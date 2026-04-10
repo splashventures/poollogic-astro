@@ -1,5 +1,5 @@
-import { City } from '@/types/city';
-import { Service } from '@/types/service';
+import type { City } from '@/types/city';
+import type { Service } from '@/types/service';
 
 /**
  * City+Service combo pages target "[service] [city]" searches.

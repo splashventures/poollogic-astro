@@ -1,5 +1,5 @@
 import { company } from '@/data/company';
-import { Testimonial } from '@/types/testimonial';
+import type { Testimonial } from '@/types/testimonial';
 
 interface ReviewSchema {
   '@context': string;

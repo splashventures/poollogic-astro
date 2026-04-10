@@ -1,5 +1,5 @@
 import { company } from '@/data/company';
-import { City } from '@/types/city';
+import type { City } from '@/types/city';
 import { cities } from '@/data/cities';
 
 interface LocalBusinessSchema {

@@ -1,5 +1,5 @@
 import { company } from '@/data/company';
-import { Service } from '@/types/service';
+import type { Service } from '@/types/service';
 import { cities } from '@/data/cities';
 
 interface ServiceSchema {

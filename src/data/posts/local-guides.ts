@@ -1,4 +1,4 @@
-import { BlogPost } from '@/types/post';
+import type { BlogPost } from '@/types/post';
 
 export const localGuidesPosts: BlogPost[] = [
   {
