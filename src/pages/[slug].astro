@@ -7,6 +7,8 @@ import { company } from '@/data/company';
 import { generateCityLocalBusinessSchema } from '@/lib/schema/localBusiness';
 import { generateServiceSchema } from '@/lib/schema/service';
 import { generateSimpleFAQSchema } from '@/lib/schema/faq';
+import { generateHowToSchema } from '@/lib/schema/howTo';
+import { generateSpeakableSchema } from '@/lib/schema/speakable';
 import { parseComboSlug, getAllComboParams, getServiceUrlSlugFromComboSlug, getComboUrlSlug, getComboIntro, getComboFAQs } from '@/data/city-service-combos';
 import { posts } from '@/data/posts';
 import type { BlogPost } from '@/types/post';
@@ -198,6 +200,8 @@ if (type === 'city' && city) {
   const cityFaqs = city.faqs;
   const faqSchema = generateSimpleFAQSchema(cityFaqs);
   if (faqSchema) schemas.push(faqSchema);
+  const speakableSchema = generateSpeakableSchema(`${company.url}/pool-service-${city.slug}/`);
+  schemas.push(speakableSchema);
 } else if (type === 'service' && service) {
   pageTitle = `${service.name} | San Diego Pool Service | PoolLogic Pool Service`;
   pageDescription = `Professional ${service.name} in San Diego. ${service.longDescription.slice(0, 100)}... ${company.rating.count}+ reviews. Call ${company.phone}!`;
@@ -215,9 +219,14 @@ if (type === 'city' && city) {
 
   const serviceSchema = generateServiceSchema(service);
   schemas.push(serviceSchema);
+  const svcSteps = getServiceSteps(service);
+  const howToSchema = generateHowToSchema(service, svcSteps);
+  schemas.push(howToSchema);
   const svcFaqs = getServiceFAQs(service);
   const faqSchema = generateSimpleFAQSchema(svcFaqs);
   if (faqSchema) schemas.push(faqSchema);
+  const speakableSchema = generateSpeakableSchema(`${company.url}/${service.urlSlug}/`);
+  schemas.push(speakableSchema);
 } else if (type === 'combo' && service && city) {
   const comboSlug = getComboUrlSlug(service, city);
   pageTitle = `${service.name} in ${city.name}, CA | ${company.name}`;
@@ -444,6 +453,7 @@ const cityWhatsIncludedCard = [
           <p class="text-sm text-gray-500">
             Get a free, five minute quote &middot; CPO-certified technicians &middot; Cancel anytime
           </p>
+          <p class="text-xs text-gray-400 mt-3">Last Updated: April 10, 2026</p>
         </div>
       </div>
     </section>
@@ -462,6 +472,10 @@ const cityWhatsIncludedCard = [
           <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 text-center">
             #1 Rated Pool Cleaning Company in {city.name}, CA
           </h2>
+          <p class="definition-paragraph text-lg text-gray-700 text-center mb-6 font-medium">{city.definitionParagraph}</p>
+          <p class="text-base text-gray-600 text-center mb-8 border-l-4 border-[#88d2c7] pl-4 text-left max-w-2xl mx-auto">
+            {city.name} pool owners trust PoolLogic for weekly cleaning, chemical balancing, and equipment care. We serve {city.neighborhoods.length} neighborhoods across the {city.zipCodes.join(', ')} ZIP {city.zipCodes.length > 1 ? 'codes' : 'code'}, just {city.distanceFromHQ} from our San Diego headquarters.
+          </p>
           <div class="prose prose-lg text-gray-600 text-center">
             {city.introContent.split('\n\n').map((paragraph) => (
               <p>{paragraph}</p>
@@ -728,7 +742,7 @@ const cityWhatsIncludedCard = [
           {cityFaqs.map((faq) => (
             <div class="bg-white rounded-xl p-6 shadow-sm">
               <h3 class="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-              <p class="text-gray-600">{faq.answer}</p>
+              <p class="faq-answer text-gray-600">{faq.answer}</p>
             </div>
           ))}
         </div>
@@ -831,7 +845,7 @@ const cityWhatsIncludedCard = [
             {service.name}
           </h1>
 
-          <p class="text-xl lg:text-2xl text-gray-600 mb-6 leading-relaxed">
+          <p class="definition-paragraph text-xl lg:text-2xl text-gray-600 mb-6 leading-relaxed">
             {service.shortDescription}
           </p>
 
@@ -876,6 +890,7 @@ const cityWhatsIncludedCard = [
               {company.phone}
             </Button>
           </div>
+          <p class="text-xs text-gray-400">Last Updated: April 10, 2026</p>
         </div>
       </div>
     </section>
@@ -895,6 +910,9 @@ const cityWhatsIncludedCard = [
           <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">
             The problem we solve
           </h2>
+          <p class="text-base text-gray-600 mt-4 border-l-4 border-[#88d2c7] pl-4 text-left max-w-2xl mx-auto">
+            {service.name} from PoolLogic includes {service.includes.slice(0, 3).join(', ').toLowerCase()}. Our CPO-certified technicians serve San Diego County with {company.rating.count}+ five-star reviews and {company.yearsInBusiness}+ years of experience.
+          </p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -1000,6 +1018,8 @@ const cityWhatsIncludedCard = [
                     <img
                       src={step.image}
                       alt={step.imageAlt}
+                      width="800"
+                      height="600"
                       class={step.imageClassName || 'object-cover w-full h-full absolute inset-0'}
                       loading="lazy"
                     />
@@ -1116,7 +1136,7 @@ const cityWhatsIncludedCard = [
           {serviceFaqs.map((faq) => (
             <div class="bg-white rounded-xl p-6 shadow-sm">
               <h3 class="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-              <p class="text-gray-600">{faq.answer}</p>
+              <p class="faq-answer text-gray-600">{faq.answer}</p>
             </div>
           ))}
         </div>
@@ -1202,6 +1222,8 @@ const cityWhatsIncludedCard = [
                     <img
                       src={post.image}
                       alt={post.imageAlt || post.title}
+                      width="800"
+                      height="400"
                       class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                       loading="lazy"
                     />

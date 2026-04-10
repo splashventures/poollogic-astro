@@ -69,6 +69,7 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
             alt={post.author}
             width="28"
             height="28"
+            loading="lazy"
             class="rounded-full object-cover"
           />
           By {post.author}
@@ -84,6 +85,11 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
         <span class="hidden sm:inline">&middot;</span>
         <span>{post.readTime}</span>
       </div>
+      {(post.dateModified || post.date) && (
+        <p class="text-blue-300 text-xs mt-3">
+          Last Updated: {new Date(post.dateModified || post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </p>
+      )}
     </div>
   </header>
 
@@ -152,6 +158,8 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
           <img
             src={post.image || FALLBACK_IMAGE}
             alt={post.imageAlt || FALLBACK_IMAGE_ALT}
+            width="800"
+            height="450"
             class="w-full h-full object-cover"
             loading="eager"
           />
@@ -196,6 +204,7 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
                 alt="Kyle Bowman"
                 width="128"
                 height="128"
+                loading="lazy"
                 class="w-full h-full object-cover"
               />
             </div>
@@ -240,6 +249,8 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
                 <img
                   src={related.image || FALLBACK_IMAGE}
                   alt={related.imageAlt || related.title}
+                  width="800"
+                  height="450"
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                 />

@@ -56,6 +56,7 @@ const painPoints = [
   geoRegion="US-CA"
   geoPlacename="San Diego"
   geoPosition={`${company.coordinates.lat};${company.coordinates.lng}`}
+  preloadImage="/images/pool/hero-pool.webp"
 >
   <!-- Hero Section - Full background image -->
   <section class="relative min-h-[600px] lg:min-h-[700px] overflow-hidden">
@@ -64,7 +65,11 @@ const painPoints = [
       src="/images/pool/hero-pool.webp"
       alt="Crystal clear swimming pool maintained by PoolLogic in San Diego"
       class="absolute inset-0 w-full h-full object-cover"
+      width="1920"
+      height="1080"
       loading="eager"
+      fetchpriority="high"
+      decoding="async"
     />
     <!-- Dark overlay for text readability -->
     <div class="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-900/60 to-gray-900/30"></div>
@@ -172,6 +177,7 @@ const painPoints = [
                 alt="PoolLogic technician testing pool water chemistry"
                 width="600"
                 height="400"
+                loading="lazy"
                 class="w-full h-auto object-cover"
               />
             </div>
@@ -181,6 +187,7 @@ const painPoints = [
                 alt="PoolLogic technician with pool pump and filter equipment"
                 width="600"
                 height="400"
+                loading="lazy"
                 class="w-full h-auto object-cover"
               />
             </div>
@@ -192,6 +199,7 @@ const painPoints = [
                 alt="PoolLogic technician skimming leaves from pool"
                 width="600"
                 height="400"
+                loading="lazy"
                 class="w-full h-auto object-cover"
               />
             </div>
@@ -201,6 +209,7 @@ const painPoints = [
                 alt="PoolLogic technician sending digital service report"
                 width="600"
                 height="400"
+                loading="lazy"
                 class="w-full h-auto object-cover"
               />
             </div>

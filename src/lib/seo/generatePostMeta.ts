@@ -1,8 +1,7 @@
-import { Metadata } from 'next';
 import { company } from '@/data/company';
-import { BlogPost } from '@/types/post';
+import type { BlogPost } from '@/types/post';
 
-export function generatePostMeta(post: BlogPost): Metadata {
+export function generatePostMeta(post: BlogPost) {
   const postUrl = `${company.url}/resources/${post.slug}/`;
 
   return {

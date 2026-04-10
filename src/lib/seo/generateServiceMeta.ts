@@ -1,11 +1,10 @@
-import { Metadata } from 'next';
-import { Service } from '@/types/service';
+import type { Service } from '@/types/service';
 import { company } from '@/data/company';
 
 /**
  * Generate metadata for service pages
  */
-export function generateServiceMetadata(service: Service): Metadata {
+export function generateServiceMetadata(service: Service) {
   const title = service.metaTitle;
   const description = service.metaDescription;
   const canonicalUrl = `${company.url}/${service.urlSlug}/`;

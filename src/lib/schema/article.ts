@@ -1,5 +1,5 @@
 import { company } from '@/data/company';
-import { BlogPost } from '@/types/post';
+import type { BlogPost } from '@/types/post';
 
 export function generateArticleSchema(post: BlogPost) {
   const postUrl = `${company.url}/resources/${post.slug}/`;

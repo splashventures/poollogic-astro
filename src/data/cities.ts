@@ -1,4 +1,4 @@
-import { City } from '@/types/city';
+import type { City } from '@/types/city';
 
 export const cities: City[] = [
   // ============================================================
@@ -54,6 +54,8 @@ export const cities: City[] = [
     metaTitle: 'Alpine Pool Service | Trusted Local Pros | PoolLogic Pool Service',
     metaDescription:
       'Reliable pool cleaning and maintenance in Alpine, CA. Serving Alpine Village, Harbison Canyon & surrounding areas. Call PoolLogic at (619) 913-9335 for a free quote!',
+
+    definitionParagraph: 'Pool service in Alpine is professional pool cleaning and maintenance tailored to the foothill community\'s extreme summer heat, hard water from Padre Dam MWD, and heavy oak debris that demand specialized chemical and cleaning protocols.',
 
     heroDescription: 'Keep your pool crystal clear in Alpine\'s foothill heat. Our CPO-certified technicians handle the hard water, oak debris, and 100°F summers so you can enjoy your mountain retreat worry-free.',
 
@@ -135,6 +137,8 @@ Whether your pool overlooks the rolling hills of Victoria Park or sits among the
     metaTitle: 'Bonita Pool Service | Trusted Local Pros | PoolLogic Pool Service',
     metaDescription:
       'Quality pool cleaning and maintenance in Bonita, CA. Serving Bonita Long Canyon, Sunnyside & all areas. Call PoolLogic at (619) 913-9335 for a free quote!',
+
+    definitionParagraph: 'Pool service in Bonita is routine and specialized pool maintenance designed for the Sweetwater Valley\'s mild inland climate, moderate-hardness Sweetwater Authority water, and heavy organic debris from the community\'s mature tree canopy.',
 
     heroDescription: 'From Bonita Long Canyon estates to Sunnyside family homes, we deliver weekly pool care tailored to the Sweetwater Valley\'s mild climate and lush, tree-shaded properties.',
 
@@ -223,6 +227,8 @@ From the hilltop estates of Bonita Long Canyon to the established neighborhoods 
     metaDescription:
       'Expert pool cleaning in Carlsbad, CA. Serving La Costa, Aviara, Bressi Ranch, Carlsbad Village & more. Trusted by hundreds of families. Call PoolLogic at (619) 913-9335!',
 
+    definitionParagraph: 'Pool service in Carlsbad is professional pool care calibrated for an upscale coastal city where salt air exposure, persistent marine layer, and a unique water supply blended with output from the Western Hemisphere\'s largest desalination plant create distinct chemistry management requirements.',
+
     heroDescription: 'Trusted by Carlsbad families from Aviara and La Costa to Carlsbad Village. We manage the salt air, marine layer, and unique desalinated water chemistry that coastal pools demand.',
 
     introContent: `PoolLogic Pool Service delivers premium pool care to homeowners throughout Carlsbad, from the luxury estates of Aviara and La Costa to the charming coastal homes of Carlsbad Village. This beautiful North County coastal city is home to some of the finest residential pools in San Diego County, and our team has the expertise to maintain them at the highest standard.
@@ -310,6 +316,8 @@ Our Carlsbad service routes are designed for efficiency, allowing us to serve ev
     metaDescription:
       'Professional pool cleaning in Chula Vista, CA. Serving Eastlake, Otay Ranch, Rancho Del Rey & all areas. Licensed & insured. Call PoolLogic at (619) 913-9335 for a free quote!',
 
+    definitionParagraph: 'Pool service in Chula Vista is weekly pool cleaning and chemical management across San Diego County\'s second-largest city, where conditions range from mild bayfront temperatures near the coast to high-80s and mid-90s heat in eastern master-planned communities like Eastlake and Otay Ranch.',
+
     heroDescription: 'San Diego County\'s second-largest city deserves top-tier pool care. We service everything from bayfront properties to the master-planned communities of Eastlake and Otay Ranch.',
 
     introContent: `PoolLogic Pool Service is the trusted choice for pool cleaning and maintenance throughout Chula Vista. As San Diego County's second-largest city, Chula Vista is home to thousands of residential pools spanning from the bayfront communities in the west to the master-planned neighborhoods of Eastlake and Otay Ranch in the east. Our team has been servicing pools across all of these diverse areas for over a decade with the same commitment to quality and reliability.
@@ -390,6 +398,8 @@ Our Chula Vista customers appreciate our consistency, transparent pricing, and t
     metaTitle: 'Del Mar Pool Service | Premium Coastal Care | PoolLogic Pool Service',
     metaDescription:
       'Luxury pool cleaning in Del Mar, CA. Serving Del Mar Village, Del Mar Heights, Del Mar Mesa & all areas. Coastal pool specialists. Call PoolLogic at (619) 913-9335!',
+
+    definitionParagraph: 'Pool service in Del Mar is premium pool maintenance for a luxury coastal resort town where persistent salt air, ocean wind, and marine layer moisture accelerate equipment corrosion and demand meticulous water chemistry management year-round.',
 
     heroDescription: 'Luxury pool care for Del Mar\'s oceanfront estates and hillside retreats. We specialize in the salt-air corrosion protection and meticulous attention that prestigious coastal pools require.',
 
@@ -478,6 +488,8 @@ Whether you own a beachfront estate in Olde Del Mar or a hilltop home in Del Mar
     metaDescription:
       'Expert pool cleaning in El Cajon, CA. Serving Granite Hills, Fletcher Hills, Rancho San Diego & all areas. Beat the heat with PoolLogic! Call (619) 913-9335!',
 
+    definitionParagraph: 'Pool service in El Cajon is heat-intensive pool maintenance for an inland valley known as "The Box," where enclosed topography traps summer temperatures above 100°F, drives extreme evaporation, and concentrates the Helix Water District\'s high-hardness water into aggressive scaling conditions.',
+
     heroDescription: 'Pool service built for "The Box",El Cajon\'s heat-trapping valley pushes pools to the limit. Our technicians adjust chemical programs for extreme summer temperatures that regularly exceed 100°F.',
 
     introContent: `PoolLogic Pool Service provides essential pool care to El Cajon, where scorching summer temperatures make a well-maintained pool more than a luxury -- it is a necessity. Known locally as "The Box" for its heat-trapping valley geography, El Cajon demands pool service professionals who understand extreme heat conditions and their effects on water chemistry, equipment, and pool surfaces.
@@ -564,6 +576,8 @@ We know that El Cajon pool owners rely on their pools for daily relief from the 
     metaTitle: 'Encinitas Pool Service | #1 Rated | PoolLogic Pool Service',
     metaDescription:
       'Premium pool cleaning in Encinitas, CA. Serving Leucadia, Cardiff, Olivenhain & all areas. Coastal pool care experts. Call PoolLogic at (619) 913-9335 today!',
+
+    definitionParagraph: 'Pool service in Encinitas is coastal and inland pool care for a laid-back North County beach town where salt air and marine fog affect oceanfront pools in Leucadia and Cardiff-by-the-Sea, while warmer inland conditions in Olivenhain require separate chemical and debris management protocols.',
 
     heroDescription: 'Serving pools from the surf breaks of Leucadia and Cardiff-by-the-Sea to the estates of Olivenhain. We understand coastal versus inland pool care and customize service for each Encinitas microclimate.',
 
@@ -652,6 +666,8 @@ We are proud to serve a community that values quality and environmental responsi
     metaDescription:
       'Professional pool cleaning in Escondido, CA. Serving Hidden Meadows, San Pasqual & all areas. Hot-weather pool care experts. Call PoolLogic at (619) 913-9335!',
 
+    definitionParagraph: 'Pool service in Escondido is inland pool maintenance for a warm North County valley surrounded by avocado groves and wine country, where summer temperatures in the mid-90s and some of San Diego County\'s hardest water at 250-350 ppm from Rincon del Diablo MWD create persistent scaling and rapid chlorine loss.',
+
     heroDescription: 'Expert pool maintenance for Escondido\'s warm inland valley. We handle the hard water, heat, and hillside debris that come with caring for pools surrounded by avocado groves and rolling terrain.',
 
     introContent: `PoolLogic Pool Service brings expert pool care to Escondido, a vibrant inland city nestled in a valley surrounded by avocado groves, citrus orchards, and rolling hillsides. Escondido's warm climate and family-oriented neighborhoods make backyard pools a way of life here, and our team ensures every pool we service is sparkling clean, chemically balanced, and equipment-ready.
@@ -733,6 +749,8 @@ Our Escondido customers trust PoolLogic Pool Service because we deliver consiste
     metaDescription:
       'Reliable pool cleaning in Fallbrook, CA. Serving De Luz, Fallbrook Village & all areas. Rural and estate pool specialists. Call PoolLogic at (619) 913-9335!',
 
+    definitionParagraph: 'Pool service in Fallbrook is rural pool maintenance for the "Avocado Capital of the World," where warm upper-80s to mid-90s summers, Santa Ana wind events, and variable well water on ranch properties require specialized chemical treatment and heavy debris management from surrounding groves.',
+
     heroDescription: 'Dependable pool care for Fallbrook ranch estates, De Luz properties, and village homes. Our technicians make the drive to the "Avocado Capital" so your pool stays spotless in the rural North County heat.',
 
     introContent: `PoolLogic Pool Service extends our professional pool care to Fallbrook, the charming agricultural community known as the "Avocado Capital of the World." Nestled in the rolling hills of northern San Diego County, Fallbrook is home to ranch estates, rural properties, and family homes -- many with pools that serve as essential retreats from the warm inland summers.
@@ -813,6 +831,8 @@ Fallbrook's distance from the coast does not mean it goes without top-tier pool 
     metaTitle: 'Jamul Pool Service | Trusted Local Pros | PoolLogic Pool Service',
     metaDescription:
       'Professional pool cleaning in Jamul, CA. Serving Steel Canyon, Jamul Highlands & all areas. Rural pool care experts. Call PoolLogic at (619) 913-9335!',
+
+    definitionParagraph: 'Pool service in Jamul is rural foothill pool care for a hot, dry East County community where summer temperatures exceed 105°F, winter nights can drop below freezing, and many properties rely on mineral-heavy well water that requires specialized chemistry protocols.',
 
     heroDescription: 'Professional pool service for Jamul\'s spacious foothill properties, from Steel Canyon estates to Lyons Valley ranches. We handle the remote terrain, well water challenges, and extreme summer heat.',
 
@@ -906,6 +926,8 @@ Our commitment to Jamul means consistent weekly service, honest communication, a
     metaDescription:
       'Luxury pool cleaning in La Jolla, CA. Serving La Jolla Shores, Bird Rock, La Jolla Village & all areas. Premium coastal care. Call PoolLogic at (619) 913-9335!',
 
+    definitionParagraph: 'Pool service in La Jolla is premium pool maintenance for an upscale coastal community near UCSD, where oceanfront cliffs, persistent salt spray, and high-end installations with infinity edges and glass tile demand advanced corrosion prevention and meticulous water chemistry management.',
+
     heroDescription: 'Premium pool care for La Jolla\'s world-class properties. From cliffside infinity pools above the Cove to Bird Rock family pools, our technicians deliver the meticulous service this community expects.',
 
     introContent: `PoolLogic Pool Service delivers the highest caliber of pool care to La Jolla, San Diego's most prestigious coastal community. Home to world-class oceanfront estates, renowned research institutions, and some of the most spectacular pools in Southern California, La Jolla demands pool service that operates at a luxury level -- and that is exactly what we provide.
@@ -993,6 +1015,8 @@ La Jolla pool owners expect excellence, and PoolLogic Pool Service delivers. Our
     metaDescription:
       'Expert pool cleaning in La Mesa, CA. Serving Mount Helix, La Mesa Village, Windsor Hills & all areas. Trusted by local families. Call PoolLogic at (619) 913-9335!',
 
+    definitionParagraph: 'Pool service in La Mesa is suburban pool maintenance for the "Jewel of the Hills," a moderate-climate community between coast and inland where Helix Water District supply at 200-280 ppm hardness and warm 82-90°F summers require consistent chemical balancing and proactive calcium management.',
+
     heroDescription: 'Reliable pool care for La Mesa, the "Jewel of the Hills." We service pools from Mount Helix estates with panoramic views down to the walkable neighborhoods of La Mesa Village.',
     introContent: `PoolLogic Pool Service is the go-to pool care provider for homeowners throughout La Mesa, the charming "Jewel of the Hills" located just east of San Diego. From the prestigious estates of Mount Helix to the walkable neighborhoods near La Mesa Village, this community offers a wonderful quality of life -- and a climate that makes pool ownership a year-round pleasure.
 
@@ -1073,6 +1097,8 @@ PoolLogic Pool Service serves La Mesa with the same dedication and expertise tha
     metaDescription:
       'Dependable pool cleaning in Lakeside, CA. Serving Eucalyptus Hills, Winter Gardens & all areas. Inland pool experts. Call PoolLogic at (619) 913-9335!',
 
+    definitionParagraph: 'Pool service in Lakeside is rural East County pool maintenance along the San Diego River, where mid-90s to 100°F+ summer heat, heavy eucalyptus and chaparral debris, and moderate-to-high hardness water from the Lakeside Water District create demanding cleaning and chemistry conditions.',
+
     heroDescription: 'Hands-on pool maintenance for Lakeside\'s warm inland community along the San Diego River. We manage the heavy debris, hard water, and scorching summers that define East County pool care.',
     introContent: `PoolLogic Pool Service provides professional pool maintenance to homeowners throughout Lakeside, a scenic inland community along the San Diego River east of El Cajon. Lakeside's warm climate and rural character make backyard pools an essential feature of daily life here, and our team delivers the expert care needed to keep them safe, clean, and ready for year-round enjoyment.
 
@@ -1152,6 +1178,8 @@ Our Lakeside customers value the peace of mind that comes with having a dedicate
     metaTitle: 'National City Pool Service | Trusted Local Pros | PoolLogic Pool Service',
     metaDescription:
       'Reliable pool cleaning in National City, CA. Serving Paradise Hills, Lincoln Acres & all neighborhoods. Call PoolLogic at (619) 913-9335 for a free quote!',
+
+    definitionParagraph: 'Pool service in National City is South Bay pool care for an urban community near Naval Base San Diego, where moderate bayfront temperatures, Sweetwater Authority water at 200-250 ppm hardness, and salt air from San Diego Bay influence equipment longevity and water chemistry.',
 
     heroDescription: 'Affordable, professional pool service for National City homeowners. Conveniently located between San Diego and Chula Vista, we bring fast response times and South Bay expertise to every visit.',
     introContent: `PoolLogic Pool Service provides professional pool care to homeowners throughout National City, a vibrant South Bay community strategically located between San Diego and Chula Vista. National City's moderate climate and family-oriented neighborhoods make pool ownership a rewarding investment, and our team ensures that investment stays in top condition year-round.
@@ -1239,6 +1267,8 @@ As one of 22+ San Diego County communities we serve, National City receives the 
     metaDescription:
       'Top-rated pool cleaning in Oceanside, CA. Serving Fire Mountain, Arrowood, Rancho Del Oro & all neighborhoods. Weekly service & repairs. Call PoolLogic at (619) 913-9335!',
 
+    definitionParagraph: 'Pool service in Oceanside is coastal North County pool maintenance for San Diego County\'s third-largest city adjacent to Camp Pendleton, where ocean salt exposure near the pier contrasts with warmer inland conditions in communities like Arrowood and Rancho Del Oro that accelerate evaporation and chemical consumption.',
+
     heroDescription: 'Comprehensive pool service across Oceanside, from beachside cottages near the pier to inland communities like Arrowood and Rancho Del Oro. Trusted by military families and long-time residents alike.',
     introContent: `PoolLogic Pool Service provides comprehensive pool care throughout Oceanside, San Diego County's third-largest city. From the iconic pier and harbor to the inland communities along Highway 76, Oceanside offers a wide range of residential neighborhoods -- each with pools that deserve professional attention.
 
@@ -1325,6 +1355,8 @@ We are committed to providing Oceanside homeowners with the same high standard o
     metaDescription:
       'Professional pool cleaning in Poway, CA. Serving Green Valley, Old Coach, Poway Estates & all areas. "City in the Country" pool experts. Call PoolLogic at (619) 913-9335!',
 
+    definitionParagraph: 'Pool service in Poway is suburban inland pool care for the "City in the Country," where 88-95°F summer heat with 100°F+ spikes, hard water from the City of Poway utility at 250-320 ppm, and oak woodland debris require aggressive scaling prevention and enhanced chemical programs.',
+
     heroDescription: 'Pool care designed for Poway\'s "City in the Country" lifestyle. Our technicians service everything from Old Coach luxury estates to family pools along Garden Road, adjusting for the warm inland climate.',
     introContent: `PoolLogic Pool Service is the trusted pool care provider for Poway, the beloved "City in the Country" nestled among the mountains and open spaces north of San Diego. Poway's combination of warm inland temperatures, spacious properties, and family-oriented lifestyle makes backyard pools a centerpiece of daily life -- and our team ensures those pools are always ready for enjoyment.
 
@@ -1404,6 +1436,8 @@ Our commitment to Poway goes beyond routine cleaning. We provide comprehensive p
     metaTitle: 'Ramona Pool Service | Trusted Local Pros | PoolLogic Pool Service',
     metaDescription:
       'Professional pool cleaning in Ramona, CA. Serving San Diego Country Estates, Ramona Village & all areas. Backcountry pool experts. Call PoolLogic at (619) 913-9335!',
+
+    definitionParagraph: 'Pool service in Ramona is backcountry pool maintenance for a rural wine country community at 1,400 feet elevation, where triple-digit summer heat, winter freezing risk, and some of the county\'s hardest well water at 300-400 ppm demand year-round professional attention.',
 
     heroDescription: 'Reliable pool care for Ramona\'s backcountry properties where triple-digit summers make a clean pool essential. We service San Diego Country Estates, ranch homes, and everything in between.',
     introContent: `PoolLogic Pool Service provides professional pool care to Ramona, a proud backcountry community east of Escondido where wide-open spaces, rural living, and genuine small-town character define daily life. With summer temperatures regularly pushing past 100°F, pools in Ramona are not a luxury -- they are essential for staying comfortable, and our team keeps them in peak condition.
@@ -1502,6 +1536,8 @@ Our commitment to Ramona homeowners is the same as in every one of the 22+ San D
     metaDescription:
       'San Diego\'s top-rated pool service by PoolLogic. Serving Hillcrest, North Park, Scripps Ranch, Point Loma & all SD neighborhoods. Weekly cleaning, repairs & more. Call (619) 913-9335 for a free quote!',
 
+    definitionParagraph: 'Pool service in San Diego is comprehensive pool cleaning and maintenance across the city\'s diverse neighborhoods, from coastal areas like Point Loma where marine layer and salt air dominate to inland communities like Scripps Ranch and Rancho Bernardo where 90°F+ summer heat and moderate-hardness City of San Diego water at 200-300 ppm drive distinct chemical requirements.',
+
     heroDescription: 'San Diego\'s hometown pool service, headquartered right here in Hillcrest. We cover every neighborhood from Point Loma and Ocean Beach to Scripps Ranch and Rancho Bernardo with same-technician consistency.',
     introContent: `PoolLogic Pool Service is proud to call San Diego home. Based in the heart of Hillcrest, we have been providing premium pool cleaning, maintenance, and repair services to San Diego homeowners and property managers for over a decade. Our central location allows us to serve every corner of San Diego efficiently, from the coastal communities of Point Loma and Ocean Beach to the inland neighborhoods of Scripps Ranch and Rancho Bernardo.
 
@@ -1587,6 +1623,8 @@ We take pride in our reputation for reliability, transparency, and exceptional r
     metaTitle: 'San Marcos Pool Service | Trusted Local Pros | PoolLogic Pool Service',
     metaDescription:
       'Quality pool cleaning in San Marcos, CA. Serving San Elijo Hills, Lake San Marcos & all areas. North County pool experts. Call PoolLogic at (619) 913-9335!',
+
+    definitionParagraph: 'Pool service in San Marcos is North County inland pool maintenance for a growing city where western neighborhoods receive some marine influence while eastern areas like Twin Oaks Valley reach the upper 80s to low 90s, and Vallecitos Water District supply requires regular calcium monitoring.',
 
     heroDescription: 'Growing with San Marcos,from the hilltop views of San Elijo Hills to the lakeside living of Lake San Marcos. We provide weekly pool care calibrated for North County\'s warm, sun-drenched climate.',
     introContent: `PoolLogic Pool Service provides dependable pool care to homeowners throughout San Marcos, a growing North County city that blends new development with established neighborhoods and rural character. From the hilltop views of San Elijo Hills to the lakeside living of Lake San Marcos, this community offers diverse residential settings -- and PoolLogic Pool Service has been keeping its pools pristine for over a decade.
@@ -1674,6 +1712,8 @@ We are proud to serve San Marcos as part of our comprehensive coverage of 22+ Sa
     metaDescription:
       'Dependable pool cleaning in Santee, CA. Serving West Hills, Carlton Hills, Riverview & all areas. East County pool experts. Call PoolLogic at (619) 913-9335!',
 
+    definitionParagraph: 'Pool service in Santee is East County pool care for a suburban community in the San Diego River valley, where warm 88-95°F summers with occasional 100°F+ heat waves and Padre Dam MWD water at 220-280 ppm hardness require consistent chemical management and evaporation control.',
+
     heroDescription: 'Trusted pool service for Santee families in the San Diego River valley. We keep pools clean and balanced across West Hills, Carlton Hills, and every neighborhood near Santee Lakes.',
     introContent: `PoolLogic Pool Service delivers reliable pool care to homeowners in Santee, a friendly East County city along the San Diego River valley. Known for its family-oriented neighborhoods, excellent parks, and warm climate, Santee is a community where backyard pools are a staple of daily life -- and our team ensures they stay in outstanding condition year-round.
 
@@ -1753,6 +1793,8 @@ Santee's warm inland climate means pools see heavy use from spring through fall,
     metaTitle: 'Spring Valley Pool Service | Trusted Local Pros | PoolLogic Pool Service',
     metaDescription:
       'Reliable pool cleaning in Spring Valley, CA. Serving Casa de Oro, Dictionary Hill & all areas. Warm-weather pool experts. Call PoolLogic at (619) 913-9335!',
+
+    definitionParagraph: 'Pool service in Spring Valley is east suburban pool maintenance for a moderate-climate inland valley where 85-92°F summer temperatures and dual water supply zones from Helix Water District and Sweetwater Authority at 200-270 ppm hardness require tailored chemical programs for each property.',
 
     heroDescription: 'Straightforward, honest pool care for Spring Valley homeowners. From Dictionary Hill properties to Casa de Oro homes, our technicians know the local water and warm inland conditions inside and out.',
     introContent: `PoolLogic Pool Service provides professional pool care to Spring Valley, a welcoming unincorporated community in eastern San Diego County. Spring Valley's warm climate and family-oriented neighborhoods make pool ownership a natural fit, and our team has been keeping local pools clean, balanced, and ready for enjoyment for over a decade.
@@ -1839,6 +1881,8 @@ As part of our coverage of 22+ San Diego County communities, Spring Valley recei
     metaTitle: 'Vista Pool Service | Trusted Local Pros | PoolLogic Pool Service',
     metaDescription:
       'Quality pool cleaning in Vista, CA. Serving Shadowridge, Vista Village, Breeze Hill & all areas. North County experts. Call PoolLogic at (619) 913-9335!',
+
+    definitionParagraph: 'Pool service in Vista is North County inland pool care for a growing community where western neighborhoods enjoy marine-moderated low 80s while eastern areas warm into the upper 80s to low 90s, and Vista Irrigation District water sourced from Lake Henshaw requires proactive scale-prevention strategies.',
 
     heroDescription: 'Weekly pool service for Vista\'s diverse neighborhoods, from the modern homes of Shadowridge to the charming streets near Vista Village. We handle North County\'s warm climate and hard water with expert care.',
     introContent: `PoolLogic Pool Service provides comprehensive pool care to homeowners throughout Vista, a diverse North County city that ranges from established downtown neighborhoods to modern master-planned communities. Vista's warm climate and family-friendly character make backyard pools a valued feature of life here, and our team has been keeping them in excellent condition for over a decade.

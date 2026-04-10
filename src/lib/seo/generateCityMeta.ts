@@ -1,5 +1,4 @@
-import { Metadata } from 'next';
-import { City } from '@/types/city';
+import type { City } from '@/types/city';
 import { company } from '@/data/company';
 
 /**
@@ -14,7 +13,7 @@ import { company } from '@/data/company';
  * - Geo-modifier (CA) included
  * - Power words: #1, Trusted, Expert, Local
  */
-export function generateCityMetadata(city: City): Metadata {
+export function generateCityMetadata(city: City) {
   // Title Formula: "[City] Pool Service | [Trust Signal] | Brand"
   // Under 60 chars, primary keyword first
   const title = `${city.name} Pool Service | #1 Rated Pool Cleaning | PoolLogic`;

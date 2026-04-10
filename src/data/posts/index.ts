@@ -1,4 +1,4 @@
-import { BlogPost } from '@/types/post';
+import type { BlogPost } from '@/types/post';
 import { poolCleaningPosts } from './pool-cleaning';
 import { poolFilterPosts } from './pool-filter';
 import { poolPumpPosts } from './pool-pump';

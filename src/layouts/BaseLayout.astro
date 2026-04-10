@@ -1,5 +1,6 @@
 ---
 import '@/styles/globals.css';
+import { ViewTransitions } from 'astro:transitions';
 import { company } from '@/data/company';
 import { generateLocalBusinessSchema } from '@/lib/schema/localBusiness';
 import Header from '@/components/layout/Header.astro';
@@ -22,6 +23,7 @@ interface Props {
   geoPlacename?: string;
   geoPosition?: string;
   schemas?: object[];
+  preloadImage?: string;
 }
 
 const {
@@ -40,6 +42,7 @@ const {
   geoPlacename,
   geoPosition,
   schemas = [],
+  preloadImage,
 } = Astro.props;
 
 const localBusinessSchema = generateLocalBusinessSchema();
@@ -99,6 +102,12 @@ const webSiteSchema = {
     {geoRegion && <meta name="geo.region" content={geoRegion} />}
     {geoPlacename && <meta name="geo.placename" content={geoPlacename} />}
     {geoPosition && <meta name="geo.position" content={geoPosition} />}
+
+    <!-- Preload LCP image -->
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+
+    <!-- View Transitions -->
+    <ViewTransitions />
 
     <!-- Global Schemas -->
     <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
