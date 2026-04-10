@@ -1,0 +1,158 @@
+import { Metadata } from 'next';
+import { company } from '@/data/company';
+import { reviews } from '@/data/reviews';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { DualCTA } from '@/components/ui/DualCTA';
+
+export const metadata: Metadata = {
+  title: `Customer Reviews | ${company.name}`,
+  description: `Read ${reviews.length} five-star reviews from real ${company.name} customers in San Diego. See why families trust us for weekly pool cleaning, repairs, and maintenance.`,
+  openGraph: {
+    title: `Customer Reviews | ${company.name}`,
+    description: `Read ${reviews.length} five-star reviews from real customers in San Diego.`,
+    type: 'website',
+    url: `${company.url}/reviews/`,
+  },
+};
+
+function StarRating({ rating }: { rating: number }) {
+  return (
+    <div className="flex gap-0.5">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg
+          key={i}
+          className={`h-5 w-5 ${i < rating ? 'text-yellow-400' : 'text-gray-300'}`}
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+export default function ReviewsPage() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    '@id': `${company.url}/#business`,
+    name: company.name,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: company.rating.value,
+      reviewCount: reviews.length,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    review: reviews.map((review) => ({
+      '@type': 'Review',
+      author: {
+        '@type': 'Person',
+        name: review.customerName,
+      },
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: review.rating,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      reviewBody: review.text,
+      datePublished: review.date,
+    })),
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+
+      {/* Breadcrumbs */}
+      <div className="py-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { name: 'Home', url: '/' },
+              { name: 'Reviews', url: '/reviews/' },
+            ]}
+          />
+        </div>
+      </div>
+
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-[#00568c] to-[#00568c]/80 text-white py-16 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+              Customer Reviews
+            </h1>
+            <p className="text-xl text-blue-100 mb-8">
+              See what our customers have to say and discover the outstanding service provided by {company.name}.
+            </p>
+
+            {/* Aggregate Rating */}
+            <div className="inline-flex flex-col items-center bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-6">
+              <div className="flex gap-1 mb-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <svg
+                    key={i}
+                    className="h-8 w-8 text-yellow-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-2xl font-bold">{company.rating.value} out of 5</p>
+              <p className="text-blue-200">Based on {reviews.length} reviews on Google</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews Grid */}
+      <section className="py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {reviews.map((review) => (
+              <div
+                key={review.id}
+                className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{review.customerName}</h3>
+                    <p className="text-sm text-gray-500">{review.city}</p>
+                  </div>
+                  <svg className="h-6 w-6 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
+                  </svg>
+                </div>
+                <StarRating rating={review.rating} />
+                <p className="mt-4 text-gray-600 text-sm leading-relaxed">
+                  &ldquo;{review.text}&rdquo;
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 lg:py-24 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Join Our {company.poolsServed.toLocaleString()}+ Satisfied Customers
+          </h2>
+          <p className="text-lg text-gray-600 mb-8">
+            Experience the pool service that San Diego families trust. Get a free quote in under 2 minutes.
+          </p>
+          <DualCTA quoteText="Get Your Free Quote" className="justify-center" />
+        </div>
+      </section>
+    </>
+  );
+}
