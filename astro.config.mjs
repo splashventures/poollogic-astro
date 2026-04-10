@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
+import partytown from '@astrojs/partytown';
 
 export default defineConfig({
   site: 'https://poollogicsd.com',
@@ -9,6 +10,11 @@ export default defineConfig({
   output: 'static',
   adapter: vercel(),
   integrations: [
+    partytown({
+      config: {
+        forward: ['dataLayer.push'],
+      },
+    }),
     sitemap({
       serialize(item) {
         const url = item.url;

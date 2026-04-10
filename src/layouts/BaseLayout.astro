@@ -105,6 +105,18 @@ const webSiteSchema = {
     <link rel="preconnect" href="https://quote.poollogicsd.com" />
     <link rel="dns-prefetch" href="https://quote.poollogicsd.com" />
 
+    <!-- GA4 via Partytown (runs in web worker, zero main thread impact) -->
+    <!-- TODO: Replace GA_MEASUREMENT_ID with actual GA4 measurement ID (G-XXXXXXXXXX) -->
+    <!--
+    <script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script type="text/partytown">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    -->
+
     <!-- View Transitions -->
     <ViewTransitions />
 
