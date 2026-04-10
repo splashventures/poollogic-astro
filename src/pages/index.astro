@@ -6,7 +6,7 @@ import { cities } from '@/data/cities';
 import Button from '@/components/ui/Button.astro';
 import TrustStats from '@/components/ui/TrustStats.astro';
 import HowItWorks from '@/components/ui/HowItWorks.astro';
-import Testimonials from '@/components/ui/Testimonials.astro';
+import GoogleReviews from '@/components/ui/GoogleReviews.astro';
 import Comparison from '@/components/ui/Comparison.astro';
 import GuaranteeSection from '@/components/ui/GuaranteeSection.astro';
 import heroPoolImg from '@/assets/images/pool/hero-pool.webp';
@@ -295,8 +295,11 @@ const painPoints = [
   <!-- Service Promise -->
   <PricingPreview />
 
-  <!-- Testimonials -->
-  <Testimonials />
+  <!-- Google Reviews -->
+  <GoogleReviews
+    placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+    googleProfileUrl="https://g.co/kgs/NKwnBPz"
+  />
 
   <!-- Guarantee -->
   <GuaranteeSection />

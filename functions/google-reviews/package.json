@@ -1,0 +1,14 @@
+{
+  "name": "google-reviews",
+  "version": "1.0.0",
+  "description": "Cloud Function to fetch and cache Google Reviews via Places API",
+  "main": "index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.0.0",
+    "@google-cloud/secret-manager": "^5.0.0",
+    "@google-cloud/storage": "^7.0.0"
+  }
+}
