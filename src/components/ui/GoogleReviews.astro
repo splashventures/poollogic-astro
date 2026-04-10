@@ -1,0 +1,204 @@
+---
+interface Props {
+  placeIds: string[];
+  maxReviews?: number;
+  googleProfileUrl: string;
+}
+
+interface Review {
+  reviewerName: string;
+  reviewerPhotoUrl: string | null;
+  rating: number;
+  text: string;
+  publishedAt: string | null;
+  googleReviewUrl: string | null;
+  relativeTimeDescription: string;
+  placeId: string;
+  businessName: string;
+}
+
+interface ReviewsResponse {
+  reviews: Review[];
+  metadata: {
+    totalReviews: number;
+    averageRating: number;
+    lastFetched: string;
+  };
+}
+
+const { placeIds, maxReviews = 10, googleProfileUrl } = Astro.props;
+
+const FUNCTION_URL = 'https://us-central1-cabana-cac.cloudfunctions.net/google-reviews';
+
+let reviews: Review[] = [];
+let totalReviews = 0;
+let averageRating = 5.0;
+let hasFetched = false;
+
+try {
+  const url = `${FUNCTION_URL}?placeIds=${placeIds.join(',')}`;
+  const res = await fetch(url);
+  if (res.ok) {
+    const data: ReviewsResponse = await res.json();
+    reviews = data.reviews.slice(0, maxReviews);
+    totalReviews = data.metadata.totalReviews;
+    averageRating = data.metadata.averageRating;
+    hasFetched = true;
+  }
+} catch {
+  // Graceful fallback: render link-only section
+}
+
+function getInitials(name: string): string {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function truncateText(text: string, max: number): string {
+  if (text.length <= max) return text;
+  return text.slice(0, max).replace(/\s+\S*$/, '') + '...';
+}
+---
+
+<section class="py-16 lg:py-28 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <!-- Google 'G' logo -->
+        <svg class="h-8 w-8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        <div class="flex items-center gap-1">
+          {[...Array(5)].map(() => (
+            <svg class="h-6 w-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          ))}
+        </div>
+      </div>
+      {hasFetched ? (
+        <>
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
+            {averageRating} Star Rating on Google
+          </h2>
+          <p class="text-base sm:text-lg text-gray-600">
+            Based on {totalReviews} verified customer reviews
+          </p>
+        </>
+      ) : (
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
+          Our Customers Love Us
+        </h2>
+      )}
+    </div>
+
+    {reviews.length > 0 ? (
+      <!-- Review Carousel -->
+      <div class="reviews-carousel -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 overflow-x-auto pb-4 snap-x snap-mandatory scroll-smooth"
+           style="scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent;">
+        <div class="flex gap-5 w-max lg:w-auto lg:grid lg:grid-cols-3 lg:gap-6">
+          {reviews.map((review) => (
+            <div class="w-[320px] sm:w-[360px] lg:w-auto snap-start flex-shrink-0 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col">
+              <!-- Reviewer info -->
+              <div class="flex items-center gap-3 mb-4">
+                {review.reviewerPhotoUrl ? (
+                  <img
+                    src={review.reviewerPhotoUrl}
+                    alt={review.reviewerName}
+                    class="w-10 h-10 rounded-full object-cover"
+                    loading="lazy"
+                    onerror={`this.style.display='none';this.nextElementSibling.style.display='flex'`}
+                  />
+                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00568c] to-[#88d2c7] items-center justify-center text-white font-semibold text-sm hidden">
+                    {getInitials(review.reviewerName)}
+                  </div>
+                ) : (
+                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00568c] to-[#88d2c7] flex items-center justify-center text-white font-semibold text-sm">
+                    {getInitials(review.reviewerName)}
+                  </div>
+                )}
+                <div>
+                  <p class="font-semibold text-gray-900 text-sm">{review.reviewerName}</p>
+                  <p class="text-gray-500 text-xs">{review.relativeTimeDescription}</p>
+                </div>
+              </div>
+              <!-- Stars -->
+              <div class="flex gap-0.5 mb-3">
+                {[...Array(5)].map(() => (
+                  <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <!-- Review text -->
+              <p class="text-gray-700 text-sm leading-relaxed flex-1">
+                {truncateText(review.text, 200)}
+              </p>
+              {review.text.length > 200 && review.googleReviewUrl && (
+                <a
+                  href={review.googleReviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-[#00568c] text-sm font-medium mt-2 inline-block hover:underline"
+                >
+                  Read more on Google &rarr;
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Scroll hint on mobile -->
+      <div class="flex justify-center mt-4 lg:hidden">
+        <div class="flex gap-1.5">
+          {reviews.slice(0, Math.min(reviews.length, 5)).map((_, i) => (
+            <div class={`w-2 h-2 rounded-full ${i === 0 ? 'bg-[#00568c]' : 'bg-gray-300'}`} />
+          ))}
+        </div>
+      </div>
+    ) : (
+      <!-- Fallback when no reviews available -->
+      <div class="text-center py-8">
+        <p class="text-gray-600 mb-4">Check out what our customers are saying</p>
+      </div>
+    )}
+
+    <!-- Footer CTA -->
+    <div class="text-center mt-10">
+      <a
+        href={googleProfileUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 text-[#00568c] font-semibold hover:underline"
+      >
+        <svg class="h-5 w-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        {hasFetched ? `See all ${totalReviews} reviews on Google` : 'See our reviews on Google'}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .reviews-carousel::-webkit-scrollbar {
+    height: 6px;
+  }
+  .reviews-carousel::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .reviews-carousel::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+  .reviews-carousel::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+</style>
