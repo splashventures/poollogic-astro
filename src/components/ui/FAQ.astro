@@ -1,0 +1,162 @@
+---
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  faqs?: FAQItem[];
+  title?: string;
+}
+
+const defaultFAQs: FAQItem[] = [
+  {
+    question: 'What does weekly pool service include?',
+    answer: 'Every weekly visit includes complete water chemistry testing, chemical balancing (all chemicals included), surface skimming, brushing walls and tiles, vacuuming, emptying baskets, and a full equipment inspection. Your CPO-certified technician sends a digital service report after every visit. Request a free quote to get a custom plan for your pool.',
+  },
+  {
+    question: 'Are chemicals included in the price?',
+    answer: "Yes! All chemicals needed to maintain your pool are included in your service price. You'll never get a surprise bill for chlorine, acid, or other treatments. We use professional-grade chemicals that keep your water perfectly balanced.",
+  },
+  {
+    question: 'Do I have to sign a long-term contract?',
+    answer: 'We earn your business every single visit. You can cancel anytime with no penalties or fees. All of our technicians are CPO-certified, so you always get expert-level care. Most of our customers stay with us for years - not because they have to, but because they want to.',
+  },
+  {
+    question: 'How quickly can you start service?',
+    answer: "We can typically begin service within 3-5 business days of receiving your quote approval. For urgent situations, we often have same-week availability. Contact us and we'll work to accommodate your timeline.",
+  },
+  {
+    question: "What if I'm not satisfied with a service visit?",
+    answer: "We stand behind our work with a 100% satisfaction guarantee. If you're not happy with any visit, we'll come back and make it right at no extra charge. If we still can't meet your expectations, we'll refund that service visit.",
+  },
+  {
+    question: 'Will I have the same technician every week?',
+    answer: 'Yes. We assign a dedicated technician to your pool who will service it every week. This means someone who knows your pool intimately - its quirks, its equipment, its history. Consistency is key to great pool care.',
+  },
+];
+
+const {
+  faqs = defaultFAQs,
+  title = 'Frequently asked questions',
+} = Astro.props;
+---
+
+<section class="py-20 lg:py-28">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <p class="text-[#00568c] font-semibold mb-3">FAQ</p>
+      <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">
+        {title}
+      </h2>
+    </div>
+
+    <!-- FAQ Items -->
+    <div class="bg-white rounded-2xl border border-gray-200 px-8" data-faq-container>
+      {faqs.map((faq, index) => (
+        <div class="border-b border-gray-200 last:border-0" data-faq-item>
+          <button
+            class="w-full py-6 flex items-center justify-between text-left hover:text-[#00568c] transition-colors"
+            data-faq-trigger
+            aria-expanded={index === 0 ? 'true' : 'false'}
+          >
+            <span class="font-semibold text-lg text-gray-900 pr-4">{faq.question}</span>
+            <span
+              class:list={[
+                'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-transform',
+                index === 0 ? 'rotate-180 bg-[#88d2c7]/20' : 'bg-gray-100',
+              ]}
+              data-faq-icon
+            >
+              <svg
+                class:list={[
+                  'h-5 w-5',
+                  index === 0 ? 'text-[#00568c]' : 'text-gray-500',
+                ]}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </span>
+          </button>
+          <div
+            class:list={[
+              'overflow-hidden transition-all duration-300',
+              index === 0 ? 'max-h-96 pb-6' : 'max-h-0',
+            ]}
+            data-faq-panel
+          >
+            <p class="text-gray-600 leading-relaxed">{faq.answer}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Contact prompt -->
+    <p class="text-center text-gray-500 mt-8">
+      Still have questions?{' '}
+      <a href="/about/#contact" class="text-[#00568c] font-medium hover:text-[#00568c]">
+        Get in touch
+      </a>
+    </p>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('[data-faq-container]').forEach((container) => {
+    const items = container.querySelectorAll('[data-faq-item]');
+
+    items.forEach((item) => {
+      const trigger = item.querySelector('[data-faq-trigger]') as HTMLButtonElement;
+      const panel = item.querySelector('[data-faq-panel]') as HTMLElement;
+      const icon = item.querySelector('[data-faq-icon]') as HTMLElement;
+      const svg = icon?.querySelector('svg') as SVGElement;
+
+      trigger?.addEventListener('click', () => {
+        const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+
+        // Close all items
+        items.forEach((otherItem) => {
+          const otherTrigger = otherItem.querySelector('[data-faq-trigger]') as HTMLButtonElement;
+          const otherPanel = otherItem.querySelector('[data-faq-panel]') as HTMLElement;
+          const otherIcon = otherItem.querySelector('[data-faq-icon]') as HTMLElement;
+          const otherSvg = otherIcon?.querySelector('svg') as SVGElement;
+
+          otherTrigger?.setAttribute('aria-expanded', 'false');
+          if (otherPanel) {
+            otherPanel.classList.remove('max-h-96', 'pb-6');
+            otherPanel.classList.add('max-h-0');
+          }
+          if (otherIcon) {
+            otherIcon.classList.remove('rotate-180', 'bg-[#88d2c7]/20');
+            otherIcon.classList.add('bg-gray-100');
+          }
+          if (otherSvg) {
+            otherSvg.classList.remove('text-[#00568c]');
+            otherSvg.classList.add('text-gray-500');
+          }
+        });
+
+        // Toggle clicked item (open if it was closed)
+        if (!isOpen) {
+          trigger.setAttribute('aria-expanded', 'true');
+          if (panel) {
+            panel.classList.remove('max-h-0');
+            panel.classList.add('max-h-96', 'pb-6');
+          }
+          if (icon) {
+            icon.classList.remove('bg-gray-100');
+            icon.classList.add('rotate-180', 'bg-[#88d2c7]/20');
+          }
+          if (svg) {
+            svg.classList.remove('text-gray-500');
+            svg.classList.add('text-[#00568c]');
+          }
+        }
+      });
+    });
+  });
+</script>

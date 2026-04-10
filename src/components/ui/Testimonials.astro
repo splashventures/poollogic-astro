@@ -1,0 +1,67 @@
+---
+import TestimonialCard from '@/components/ui/TestimonialCard.astro';
+
+const testimonials = [
+  {
+    name: 'Emma Valdez',
+    location: 'San Diego',
+    text: "We have been using PoolLogic for our pool and spa services and had a great experience the entire time. Automated billing, weekly maintenance, and real-time pool health data. Our technician Roni is always reliable and thorough.",
+    rating: 5,
+  },
+  {
+    name: 'Tracy Serrano',
+    location: 'San Diego',
+    text: "Pool Logic is by far the best pool servicing company we've used! Believe me, after 30 plus years owning a pool, we've had a number of scammers. PoolLogic is efficient, prompt, very knowledgeable and reasonably priced.",
+    rating: 5,
+  },
+  {
+    name: 'Wayne Hawkins',
+    location: 'San Diego',
+    text: "Great pool service. Our pool water has been crystal clear, starting from the first day of Pool Logic's service. Highly recommend them to anyone looking for professional, reliable pool care.",
+    rating: 5,
+  },
+];
+---
+
+<section class="py-20 lg:py-28 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <p class="text-[#00568c] font-semibold mb-3">TESTIMONIALS</p>
+      <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+        Don't just take our word for it
+      </h2>
+      <p class="text-lg text-gray-600">
+        See why San Diego homeowners trust us with their pools
+      </p>
+    </div>
+
+    <!-- Testimonials Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {testimonials.map((testimonial) => (
+        <TestimonialCard
+          name={testimonial.name}
+          location={testimonial.location}
+          text={testimonial.text}
+          rating={testimonial.rating}
+        />
+      ))}
+    </div>
+
+    <!-- Trust indicators -->
+    <div class="mt-12 flex flex-wrap items-center justify-center gap-8 text-gray-500 text-sm">
+      <div class="flex items-center gap-2">
+        <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+        <span>Verified reviews from real customers</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+        </svg>
+        <span>5.0/5 star rating on Google</span>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,62 @@
+---
+import { cn } from '@/lib/utils';
+
+interface Props {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  external?: boolean;
+  class?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  external,
+  class: className,
+  type = 'button',
+  disabled,
+} = Astro.props;
+
+const variantStyles: Record<string, string> = {
+  primary: 'bg-[#00568c] text-white hover:bg-[#ffb12b] hover:text-gray-900 focus:ring-[#00568c] shadow-sm',
+  secondary: 'bg-[#ffb12b] text-gray-900 hover:bg-[#e9a025] focus:ring-[#ffb12b] shadow-sm font-bold',
+  outline: 'border-2 border-[#00568c] text-[#00568c] hover:bg-[#ffb12b] hover:border-[#ffb12b] hover:text-gray-900 focus:ring-[#00568c]',
+  ghost: 'text-[#00568c] hover:bg-[#ffb12b]/20 focus:ring-[#00568c]',
+};
+
+const sizeStyles: Record<string, string> = {
+  sm: 'px-3 py-1.5 text-sm',
+  md: 'px-5 py-2.5 text-base',
+  lg: 'px-8 py-3.5 text-lg',
+};
+
+const baseStyles = cn(
+  'inline-flex items-center justify-center font-semibold rounded-lg',
+  'transition-all duration-200 ease-in-out',
+  'focus:outline-none focus:ring-2 focus:ring-offset-2',
+  'disabled:opacity-50 disabled:cursor-not-allowed',
+  variantStyles[variant],
+  sizeStyles[size],
+  className
+);
+---
+
+{href ? (
+  external ? (
+    <a href={href} class={baseStyles} target="_blank" rel="noopener noreferrer">
+      <slot />
+    </a>
+  ) : (
+    <a href={href} class={baseStyles}>
+      <slot />
+    </a>
+  )
+) : (
+  <button type={type} class={baseStyles} disabled={disabled}>
+    <slot />
+  </button>
+)}

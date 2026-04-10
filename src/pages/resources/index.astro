@@ -1,0 +1,446 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { posts, topicGroups } from '@/data/posts';
+import { company } from '@/data/company';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import DualCTA from '@/components/ui/DualCTA.astro';
+
+const quickTips = [
+  'Test your water chemistry at least once a week during swimming season.',
+  'Run your pump 8-12 hours daily during summer, less in winter.',
+  'Clean your filter every 3-6 months, depending on usage.',
+  'Skim debris daily to prevent staining and clogged filters.',
+  'Maintain water level at the middle of your skimmer opening.',
+  'Shock your pool after heavy use or rain to restore chlorine levels.',
+  'Check your pump basket weekly for debris that reduces circulation.',
+  'Balance pH before adding other chemicals for best results.',
+];
+
+const categories = [
+  {
+    slug: 'pool-care-tips',
+    name: 'Pool Care Tips',
+    description: 'Expert maintenance advice, cleaning guides, and repair tips.',
+  },
+  {
+    slug: 'local-guides',
+    name: 'Local Guides',
+    description: 'San Diego attractions, landmarks, and local tips.',
+  },
+];
+
+const FALLBACK_IMAGE = '/images/pool/hero-pool.webp';
+
+// Sort posts by date, newest first
+const sortedPosts = [...posts].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+
+const latestPosts = sortedPosts.slice(0, 6);
+
+// Group remaining posts by category
+const poolCarePosts = sortedPosts.filter((p) => p.category === 'pool-care-tips').slice(0, 9);
+const localGuides = sortedPosts.filter((p) => p.category === 'local-guides').slice(0, 6);
+---
+
+<BaseLayout
+  title="Pool Care Resources & Tips | PoolLogic Pool Service"
+  description="Helpful pool care guides, maintenance tips, and expert advice from PoolLogic Pool Service. Learn how to keep your pool clean, safe, and beautiful."
+  canonical={`${company.url}/resources/`}
+  ogTitle="Pool Care Resources & Tips | PoolLogic Pool Service"
+  ogDescription="Helpful pool care guides, maintenance tips, and expert advice from PoolLogic Pool Service."
+  ogUrl={`${company.url}/resources/`}
+>
+  <!-- Breadcrumbs -->
+  <div class="py-2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Resources', url: '/resources/' },
+        ]}
+      />
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-[#00568c] to-[#00568c]/80 text-white py-16 lg:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl lg:text-5xl font-bold mb-4">
+          Pool Care Resources
+        </h1>
+        <p class="text-xl text-blue-100">
+          Expert guides, maintenance tips, and troubleshooting help from the pool professionals.
+          Whether you DIY or use a service, these resources will help you understand pool care.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories + Topic Quick Links -->
+  <section class="py-8 bg-gray-50 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap gap-3 mb-4">
+        {categories.map((cat) => (
+          <a
+            href={`/resources/category/${cat.slug}/`}
+            class="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-5 py-2 text-sm font-medium text-gray-700 hover:border-[#00568c] hover:text-[#00568c] transition-colors"
+          >
+            {cat.name}
+            <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        ))}
+      </div>
+      <div class="flex flex-wrap gap-2">
+        {topicGroups.map((group) => (
+          <a
+            href={`/resources/topic/${group.slug}/`}
+            class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full hover:bg-[#00568c]/10 hover:text-[#00568c] transition-colors"
+          >
+            {group.name}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Tips Banner -->
+  <section class="py-8 bg-yellow-50 border-b border-yellow-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-lg font-semibold text-yellow-800 mb-4 flex items-center gap-2">
+        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+        </svg>
+        Quick Tips
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {quickTips.map((tip) => (
+          <div class="flex items-start gap-2">
+            <svg class="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-sm text-yellow-800">{tip}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Articles -->
+  <section class="py-12 lg:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8">Latest Articles</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {latestPosts.map((post) => (
+          <a
+            href={`/resources/${post.slug}/`}
+            class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group"
+          >
+            <div class="relative w-full aspect-video overflow-hidden">
+              <img
+                src={post.image || FALLBACK_IMAGE}
+                alt={post.imageAlt || post.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+            </div>
+            <div class="p-6">
+              <span class="text-xs font-medium text-[#00568c] uppercase tracking-wide">
+                {post.categoryName}
+              </span>
+              <h3 class="text-lg font-semibold text-gray-900 mt-2 mb-2 group-hover:text-[#00568c] transition-colors">
+                {post.title}
+              </h3>
+              <p class="text-gray-600 text-sm mb-3 line-clamp-2">{post.excerpt}</p>
+              <div class="flex items-center gap-2 text-xs text-gray-500">
+                <span>{post.readTime}</span>
+                <span>&middot;</span>
+                <time datetime={post.date}>
+                  {new Date(post.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </time>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pool Care Tips -->
+  <section class="py-12 lg:py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-2xl font-bold text-gray-900">Pool Care Tips</h2>
+        <a
+          href="/resources/category/pool-care-tips/"
+          class="text-[#00568c] font-semibold text-sm hover:text-[#00568c]/80 transition-colors"
+        >
+          View All
+        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {poolCarePosts.map((post) => (
+          <a
+            href={`/resources/${post.slug}/`}
+            class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group"
+          >
+            <div class="relative w-full aspect-[16/9] overflow-hidden">
+              <img
+                src={post.image || FALLBACK_IMAGE}
+                alt={post.imageAlt || post.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-[#00568c] transition-colors">
+                {post.title}
+              </h3>
+              <p class="text-gray-600 text-sm mb-3 line-clamp-2">{post.excerpt}</p>
+              <span class="text-sm text-gray-500">{post.readTime}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Local Guides -->
+  {localGuides.length > 0 && (
+    <section class="py-12 lg:py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-2xl font-bold text-gray-900">Local Guides</h2>
+          <a
+            href="/resources/category/local-guides/"
+            class="text-[#00568c] font-semibold text-sm hover:text-[#00568c]/80 transition-colors"
+          >
+            View All
+          </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {localGuides.map((post) => (
+            <a
+              href={`/resources/${post.slug}/`}
+              class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group"
+            >
+              <div class="relative w-full aspect-[16/9] overflow-hidden">
+                <img
+                  src={post.image || FALLBACK_IMAGE}
+                  alt={post.imageAlt || post.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-[#00568c] transition-colors">
+                  {post.title}
+                </h3>
+                <p class="text-gray-600 text-sm mb-3 line-clamp-2">{post.excerpt}</p>
+                <span class="text-sm text-gray-500">{post.readTime}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Browse All Articles -->
+  <section class="py-12 lg:py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Browse All Articles</h2>
+      <p class="text-gray-600 mb-8">
+        {posts.length} articles across {topicGroups.length} topics. Click a topic to explore.
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {topicGroups.map((group) => {
+          const sorted = [...group.posts].sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+          );
+          return (
+            <details
+              id={`topic-${group.slug}`}
+              class="group bg-white border border-gray-200 rounded-xl overflow-hidden"
+            >
+              <summary class="flex items-center justify-between p-5 cursor-pointer hover:bg-gray-50 transition-colors list-none [&::-webkit-details-marker]:hidden">
+                <div class="flex items-center gap-3">
+                  <h3 class="font-semibold text-gray-900">{group.name}</h3>
+                  <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                    {group.posts.length}
+                  </span>
+                  <a href={`/resources/topic/${group.slug}/`} class="text-xs text-[#00568c] font-medium hover:underline">
+                    View all
+                  </a>
+                </div>
+                <svg
+                  class="h-5 w-5 text-gray-400 transition-transform group-open:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div class="border-t border-gray-100 divide-y divide-gray-50">
+                {sorted.map((post) => (
+                  <a
+                    href={`/resources/${post.slug}/`}
+                    class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                  >
+                    <span class="text-sm text-gray-900 hover:text-[#00568c] transition-colors pr-4">
+                      {post.title}
+                    </span>
+                    <span class="text-xs text-gray-400 whitespace-nowrap flex-shrink-0">
+                      {post.readTime}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </details>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- DIY vs Professional Service -->
+  <section class="py-16 lg:py-24 bg-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold mb-6">DIY vs Professional Pool Service</h2>
+          <p class="text-gray-300 mb-6">
+            Some pool owners enjoy maintaining their own pools. Others prefer to leave it to
+            professionals. Here's how to decide what's right for you.
+          </p>
+
+          <div class="space-y-4 mb-8">
+            <div>
+              <h3 class="font-semibold text-white mb-2">Consider DIY if you:</h3>
+              <ul class="space-y-2 text-gray-300">
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                  Enjoy hands-on maintenance tasks
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                  Have time for weekly testing and cleaning
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                  Are willing to learn proper chemistry
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="font-semibold text-white mb-2">Consider professional service if you:</h3>
+              <ul class="space-y-2 text-gray-300">
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-[#88d2c7] rounded-full"></span>
+                  Value your free time
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-[#88d2c7] rounded-full"></span>
+                  Want consistently balanced water
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-[#88d2c7] rounded-full"></span>
+                  Prefer expert eyes on your equipment
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-[#88d2c7] rounded-full"></span>
+                  Don't want to buy/store chemicals
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="text-gray-400 text-sm">
+            Many pool owners start with DIY and later switch to professional service when they
+            realize the time commitment. Either way, these resources help you understand what
+            good pool care looks like.
+          </p>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-8">
+          <h3 class="text-xl font-semibold mb-6">What Professional Service Provides</h3>
+          <ul class="space-y-4">
+            {[
+              'Weekly chemical testing and balancing',
+              'All chemicals included (no storage hassle)',
+              'Professional-grade equipment',
+              'Equipment monitoring and early problem detection',
+              'Consistent scheduling you can count on',
+              'Digital service reports after each visit',
+              'Priority scheduling for repairs',
+              'Expert knowledge on call when needed',
+            ].map((item) => (
+              <li class="flex items-center gap-3">
+                <svg class="h-5 w-5 text-[#88d2c7] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-gray-300">{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="mt-8 pt-6 border-t border-gray-700">
+            <p class="text-lg font-semibold text-white mb-2">
+              Weekly service with all chemicals included
+            </p>
+            <p class="text-gray-400 text-sm">Get a free quote today</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Have Questions -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-[#88d2c7]/10 rounded-2xl p-8 lg:p-12 text-center">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">
+          Have a Pool Question?
+        </h2>
+        <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+          Can't find what you're looking for? Our team is happy to help.
+          Whether you're a customer or just need advice, reach out and we'll
+          point you in the right direction.
+        </p>
+        <DualCTA quoteText="Get a Free Quote" class="justify-center" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Link -->
+  <section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">
+        Explore Our Services
+      </h2>
+      <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
+        From weekly cleaning to equipment repairs, we offer complete pool care for
+        San Diego homeowners.
+      </p>
+      <a
+        href="/services/"
+        class="inline-flex items-center gap-2 bg-[#00568c] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#00568c]/90 transition-colors"
+      >
+        View All Services
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

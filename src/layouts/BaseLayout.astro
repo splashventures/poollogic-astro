@@ -1,0 +1,118 @@
+---
+import '@/styles/globals.css';
+import { company } from '@/data/company';
+import { generateLocalBusinessSchema } from '@/lib/schema/localBusiness';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import StickyMobileCTA from '@/components/ui/StickyMobileCTA.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogType?: string;
+  ogUrl?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  noindex?: boolean;
+  keywords?: string[];
+  geoRegion?: string;
+  geoPlacename?: string;
+  geoPosition?: string;
+  schemas?: object[];
+}
+
+const {
+  title = `${company.name} | San Diego Pool Service`,
+  description = `Professional pool cleaning and maintenance services in San Diego County. Serving San Diego, Chula Vista, Carlsbad & 20+ cities. ${company.rating.count}+ 5-star reviews. Call ${company.phone}!`,
+  canonical = company.url + '/',
+  ogTitle,
+  ogDescription,
+  ogType = 'website',
+  ogUrl,
+  twitterTitle,
+  twitterDescription,
+  noindex = false,
+  keywords = [],
+  geoRegion,
+  geoPlacename,
+  geoPosition,
+  schemas = [],
+} = Astro.props;
+
+const localBusinessSchema = generateLocalBusinessSchema();
+const webSiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${company.url}/#website`,
+  name: company.name,
+  url: company.url,
+  publisher: {
+    '@type': 'Organization',
+    '@id': `${company.url}/#organization`,
+  },
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/images/logos/poollogic-logo.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/images/logos/poollogic-logo.png" />
+    <meta name="author" content={company.name} />
+    <meta name="creator" content={company.name} />
+    <meta name="publisher" content={company.name} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+    {noindex ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      <meta name="robots" content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1" />
+    )}
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={ogTitle || title} />
+    <meta property="og:description" content={ogDescription || description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={ogUrl || canonical} />
+    <meta property="og:site_name" content={company.name} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={`${company.url}/images/logos/poollogic-logo.png`} />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content={`${company.name} Logo`} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={twitterTitle || ogTitle || title} />
+    <meta name="twitter:description" content={twitterDescription || ogDescription || description} />
+    <meta name="twitter:image" content={`${company.url}/images/logos/poollogic-logo.png`} />
+
+    <!-- Geo tags -->
+    {geoRegion && <meta name="geo.region" content={geoRegion} />}
+    {geoPlacename && <meta name="geo.placename" content={geoPlacename} />}
+    {geoPosition && <meta name="geo.position" content={geoPosition} />}
+
+    <!-- Global Schemas -->
+    <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(webSiteSchema)} />
+    {schemas.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
+  </head>
+  <body class="font-sans antialiased bg-white text-gray-900">
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <StickyMobileCTA />
+  </body>
+</html>

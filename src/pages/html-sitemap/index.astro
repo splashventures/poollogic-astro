@@ -1,0 +1,181 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import { cities } from '@/data/cities';
+import { getMaintenanceServices, getRepairServices, getInstallationServices } from '@/data/services';
+import { posts } from '@/data/posts';
+
+const title = 'Sitemap | PoolLogic Pool Service';
+const description = 'Navigate all pages on the PoolLogic Pool Service website. Find pool services, city-specific pages, and helpful resources.';
+
+const maintenanceServices = getMaintenanceServices();
+const repairServices = getRepairServices();
+const installationServices = getInstallationServices();
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="https://poollogicsd.com/html-sitemap/"
+>
+  <!-- Breadcrumbs -->
+  <div class="py-2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Sitemap', url: '/html-sitemap/' },
+        ]}
+      />
+    </div>
+  </div>
+
+  <!-- Content -->
+  <section class="py-12 lg:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8">Sitemap</h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Main Pages -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+            Main Pages
+          </h2>
+          <ul class="space-y-2">
+            <li>
+              <a href="/" class="text-[#00568c] hover:text-[#00568c]/80">Home</a>
+            </li>
+            <li>
+              <a href="/services/" class="text-[#00568c] hover:text-[#00568c]/80">All Services</a>
+            </li>
+            <li>
+              <a href="/commercial-pool-service-san-diego/" class="text-[#00568c] hover:text-[#00568c]/80">Commercial Pool Service</a>
+            </li>
+            <li>
+              <a href="/about/" class="text-[#00568c] hover:text-[#00568c]/80">About Us</a>
+            </li>
+            <li>
+              <a href="/resources/" class="text-[#00568c] hover:text-[#00568c]/80">Resources & Tips</a>
+            </li>
+            <li>
+              <a href="/reviews/" class="text-[#00568c] hover:text-[#00568c]/80">Reviews</a>
+            </li>
+            <li>
+              <a href="/pool-service-near-me/" class="text-[#00568c] hover:text-[#00568c]/80">Pool Service Near Me</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Maintenance Services -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+            Maintenance Services
+          </h2>
+          <ul class="space-y-2">
+            {maintenanceServices.map((service) => (
+              <li>
+                <a
+                  href={`/${service.urlSlug}/`}
+                  class="text-[#00568c] hover:text-[#00568c]/80"
+                >
+                  {service.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Repair Services -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+            Repair Services
+          </h2>
+          <ul class="space-y-2">
+            {repairServices.map((service) => (
+              <li>
+                <a
+                  href={`/${service.urlSlug}/`}
+                  class="text-[#00568c] hover:text-[#00568c]/80"
+                >
+                  {service.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Installation Services -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+            Installation Services
+          </h2>
+          <ul class="space-y-2">
+            {installationServices.map((service) => (
+              <li>
+                <a
+                  href={`/${service.urlSlug}/`}
+                  class="text-[#00568c] hover:text-[#00568c]/80"
+                >
+                  {service.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- San Diego County -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+            San Diego County
+          </h2>
+          <ul class="space-y-2">
+            {cities.map((city) => (
+              <li>
+                <a
+                  href={`/pool-service-${city.slug}/`}
+                  class="text-[#00568c] hover:text-[#00568c]/80"
+                >
+                  {city.name} Pool Service
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+            Legal
+          </h2>
+          <ul class="space-y-2">
+            <li>
+              <a href="/privacy-policy/" class="text-[#00568c] hover:text-[#00568c]/80">Privacy Policy</a>
+            </li>
+            <li>
+              <a href="/terms-of-use/" class="text-[#00568c] hover:text-[#00568c]/80">Terms of Service</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Blog Posts -->
+      <div class="mt-12">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+          Resources & Articles
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-2">
+          {posts.map((post) => (
+            <div>
+              <a
+                href={`/resources/${post.slug}/`}
+                class="text-[#00568c] hover:text-[#00568c]/80 text-sm"
+              >
+                {post.title}
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

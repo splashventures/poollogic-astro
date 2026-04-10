@@ -1,0 +1,178 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import { company } from '@/data/company';
+
+const title = 'Terms of Service | PoolLogic Pool Service';
+const description = 'Terms of service for PoolLogic Pool Service. Read our terms and conditions for using our website and pool services.';
+const lastUpdated = 'January 1, 2024';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={`${company.url}/terms-of-use/`}
+>
+  <!-- Breadcrumbs -->
+  <div class="py-2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Terms of Use', url: '/terms-of-use/' },
+        ]}
+      />
+    </div>
+  </div>
+
+  <!-- Content -->
+  <section class="py-12 lg:py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Terms of Service</h1>
+      <p class="text-gray-500 mb-8">Last updated: {lastUpdated}</p>
+
+      <div class="prose prose-lg max-w-none text-gray-600">
+        <p>
+          Welcome to {company.name}. These Terms of Service ("Terms") govern your use of our
+          website and services. By using our website or engaging our services, you agree to
+          these Terms.
+        </p>
+
+        <h2>Services</h2>
+        <p>
+          {company.name} provides pool cleaning, maintenance, repair, and installation services
+          for residential and commercial properties in the greater San Diego County area of California. Specific
+          services, pricing, and terms are outlined in individual service agreements.
+        </p>
+
+        <h2>Service Agreements</h2>
+        <p>
+          Pool service is provided according to the terms specified in your service agreement,
+          which may include:
+        </p>
+        <ul>
+          <li>Frequency of service (weekly, bi-weekly, etc.)</li>
+          <li>Specific services included</li>
+          <li>Pricing and payment terms</li>
+          <li>Cancellation policies</li>
+        </ul>
+
+        <h2>Quotes and Pricing</h2>
+        <p>
+          Quotes provided through our website or by our team are estimates based on the
+          information provided. Final pricing may vary based on actual pool condition,
+          accessibility, and specific service requirements. All quotes are valid for 30 days
+          unless otherwise specified.
+        </p>
+
+        <h2>Payment Terms</h2>
+        <p>
+          Payment terms are specified in your service agreement. Generally:
+        </p>
+        <ul>
+          <li>Recurring services are billed monthly</li>
+          <li>One-time services are due upon completion</li>
+          <li>Repair services require approval before work begins</li>
+          <li>Late payments may incur fees as specified in your agreement</li>
+        </ul>
+
+        <h2>Access to Property</h2>
+        <p>
+          You agree to provide reasonable access to your property for scheduled services.
+          If access is not available, a trip charge may apply. Please ensure:
+        </p>
+        <ul>
+          <li>Gates are unlocked or access codes are provided</li>
+          <li>Pets are secured during service</li>
+          <li>Pool equipment is accessible</li>
+        </ul>
+
+        <h2>Cancellation and Termination</h2>
+        <p>
+          Recurring service may be cancelled with 30 days written notice. Cancellation of
+          scheduled one-time services with less than 24 hours notice may result in a
+          cancellation fee.
+        </p>
+
+        <h2>Limitations of Liability</h2>
+        <p>
+          While we take every precaution to protect your property, {company.name}'s liability
+          is limited to the cost of services provided. We are not responsible for:
+        </p>
+        <ul>
+          <li>Pre-existing conditions or equipment failures</li>
+          <li>Damage caused by improper previous work</li>
+          <li>Weather-related issues affecting pool condition</li>
+          <li>Damage from unauthorized modifications</li>
+        </ul>
+
+        <h2>Warranty</h2>
+        <p>
+          We stand behind our work:
+        </p>
+        <ul>
+          <li>Repair work is warranted for 90 days (labor)</li>
+          <li>Parts carry manufacturer warranties</li>
+          <li>Installation work is warranted per manufacturer specifications</li>
+          <li>Satisfaction guarantee on recurring cleaning services</li>
+        </ul>
+
+        <h2>Website Use</h2>
+        <p>
+          When using our website, you agree to:
+        </p>
+        <ul>
+          <li>Provide accurate information when requesting quotes</li>
+          <li>Not interfere with website functionality</li>
+          <li>Not use the website for any unlawful purpose</li>
+          <li>Not attempt to access restricted areas</li>
+        </ul>
+
+        <h2>Intellectual Property</h2>
+        <p>
+          All content on our website, including text, graphics, logos, and images, is the
+          property of {company.name} and protected by copyright laws. You may not reproduce,
+          distribute, or create derivative works without our written permission.
+        </p>
+
+        <h2>Dispute Resolution</h2>
+        <p>
+          Any disputes arising from these Terms or our services will be resolved through:
+        </p>
+        <ol>
+          <li>Good faith negotiation between parties</li>
+          <li>Mediation if negotiation is unsuccessful</li>
+          <li>Binding arbitration in San Diego County, California</li>
+        </ol>
+
+        <h2>Governing Law</h2>
+        <p>
+          These Terms are governed by the laws of the State of California, without regard
+          to conflict of law principles.
+        </p>
+
+        <h2>Changes to Terms</h2>
+        <p>
+          We reserve the right to modify these Terms at any time. Changes will be posted
+          on this page with an updated effective date. Continued use of our services after
+          changes constitutes acceptance of the modified Terms.
+        </p>
+
+        <h2>Severability</h2>
+        <p>
+          If any provision of these Terms is found to be unenforceable, the remaining
+          provisions will continue in full force and effect.
+        </p>
+
+        <h2>Contact Us</h2>
+        <p>
+          If you have questions about these Terms, please contact us:
+        </p>
+        <ul>
+          <li>Phone: {company.phone}</li>
+          <li>Address: {company.address.street}, {company.address.city}, {company.address.state} {company.address.zip}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
