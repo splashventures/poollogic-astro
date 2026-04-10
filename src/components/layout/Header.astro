@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import { company } from '@/data/company';
 import { formatPhoneLink } from '@/lib/utils';
 import Button from '@/components/ui/Button.astro';
+import logoHeader from '@/assets/images/logos/poollogic-logo-header.png';
 
 const navigation = [
   { name: 'Services', href: '/services/' },
@@ -52,11 +54,11 @@ const serviceAreas = [
     <div class="flex justify-between items-center h-20">
       <!-- Logo -->
       <a href="/" class="flex items-center py-2">
-        <img
-          src="/images/logos/poollogic-logo-header.png"
+        <Image
+          src={logoHeader}
           alt="PoolLogic Pool Service"
-          width="200"
-          height="96"
+          width={200}
+          height={96}
           loading="eager"
           class="!h-[52px] w-auto"
           style="height: 52px; width: auto;"

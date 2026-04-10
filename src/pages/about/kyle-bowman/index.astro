@@ -1,9 +1,11 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
 import Button from '@/components/ui/Button.astro';
 import { company } from '@/data/company';
 import { posts } from '@/data/posts';
+import kyleBowmanImg from '@/assets/images/pool/kyle-bowman.webp';
 
 const recentPosts = [...posts]
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -74,11 +76,11 @@ const description = 'Kyle Bowman is the Founder of PoolLogic Pool Service, a CPO
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col sm:flex-row items-center sm:items-start gap-8">
         <div class="w-32 h-32 rounded-full overflow-hidden flex-shrink-0">
-          <img
-            src="/images/pool/kyle-bowman.webp"
+          <Image
+            src={kyleBowmanImg}
             alt="Kyle Bowman, Founder of PoolLogic Pool Service"
-            width="256"
-            height="256"
+            width={256}
+            height={256}
             loading="eager"
             class="w-full h-full object-cover"
           />

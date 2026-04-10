@@ -1,6 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import { company } from '@/data/company';
 import Button from '@/components/ui/Button.astro';
+import phoneImg from '@/assets/images/pool/phone.jpg';
+import handleEverythingImg from '@/assets/images/pool/step-handle-everything.webp';
+import enjoyPoolImg from '@/assets/images/pool/step-enjoy-pool.webp';
 
 const steps = [
   {
@@ -8,7 +12,7 @@ const steps = [
     title: 'Get your free quote',
     description:
       "No two pools are the same, and your quote shouldn't be either. Tell us about your pool and we'll have a personalized estimate ready in minutes.",
-    image: '/images/pool/phone.jpg',
+    image: phoneImg,
     imageAlt: 'Smartphone with quote form, sunglasses and drink on sunny pool deck',
     highlight: '2-minute form',
   },
@@ -17,7 +21,7 @@ const steps = [
     title: 'We handle everything',
     description:
       'Your dedicated technician arrives weekly at the same time. We test, balance, clean, and inspect, then send you a detailed report.',
-    image: '/images/pool/step-handle-everything.webp',
+    image: handleEverythingImg,
     imageAlt: 'Pool technician with pole servicing residential pool in San Diego',
     highlight: 'Same tech every week',
   },
@@ -26,7 +30,7 @@ const steps = [
     title: 'Enjoy your pool',
     description:
       'Spend your time swimming, not maintaining. Your pool stays crystal clear, safe, and ready whenever you want.',
-    image: '/images/pool/step-enjoy-pool.webp',
+    image: enjoyPoolImg,
     imageAlt: 'Beautiful crystal clear pool with floats and tropical landscaping',
     highlight: 'Crystal clear, always',
   },
@@ -63,11 +67,11 @@ const steps = [
             <!-- Image side -->
             <div class="w-full lg:w-1/2">
               <div class="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/3]">
-                <img
+                <Image
                   src={step.image}
                   alt={step.imageAlt}
-                  width="800"
-                  height="600"
+                  width={800}
+                  height={600}
                   class="object-cover w-full h-full absolute inset-0"
                   loading="lazy"
                 />

@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { company } from '@/data/company';
 import { cities } from '@/data/cities';
@@ -8,6 +9,11 @@ import HowItWorks from '@/components/ui/HowItWorks.astro';
 import Testimonials from '@/components/ui/Testimonials.astro';
 import Comparison from '@/components/ui/Comparison.astro';
 import GuaranteeSection from '@/components/ui/GuaranteeSection.astro';
+import heroPoolImg from '@/assets/images/pool/hero-pool.webp';
+import techTestingImg from '@/assets/images/pool/pool-tech-testing-chemicals.webp';
+import techEquipmentImg from '@/assets/images/pool/pool-tech-equipment.webp';
+import techSkimmingImg from '@/assets/images/pool/pool-tech-skimming.webp';
+import techServiceUpdateImg from '@/assets/images/pool/pool-tech-service-update.webp';
 import FAQ from '@/components/ui/FAQ.astro';
 import PricingPreview from '@/components/ui/PricingPreview.astro';
 
@@ -61,12 +67,12 @@ const painPoints = [
   <!-- Hero Section - Full background image -->
   <section class="relative min-h-[600px] lg:min-h-[700px] overflow-hidden">
     <!-- Background Image -->
-    <img
-      src="/images/pool/hero-pool.webp"
+    <Image
+      src={heroPoolImg}
       alt="Crystal clear swimming pool maintained by PoolLogic in San Diego"
       class="absolute inset-0 w-full h-full object-cover"
-      width="1920"
-      height="1080"
+      width={1920}
+      height={1080}
       loading="eager"
       fetchpriority="high"
       decoding="async"
@@ -172,21 +178,21 @@ const painPoints = [
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-4">
             <div class="rounded-xl overflow-hidden">
-              <img
-                src="/images/pool/pool-tech-testing-chemicals.webp"
+              <Image
+                src={techTestingImg}
                 alt="PoolLogic technician testing pool water chemistry"
-                width="600"
-                height="400"
+                width={600}
+                height={400}
                 loading="lazy"
                 class="w-full h-auto object-cover"
               />
             </div>
             <div class="rounded-xl overflow-hidden">
-              <img
-                src="/images/pool/pool-tech-equipment.webp"
+              <Image
+                src={techEquipmentImg}
                 alt="PoolLogic technician with pool pump and filter equipment"
-                width="600"
-                height="400"
+                width={600}
+                height={400}
                 loading="lazy"
                 class="w-full h-auto object-cover"
               />
@@ -194,21 +200,21 @@ const painPoints = [
           </div>
           <div class="space-y-4 pt-8">
             <div class="rounded-xl overflow-hidden">
-              <img
-                src="/images/pool/pool-tech-skimming.webp"
+              <Image
+                src={techSkimmingImg}
                 alt="PoolLogic technician skimming leaves from pool"
-                width="600"
-                height="400"
+                width={600}
+                height={400}
                 loading="lazy"
                 class="w-full h-auto object-cover"
               />
             </div>
             <div class="rounded-xl overflow-hidden">
-              <img
-                src="/images/pool/pool-tech-service-update.webp"
+              <Image
+                src={techServiceUpdateImg}
                 alt="PoolLogic technician sending digital service report"
-                width="600"
-                height="400"
+                width={600}
+                height={400}
                 loading="lazy"
                 class="w-full h-auto object-cover"
               />
