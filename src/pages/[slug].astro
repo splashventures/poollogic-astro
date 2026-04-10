@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { cities, getCityBySlug, getNearbyCities, getPrimaryCities } from '@/data/cities';
@@ -19,6 +20,7 @@ import Button from '@/components/ui/Button.astro';
 import TrustStats from '@/components/ui/TrustStats.astro';
 import GuaranteeBadge from '@/components/ui/GuaranteeBadge.astro';
 import GuaranteeSection from '@/components/ui/GuaranteeSection.astro';
+import { getImage } from '@/lib/images';
 
 // === How It Works steps data (per service) ===
 
@@ -1015,14 +1017,25 @@ const cityWhatsIncludedCard = [
                 <!-- Image side -->
                 <div class="w-full lg:w-1/2">
                   <div class="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/3]">
-                    <img
-                      src={step.image}
-                      alt={step.imageAlt}
-                      width="800"
-                      height="600"
-                      class={step.imageClassName || 'object-cover w-full h-full absolute inset-0'}
-                      loading="lazy"
-                    />
+                    {getImage(step.image) ? (
+                      <Image
+                        src={getImage(step.image)!}
+                        alt={step.imageAlt}
+                        width={800}
+                        height={600}
+                        class={step.imageClassName || 'object-cover w-full h-full absolute inset-0'}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <img
+                        src={step.image}
+                        alt={step.imageAlt}
+                        width="800"
+                        height="600"
+                        class={step.imageClassName || 'object-cover w-full h-full absolute inset-0'}
+                        loading="lazy"
+                      />
+                    )}
                     <div class="absolute top-5 left-5 flex items-center justify-center w-12 h-12 rounded-full bg-[#00568c] text-white text-xl font-bold shadow-lg">
                       {step.number}
                     </div>
@@ -1219,14 +1232,25 @@ const cityWhatsIncludedCard = [
               >
                 {post.image && (
                   <div class="relative aspect-[2/1] overflow-hidden">
-                    <img
-                      src={post.image}
-                      alt={post.imageAlt || post.title}
-                      width="800"
-                      height="400"
-                      class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
-                    />
+                    {getImage(post.image) ? (
+                      <Image
+                        src={getImage(post.image)!}
+                        alt={post.imageAlt || post.title}
+                        width={800}
+                        height={400}
+                        class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <img
+                        src={post.image}
+                        alt={post.imageAlt || post.title}
+                        width="800"
+                        height="400"
+                        class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                        loading="lazy"
+                      />
+                    )}
                   </div>
                 )}
                 <div class="p-6 flex-1 flex flex-col">

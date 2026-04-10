@@ -8,7 +8,67 @@ export default defineConfig({
   trailingSlash: 'always',
   output: 'static',
   adapter: vercel(),
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      serialize(item) {
+        const url = item.url;
+        const path = new URL(url).pathname;
+
+        // Homepage
+        if (path === '/') {
+          item.priority = 1.0;
+          item.changefreq = 'weekly';
+        }
+        // Service pages
+        else if (path.match(/^\/(pool-|hot-tub-).+-san-diego\/$/)) {
+          item.priority = 0.9;
+          item.changefreq = 'monthly';
+        }
+        // Services overview
+        else if (path === '/services/') {
+          item.priority = 0.9;
+          item.changefreq = 'monthly';
+        }
+        // City pages
+        else if (path.match(/^\/pool-service-[a-z-]+\/$/)) {
+          item.priority = 0.8;
+          item.changefreq = 'monthly';
+        }
+        // About, reviews, commercial
+        else if (['/about/', '/reviews/', '/commercial-pool-service-san-diego/'].includes(path)) {
+          item.priority = 0.7;
+          item.changefreq = 'monthly';
+        }
+        // Blog index, Kyle Bowman bio
+        else if (['/resources/', '/about/kyle-bowman/'].includes(path)) {
+          item.priority = 0.6;
+          item.changefreq = 'weekly';
+        }
+        // Blog posts, categories, topics
+        else if (path.startsWith('/resources/')) {
+          item.priority = 0.6;
+          item.changefreq = 'monthly';
+        }
+        // City-service combo pages
+        else if (path.match(/^\/.+-pool-.+-[a-z-]+\/$/)) {
+          item.priority = 0.5;
+          item.changefreq = 'monthly';
+        }
+        // Legal, utility pages
+        else if (['/privacy-policy/', '/terms-of-use/', '/html-sitemap/'].includes(path)) {
+          item.priority = 0.3;
+          item.changefreq = 'yearly';
+        }
+        // Default
+        else {
+          item.priority = 0.5;
+          item.changefreq = 'monthly';
+        }
+
+        return item;
+      },
+    }),
+  ],
   image: {
     service: {
       entrypoint: 'astro/assets/services/sharp',

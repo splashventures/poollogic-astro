@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { topicGroups } from '@/data/posts';
@@ -7,6 +8,7 @@ import { services } from '@/data/services';
 import { company } from '@/data/company';
 import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
 import DualCTA from '@/components/ui/DualCTA.astro';
+import { getImage } from '@/lib/images';
 
 export const getStaticPaths = (async () => {
   return topicHubs.map((hub) => {
@@ -111,14 +113,25 @@ const collectionSchema = {
             class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group"
           >
             <div class="relative w-full aspect-video overflow-hidden">
-              <img
-                src={post.image || FALLBACK_IMAGE}
-                alt={post.imageAlt || post.title}
-                width="800"
-                height="450"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                loading="lazy"
-              />
+              {getImage(post.image || FALLBACK_IMAGE) ? (
+                <Image
+                  src={getImage(post.image || FALLBACK_IMAGE)!}
+                  alt={post.imageAlt || post.title}
+                  width={800}
+                  height={450}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              ) : (
+                <img
+                  src={post.image || FALLBACK_IMAGE}
+                  alt={post.imageAlt || post.title}
+                  width="800"
+                  height="450"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              )}
             </div>
             <div class="p-6">
               <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-[#00568c] transition-colors">

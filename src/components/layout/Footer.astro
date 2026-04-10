@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import { company } from '@/data/company';
 import { formatPhoneLink } from '@/lib/utils';
+import logoLight from '@/assets/images/logos/poollogic-logo-light.png';
 
 const serviceLinks = [
   { name: 'Weekly Pool Cleaning', href: '/pool-cleaning-service-san-diego/' },
@@ -48,11 +50,11 @@ const currentYear = new Date().getFullYear();
       <!-- Company info with NAP -->
       <div class="lg:col-span-2">
         <a href="/" class="inline-block mb-4">
-          <img
-            src="/images/logos/poollogic-logo-light.png"
+          <Image
+            src={logoLight}
             alt={`${company.name} - San Diego Pool Service`}
-            width="140"
-            height="100"
+            width={140}
+            height={100}
             loading="lazy"
             class="h-16 w-auto"
           />
