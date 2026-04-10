@@ -12,7 +12,11 @@ export function cn(...inputs: ClassValue[]) {
  * Format phone for tel: links
  */
 export function formatPhoneLink(phone: string): string {
-  return `tel:${phone.replace(/[^0-9+]/g, '')}`;
+  const digits = phone.replace(/[^0-9+]/g, '');
+  // Normalize to E.164 format (+1 prefix) for consistency
+  if (digits.startsWith('+')) return `tel:${digits}`;
+  if (digits.length === 10) return `tel:+1${digits}`;
+  return `tel:+${digits}`;
 }
 
 /**

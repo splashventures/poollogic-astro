@@ -175,6 +175,7 @@ const serviceAreas = [
                 <button
                   class="flex items-center justify-between w-full text-gray-700 font-medium"
                   data-mobile-accordion-trigger
+                  aria-expanded="false"
                 >
                   {item.name}
                   <svg
@@ -264,6 +265,8 @@ const serviceAreas = [
         const arrow = trigger.querySelector('[data-mobile-accordion-arrow]') as HTMLElement;
         panel?.classList.toggle('hidden');
         arrow?.classList.toggle('rotate-180');
+        const expanded = trigger.getAttribute('aria-expanded') === 'true';
+        trigger.setAttribute('aria-expanded', String(!expanded));
       });
     });
 
