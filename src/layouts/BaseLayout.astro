@@ -23,7 +23,6 @@ interface Props {
   geoPlacename?: string;
   geoPosition?: string;
   schemas?: object[];
-  preloadImage?: string;
 }
 
 const {
@@ -42,7 +41,6 @@ const {
   geoPlacename,
   geoPosition,
   schemas = [],
-  preloadImage,
 } = Astro.props;
 
 const localBusinessSchema = generateLocalBusinessSchema();
@@ -103,8 +101,9 @@ const webSiteSchema = {
     {geoPlacename && <meta name="geo.placename" content={geoPlacename} />}
     {geoPosition && <meta name="geo.position" content={geoPosition} />}
 
-    <!-- Preload LCP image -->
-    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+    <!-- Preconnect to external quote domain -->
+    <link rel="preconnect" href="https://quote.poollogicsd.com" />
+    <link rel="dns-prefetch" href="https://quote.poollogicsd.com" />
 
     <!-- View Transitions -->
     <ViewTransitions />
