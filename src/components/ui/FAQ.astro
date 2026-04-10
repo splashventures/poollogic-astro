@@ -106,57 +106,62 @@ const {
 </section>
 
 <script>
-  document.querySelectorAll('[data-faq-container]').forEach((container) => {
-    const items = container.querySelectorAll('[data-faq-item]');
+  function initFAQ() {
+    document.querySelectorAll('[data-faq-container]').forEach((container) => {
+      const items = container.querySelectorAll('[data-faq-item]');
 
-    items.forEach((item) => {
-      const trigger = item.querySelector('[data-faq-trigger]') as HTMLButtonElement;
-      const panel = item.querySelector('[data-faq-panel]') as HTMLElement;
-      const icon = item.querySelector('[data-faq-icon]') as HTMLElement;
-      const svg = icon?.querySelector('svg') as SVGElement;
+      items.forEach((item) => {
+        const trigger = item.querySelector('[data-faq-trigger]') as HTMLButtonElement;
+        const panel = item.querySelector('[data-faq-panel]') as HTMLElement;
+        const icon = item.querySelector('[data-faq-icon]') as HTMLElement;
+        const svg = icon?.querySelector('svg') as SVGElement;
 
-      trigger?.addEventListener('click', () => {
-        const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+        trigger?.addEventListener('click', () => {
+          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
 
-        // Close all items
-        items.forEach((otherItem) => {
-          const otherTrigger = otherItem.querySelector('[data-faq-trigger]') as HTMLButtonElement;
-          const otherPanel = otherItem.querySelector('[data-faq-panel]') as HTMLElement;
-          const otherIcon = otherItem.querySelector('[data-faq-icon]') as HTMLElement;
-          const otherSvg = otherIcon?.querySelector('svg') as SVGElement;
+          // Close all items
+          items.forEach((otherItem) => {
+            const otherTrigger = otherItem.querySelector('[data-faq-trigger]') as HTMLButtonElement;
+            const otherPanel = otherItem.querySelector('[data-faq-panel]') as HTMLElement;
+            const otherIcon = otherItem.querySelector('[data-faq-icon]') as HTMLElement;
+            const otherSvg = otherIcon?.querySelector('svg') as SVGElement;
 
-          otherTrigger?.setAttribute('aria-expanded', 'false');
-          if (otherPanel) {
-            otherPanel.classList.remove('max-h-96', 'pb-6');
-            otherPanel.classList.add('max-h-0');
-          }
-          if (otherIcon) {
-            otherIcon.classList.remove('rotate-180', 'bg-[#88d2c7]/20');
-            otherIcon.classList.add('bg-gray-100');
-          }
-          if (otherSvg) {
-            otherSvg.classList.remove('text-[#00568c]');
-            otherSvg.classList.add('text-gray-500');
+            otherTrigger?.setAttribute('aria-expanded', 'false');
+            if (otherPanel) {
+              otherPanel.classList.remove('max-h-96', 'pb-6');
+              otherPanel.classList.add('max-h-0');
+            }
+            if (otherIcon) {
+              otherIcon.classList.remove('rotate-180', 'bg-[#88d2c7]/20');
+              otherIcon.classList.add('bg-gray-100');
+            }
+            if (otherSvg) {
+              otherSvg.classList.remove('text-[#00568c]');
+              otherSvg.classList.add('text-gray-500');
+            }
+          });
+
+          // Toggle clicked item (open if it was closed)
+          if (!isOpen) {
+            trigger.setAttribute('aria-expanded', 'true');
+            if (panel) {
+              panel.classList.remove('max-h-0');
+              panel.classList.add('max-h-96', 'pb-6');
+            }
+            if (icon) {
+              icon.classList.remove('bg-gray-100');
+              icon.classList.add('rotate-180', 'bg-[#88d2c7]/20');
+            }
+            if (svg) {
+              svg.classList.remove('text-gray-500');
+              svg.classList.add('text-[#00568c]');
+            }
           }
         });
-
-        // Toggle clicked item (open if it was closed)
-        if (!isOpen) {
-          trigger.setAttribute('aria-expanded', 'true');
-          if (panel) {
-            panel.classList.remove('max-h-0');
-            panel.classList.add('max-h-96', 'pb-6');
-          }
-          if (icon) {
-            icon.classList.remove('bg-gray-100');
-            icon.classList.add('rotate-180', 'bg-[#88d2c7]/20');
-          }
-          if (svg) {
-            svg.classList.remove('text-gray-500');
-            svg.classList.add('text-[#00568c]');
-          }
-        }
       });
     });
-  });
+  }
+
+  // Re-initialize after View Transitions navigation
+  document.addEventListener('astro:page-load', initFAQ);
 </script>

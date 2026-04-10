@@ -9,13 +9,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Format phone number for display
- */
-export function formatPhone(phone: string): string {
-  return phone;
-}
-
-/**
  * Format phone for tel: links
  */
 export function formatPhoneLink(phone: string): string {

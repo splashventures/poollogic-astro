@@ -52,17 +52,16 @@ const painPoints = [
 <BaseLayout
   title={title}
   description={description}
-  canonical={company.url}
+  canonical={`${company.url}/`}
   ogTitle="Pool Service San Diego | #1 Pool Cleaning Company | PoolLogic"
   ogDescription={`Professional pool service for San Diego. Weekly cleaning, all chemicals included, CPO-certified technicians. ${company.rating.count}+ 5-star reviews.`}
-  ogUrl={company.url}
+  ogUrl={`${company.url}/`}
   twitterTitle="Pool Service San Diego | PoolLogic Pool Service"
   twitterDescription={`San Diego's #1 rated pool service. All chemicals included. Call ${company.phone}!`}
   keywords={keywords}
   geoRegion="US-CA"
   geoPlacename="San Diego"
   geoPosition={`${company.coordinates.lat};${company.coordinates.lng}`}
-  preloadImage="/images/pool/hero-pool.webp"
 >
   <!-- Hero Section - Full background image -->
   <section class="relative min-h-[600px] lg:min-h-[700px] overflow-hidden">
@@ -71,8 +70,8 @@ const painPoints = [
       src={heroPoolImg}
       alt="Crystal clear swimming pool maintained by PoolLogic in San Diego"
       class="absolute inset-0 w-full h-full object-cover"
-      width={1920}
-      height={1080}
+      widths={[640, 1024, 1920]}
+      sizes="100vw"
       loading="eager"
       fetchpriority="high"
       decoding="async"
