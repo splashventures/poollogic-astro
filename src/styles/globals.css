@@ -13,6 +13,12 @@
   --color-brand-aqua-dark: #5fb8aa;
 }
 
+/* Ensure font-display: swap for faster text rendering */
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+}
+
 /* Base styles */
 body {
   font-family: var(--font-sans);

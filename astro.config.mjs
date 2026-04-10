@@ -9,8 +9,20 @@ export default defineConfig({
   output: 'static',
   adapter: vercel(),
   integrations: [sitemap()],
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+      config: {
+        quality: 80,
+      },
+    },
+  },
+  compressHTML: true,
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      cssMinify: true,
+    },
   },
   redirects: {
     // Static page redirects

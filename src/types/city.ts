@@ -33,6 +33,7 @@ export interface City {
   metaDescription: string;
 
   // Page content sections
+  definitionParagraph: string;
   heroDescription: string;
   introContent: string;
   localExpertiseContent: string;

@@ -29,6 +29,7 @@ interface LocalBusinessSchema {
   areaServed: Array<{
     '@type': string;
     name: string;
+    polygon?: string;
   }>;
   openingHoursSpecification: Array<{
     '@type': string;
@@ -88,10 +89,19 @@ export function generateLocalBusinessSchema(): LocalBusinessSchema {
       latitude: company.coordinates.lat,
       longitude: company.coordinates.lng,
     },
-    areaServed: cities.map((city) => ({
-      '@type': 'City',
-      name: `${city.name}, ${city.state}`,
-    })),
+    areaServed: [
+      ...cities.map((city) => ({
+        '@type': 'City' as const,
+        name: `${city.name}, ${city.state}`,
+      })),
+      {
+        '@type': 'GeoShape' as const,
+        name: 'San Diego County Service Area',
+        polygon: cities
+          .map((c) => `${c.coordinates.lat},${c.coordinates.lng}`)
+          .join(' '),
+      },
+    ],
     openingHoursSpecification: company.openingHoursSpecification.map((hours) => ({
       '@type': 'OpeningHoursSpecification',
       dayOfWeek: hours.dayOfWeek,
