@@ -28,13 +28,13 @@ const serviceAreas = [
   <div class="bg-[#00568c] text-white py-2">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center text-sm">
       <div class="flex items-center gap-4">
-        <span class="hidden sm:inline">{company.hoursDisplay}</span>
+        <span class="text-xs sm:text-sm">{company.hoursDisplay}</span>
         <span class="hidden md:inline">|</span>
         <span class="hidden md:inline">{company.serviceAreaDescription}</span>
       </div>
       <a
         href={formatPhoneLink(company.phone)}
-        class="flex items-center gap-2 font-semibold hover:text-[#88d2c7] transition-colors"
+        class="flex items-center gap-2 font-semibold hover:text-[#88d2c7] transition-colors min-h-[44px] sm:min-h-0 items-center"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@ const serviceAreas = [
 
   <!-- Main navigation -->
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-20">
+    <div class="flex justify-between items-center h-16 sm:h-20">
       <!-- Logo -->
       <a href="/" class="flex items-center py-2">
         <Image
@@ -61,8 +61,8 @@ const serviceAreas = [
           height={96}
           loading="eager"
           fetchpriority="high"
-          class="!h-[52px] w-auto"
-          style="height: 52px; width: auto;"
+          class="!h-[42px] sm:!h-[52px] w-auto"
+          style="height: 42px; width: auto;"
         />
       </a>
 

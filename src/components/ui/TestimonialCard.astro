@@ -12,7 +12,7 @@ const { name, location, text, rating, yearsCustomer } = Astro.props;
 const stars = Array.from({ length: rating }, (_, i) => i);
 ---
 
-<div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full flex flex-col">
+<div class="bg-white rounded-2xl p-5 sm:p-8 shadow-sm border border-gray-100 h-full flex flex-col">
   <!-- Stars -->
   <div class="flex gap-1 mb-4">
     {stars.map(() => (
@@ -23,7 +23,7 @@ const stars = Array.from({ length: rating }, (_, i) => i);
   </div>
 
   <!-- Quote -->
-  <blockquote class="text-gray-700 text-lg leading-relaxed flex-grow">
+  <blockquote class="text-gray-700 text-base sm:text-lg leading-relaxed flex-grow">
     &ldquo;{text}&rdquo;
   </blockquote>
 
