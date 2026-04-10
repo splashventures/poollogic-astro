@@ -1,0 +1,87 @@
+---
+import { company } from '@/data/company';
+import { formatPhoneLink } from '@/lib/utils';
+import Button from '@/components/ui/Button.astro';
+
+interface Props {
+  quoteText?: string;
+  phoneText?: string;
+  variant?: 'default' | 'compact' | 'stacked';
+  class?: string;
+}
+
+const {
+  quoteText = 'Get Your Free Quote',
+  phoneText,
+  variant = 'default',
+  class: className = '',
+} = Astro.props;
+
+const phoneDisplay = phoneText || company.phone;
+---
+
+{variant === 'stacked' ? (
+  <div class={`flex flex-col gap-3 ${className}`}>
+    <Button href={company.quoteUrl} external size="lg" class="w-full">
+      {quoteText}
+    </Button>
+    <a
+      href={formatPhoneLink(company.phone)}
+      class="inline-flex items-center justify-center gap-2 text-[#00568c] font-semibold hover:text-[#00568c] transition-colors"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+      </svg>
+      or call: {phoneDisplay}
+    </a>
+  </div>
+) : variant === 'compact' ? (
+  <div class={`flex flex-col sm:flex-row items-center gap-3 ${className}`}>
+    <Button href={company.quoteUrl} external size="md">
+      {quoteText}
+    </Button>
+    <span class="text-gray-500 hidden sm:inline">or</span>
+    <a
+      href={formatPhoneLink(company.phone)}
+      class="inline-flex items-center gap-2 text-[#00568c] font-semibold hover:text-[#00568c]"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+      </svg>
+      {phoneDisplay}
+    </a>
+  </div>
+) : (
+  <div class={`flex flex-col sm:flex-row items-center gap-4 ${className}`}>
+    <Button href={company.quoteUrl} external size="lg">
+      {quoteText}
+    </Button>
+    <div class="flex items-center gap-2 text-gray-600">
+      <span class="hidden sm:inline">or call now:</span>
+      <a
+        href={formatPhoneLink(company.phone)}
+        class="inline-flex items-center gap-2 text-[#00568c] font-bold text-lg hover:text-[#00568c] transition-colors"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+        </svg>
+        {phoneDisplay}
+      </a>
+    </div>
+  </div>
+)}

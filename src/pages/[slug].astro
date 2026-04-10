@@ -1,0 +1,1529 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { cities, getCityBySlug, getNearbyCities, getPrimaryCities } from '@/data/cities';
+import { services, getServiceBySlug, getServiceByUrlSlug } from '@/data/services';
+import { company } from '@/data/company';
+import { generateCityLocalBusinessSchema } from '@/lib/schema/localBusiness';
+import { generateServiceSchema } from '@/lib/schema/service';
+import { generateSimpleFAQSchema } from '@/lib/schema/faq';
+import { parseComboSlug, getAllComboParams, getServiceUrlSlugFromComboSlug, getComboUrlSlug, getComboIntro, getComboFAQs } from '@/data/city-service-combos';
+import { posts } from '@/data/posts';
+import type { BlogPost } from '@/types/post';
+import type { City } from '@/types/city';
+import type { Service } from '@/types/service';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import Button from '@/components/ui/Button.astro';
+import TrustStats from '@/components/ui/TrustStats.astro';
+import GuaranteeBadge from '@/components/ui/GuaranteeBadge.astro';
+import GuaranteeSection from '@/components/ui/GuaranteeSection.astro';
+
+// === How It Works steps data (per service) ===
+
+interface HowItWorksStep {
+  number: string;
+  title: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  imageClassName?: string;
+  highlight: string;
+}
+
+function getServiceSteps(service: Service): HowItWorksStep[] {
+  const stepsBySlug: Record<string, HowItWorksStep[]> = {
+    'weekly-pool-cleaning': [
+      { number: '1', title: 'Tell Us About Your Pool', description: "Fill out our 2-minute form with your pool size, features, and any concerns. We'll send a customized weekly service quote within 24 hours.", image: '/images/pool/phone.jpg', imageAlt: 'Smartphone with pool service quote form on sunny pool deck', highlight: '2-minute form' },
+      { number: '2', title: 'We Take Care of Everything', description: 'Your dedicated technician arrives at the same time each week to test water, balance chemicals, skim, brush, vacuum, and inspect equipment. You get a detailed digital report after every visit.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Pool technician skimming a residential pool in San Diego', highlight: 'Same tech every week' },
+      { number: '3', title: 'Enjoy a Swim-Ready Pool', description: 'No more testing strips, chemical runs, or weekend scrubbing. Your pool stays crystal clear, perfectly balanced, and ready whenever you want.', image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Crystal clear pool with floats and tropical landscaping', highlight: 'Crystal clear, always' },
+    ],
+    'pool-filter-cleaning': [
+      { number: '1', title: 'Request a Filter Cleaning', description: "Tell us your filter type (cartridge, sand, or DE) and when it was last cleaned. We'll schedule a deep cleaning at a time that works for you.", image: '/images/pool/phone.jpg', imageAlt: 'Scheduling a pool filter cleaning service', highlight: 'All filter types serviced' },
+      { number: '2', title: 'We Deep-Clean Your Filter', description: 'Our tech fully disassembles your filter, chemically soaks and pressure-washes every element, inspects for wear, and reassembles, restoring full filtration capacity.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Pool technician performing filter maintenance', highlight: 'Complete disassembly & soak' },
+      { number: '3', title: 'Better Water, Lower Bills', description: "A clean filter means crystal-clear water, better circulation, and lower energy costs. You'll notice the difference immediately.", image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Crystal clear pool water after professional filter cleaning', highlight: 'Restored filtration capacity' },
+    ],
+    'pool-drain-restart': [
+      { number: '1', title: 'Tell Us About Your Pool', description: "Share your pool size, surface type, and any issues like cloudiness or scaling. We'll provide a detailed quote for a complete drain and restart.", image: '/images/pool/phone.jpg', imageAlt: 'Getting a quote for pool draining service', highlight: 'Free evaluation' },
+      { number: '2', title: 'We Drain, Clean & Refill', description: 'We safely pump out all the old water, pressure-wash every surface, inspect the shell for damage, then refill with fresh water and balance the chemistry.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Pool technician performing drain and restart service', highlight: 'Complete surface cleaning' },
+      { number: '3', title: 'A Fresh Start', description: "Your pool looks and feels brand new: bright surfaces, balanced water, and zero dissolved solids. It's like swimming in a new pool.", image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Freshly refilled crystal clear pool', highlight: 'Like a brand-new pool' },
+    ],
+    'pool-algae-removal': [
+      { number: '1', title: 'Send Us Photos of the Algae', description: "Snap a few pictures of your green pool and fill out our quick form. We'll identify the type (green, mustard, or black algae) and quote a targeted treatment plan.", image: '/images/pool/phone.jpg', imageAlt: 'Taking photos of pool algae for treatment quote', highlight: 'Targeted treatment plan' },
+      { number: '2', title: 'We Eliminate the Algae', description: "Our techs shock-treat, brush, and vacuum until every trace of algae is gone. We clean your filter during treatment and return for follow-up visits as needed. It's all included.", image: '/images/pool/step-handle-everything.webp', imageAlt: 'Pool technician treating algae in residential pool', highlight: 'Multiple visits included' },
+      { number: '3', title: 'Crystal Clear Again', description: "Your pool goes from green to pristine. We rebalance the chemistry and give you a prevention plan so the algae doesn't come back.", image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Crystal clear pool after algae removal treatment', highlight: 'Prevention plan included' },
+    ],
+    'hot-tub-cleaning': [
+      { number: '1', title: 'Tell Us About Your Spa', description: "Share your hot tub model, how often you use it, and any issues. We'll put together a maintenance plan tailored to your spa.", image: '/images/pool/phone.jpg', imageAlt: 'Getting a quote for hot tub cleaning service', highlight: 'Customized for your spa' },
+      { number: '2', title: 'We Handle the Maintenance', description: 'Your tech tests and treats the water, cleans the filter, wipes the waterline, checks jets and drains, and verifies the heater and controls are working properly.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician maintaining a hot tub', highlight: 'Complete spa care' },
+      { number: '3', title: 'Just Relax', description: 'Step into perfectly warm, clean, safe water any time you want. No more guessing at chemicals or worrying about bacteria.', image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Clean, inviting hot tub ready for use', highlight: 'Always soak-ready' },
+    ],
+    'pool-acid-washing': [
+      { number: '1', title: 'Describe the Staining', description: "Tell us about your pool surface, the type of stains you're seeing, and when the pool was last acid-washed. We'll evaluate and quote the job.", image: '/images/pool/phone.jpg', imageAlt: 'Getting a quote for pool acid washing', highlight: 'Free stain evaluation' },
+      { number: '2', title: 'We Drain & Acid Wash', description: 'We fully drain your pool, carefully apply muriatic acid to strip away stains and discoloration, scrub every surface, then neutralize, refill, and rebalance.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician acid washing pool plaster', highlight: 'Professional-grade results' },
+      { number: '3', title: 'Bright, Clean Surfaces', description: "Your pool plaster looks years younger: bright, smooth, and free of stains. It's the most dramatic transformation in pool care.", image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Pool with bright clean plaster after acid washing', highlight: 'Like-new plaster finish' },
+    ],
+    'pool-heater-repair': [
+      { number: '1', title: 'Describe the Problem', description: "Tell us what's happening: no heat, error codes, strange noises, or leaks. We'll schedule a diagnostic visit at your convenience.", image: '/images/pool/phone.jpg', imageAlt: 'Scheduling a pool heater repair diagnosis', highlight: 'Fast diagnostic scheduling' },
+      { number: '2', title: 'We Diagnose & Fix It', description: 'Our technician pinpoints the exact issue (ignition, heat exchanger, thermostat, or controls) and repairs it, often in a single visit. All major brands serviced.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician repairing a pool heater', highlight: 'Most repairs same-day' },
+      { number: '3', title: 'Warm Water Again', description: 'Your pool heater runs reliably again. We test thoroughly after every repair and back our work with a 90-day labor warranty.', image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Warm, inviting pool after heater repair', highlight: '90-day labor warranty' },
+    ],
+    'pool-pump-repair': [
+      { number: '1', title: "Tell Us What's Wrong", description: "Noisy motor? Leaking water? Not priming? Describe the symptoms and we'll get a technician to you fast.", image: '/images/pool/phone.jpg', imageAlt: 'Requesting pool pump repair service', highlight: 'Same-day available' },
+      { number: '2', title: 'We Repair Your Pump', description: 'Our tech diagnoses the problem (motor, seal, impeller, or capacitor) and completes the repair with quality replacement parts.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician repairing a pool pump', highlight: 'Quality OEM parts' },
+      { number: '3', title: 'Circulation Restored', description: "Your pump runs quietly and efficiently again. We also check if a variable-speed upgrade could save you money on energy.", image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Pool with proper water circulation after pump repair', highlight: '90-day labor warranty' },
+    ],
+    'pool-filter-repair': [
+      { number: '1', title: 'Describe the Issue', description: "Cloudy water? High pressure reading? Leaking tank? Tell us what's going on and we'll schedule a repair visit.", image: '/images/pool/phone.jpg', imageAlt: 'Requesting pool filter repair service', highlight: 'Fast scheduling' },
+      { number: '2', title: 'We Fix Your Filter', description: "Whether it's a cracked tank, failed multiport valve, or worn internal parts, we diagnose it and repair it. Cartridge, sand, and DE filters.", image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician repairing a pool filter system', highlight: 'All filter types' },
+      { number: '3', title: 'Clear Water Again', description: "Proper filtration is restored, water clarity improves immediately, and your pump isn't straining against a broken filter anymore.", image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Clear pool water after filter repair', highlight: 'Flow verified after repair' },
+    ],
+    'pool-light-repair': [
+      { number: '1', title: 'Tell Us About the Light', description: "Flickering, dim, or completely out? Let us know which lights are affected and we'll schedule a safe electrical diagnosis.", image: '/images/pool/phone.jpg', imageAlt: 'Requesting pool light repair service', highlight: 'Safe electrical testing' },
+      { number: '2', title: 'We Repair or Upgrade', description: 'Our tech tests the bulb, fixture, transformer, and wiring, then makes the repair. We also offer energy-efficient LED upgrades.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician repairing underwater pool light', highlight: 'LED upgrades available' },
+      { number: '3', title: 'Beautiful Nighttime Pool', description: 'Your pool glows again with bright, reliable lighting. Enjoy safe nighttime swims and stunning backyard ambiance.', image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Beautifully lit pool at night', highlight: 'GFCI safety verified' },
+    ],
+    'pool-automation-repair': [
+      { number: '1', title: 'Describe the Issue', description: "App not connecting? Controller unresponsive? Valves not turning? Tell us what's happening with your automation system.", image: '/images/pool/phone.jpg', imageAlt: 'Requesting pool automation repair service', highlight: 'All major brands' },
+      { number: '2', title: 'We Diagnose & Repair', description: 'Our automation specialists troubleshoot Pentair, Hayward, and Jandy systems: controllers, actuators, sensors, and app connectivity.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician repairing pool automation controller', highlight: 'Firmware updates included' },
+      { number: '3', title: 'Full Control Restored', description: 'Manage your pump, heater, lights, and water features from your phone again. We verify every function and walk you through any changes.', image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Smart pool control from smartphone', highlight: 'User training included' },
+    ],
+    'salt-water-pool-repair': [
+      { number: '1', title: 'Describe the Problem', description: "Low chlorine output? Error lights? Salt readings off? Tell us what your salt system is doing and we'll schedule a diagnosis.", image: '/images/pool/phone.jpg', imageAlt: 'Requesting salt water pool system repair', highlight: 'All salt system brands' },
+      { number: '2', title: 'We Fix Your Salt System', description: 'Our tech inspects the salt cell for scaling, tests the control board and flow sensor, and makes the repair to restore automatic chlorination.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician servicing a salt chlorine generator', highlight: 'Cell cleaning included' },
+      { number: '3', title: 'Auto Chlorination Restored', description: 'Your salt system generates chlorine reliably again. We verify output levels and give you tips to extend cell life.', image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Salt water pool with crystal clear water', highlight: 'Maintenance tips included' },
+    ],
+    'pool-heater-installation': [
+      { number: '1', title: 'Tell Us Your Heating Needs', description: "Share your pool size, how warm you want the water, and your budget. We'll recommend the right heater (gas, heat pump, or solar) and provide a detailed quote.", image: '/images/pool/phone.jpg', imageAlt: 'Getting a quote for pool heater installation', highlight: 'Expert sizing consultation' },
+      { number: '2', title: 'Professional Installation', description: 'We install your new heater to code, connect it to your plumbing and gas or electrical, integrate with existing automation, and test everything thoroughly.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician installing a new pool heater', highlight: 'Code-compliant installation' },
+      { number: '3', title: 'Year-Round Swimming', description: 'Enjoy your pool in any season. Your new heater provides efficient, reliable warmth whenever you want it.', image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Warm inviting pool heated year-round', highlight: 'Manufacturer warranty included' },
+    ],
+    'pool-pump-installation': [
+      { number: '1', title: 'Evaluate Your Current Setup', description: "We assess your existing pump, plumbing, and electrical to recommend the right variable-speed pump for your pool and check for utility rebates.", image: '/images/pool/phone.jpg', imageAlt: 'Getting a quote for pool pump installation', highlight: 'Rebate assistance included' },
+      { number: '2', title: 'We Install & Program', description: 'Out with the old, in with the new. We install your energy-efficient pump, wire it properly, and program optimal speed schedules for your pool.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician installing a variable-speed pool pump', highlight: 'Proper speed programming' },
+      { number: '3', title: 'Lower Bills, Quieter Pool', description: 'Your new variable-speed pump cuts energy use by up to 80% while running quieter and providing better filtration through longer, slower cycles.', image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Efficient pool with new variable-speed pump', highlight: 'Up to 80% energy savings' },
+    ],
+    'pool-filter-installation': [
+      { number: '1', title: 'Tell Us Your Filtration Needs', description: "We evaluate your pool volume, usage, and water quality goals to recommend the right filter type (cartridge, sand, or DE) and provide a quote.", image: '/images/pool/phone.jpg', imageAlt: 'Getting a quote for pool filter installation', highlight: 'Right filter for your pool' },
+      { number: '2', title: 'Professional Installation', description: 'We remove your old filter, install the new one with proper plumbing connections, and run the break-in procedure to ensure optimal performance.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician installing a new pool filter', highlight: 'Includes old filter removal' },
+      { number: '3', title: 'Crystal Clear Water', description: "Your new filter provides superior filtration with less maintenance. You'll notice the difference in water clarity from the very first day.", image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Crystal clear pool water from new filter', highlight: 'Better clarity, less work' },
+    ],
+    'pool-automation-installation': [
+      { number: '1', title: 'Design Your Smart Pool', description: "Tell us what you want to control (pump, heater, lights, water features) and we'll design a system with the right automation package for your setup.", image: '/images/pool/phone.jpg', imageAlt: 'Planning a smart pool automation system', highlight: 'Custom system design' },
+      { number: '2', title: 'We Install & Configure', description: 'Our techs install the controller, wire every component, program schedules and scenes, set up the mobile app, and walk you through everything.', image: '/images/pool/step-handle-everything.webp', imageAlt: 'Technician installing pool automation system', highlight: 'App setup included' },
+      { number: '3', title: 'Control From Anywhere', description: 'Adjust your pool from your phone, set schedules, and save energy, all from the couch or across the country. Works with Alexa and Google Home.', image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Controlling pool from smartphone app', highlight: 'Works with Alexa & Google' },
+    ],
+  };
+
+  return stepsBySlug[service.slug] || [
+    { number: '1', title: 'Request a Quote', description: `No two pools are the same, and your quote shouldn't be either. Tell us about your ${service.category === 'maintenance' ? 'pool' : 'pool equipment'} and we'll have a personalized estimate ready in minutes.`, image: '/images/pool/phone.jpg', imageAlt: 'Requesting a pool service quote', highlight: 'Free quote in 24 hours' },
+    { number: '2', title: 'We Handle the Service', description: `Our CPO-certified technicians arrive on time and complete the ${service.name.toLowerCase()} professionally. We keep you updated every step of the way.`, image: '/images/pool/step-handle-everything.webp', imageAlt: 'Pool technician performing service', highlight: 'CPO-certified technicians' },
+    { number: '3', title: 'Enjoy the Results', description: `Your ${service.category === 'maintenance' ? 'pool is clean, balanced, and swim-ready' : 'equipment works like new'}. We guarantee your satisfaction.`, image: '/images/pool/step-enjoy-pool.webp', imageAlt: 'Beautiful crystal clear pool', highlight: '100% satisfaction guaranteed' },
+  ];
+}
+
+// === Service FAQs ===
+
+function getServiceFAQs(service: Service) {
+  return [
+    { question: `How much does ${service.name.toLowerCase()} cost?`, answer: `Contact us for a free, no-obligation quote. Final pricing depends on your specific pool and equipment. Every quote includes a detailed breakdown with no hidden fees.` },
+    { question: `How long does ${service.name.toLowerCase()} take?`, answer: `The duration depends on your pool's size and condition. Most ${service.category} services are completed in a single visit. We'll provide a time estimate when we assess your specific situation.` },
+    { question: `Do you offer ${service.name.toLowerCase()} in my area?`, answer: `We provide ${service.name.toLowerCase()} throughout San Diego County, including San Diego, Chula Vista, Carlsbad, La Jolla, Escondido, and 20+ other cities across greater San Diego.` },
+    { question: `Why should I choose PoolLogic for ${service.name.toLowerCase()}?`, answer: `With ${company.yearsInBusiness}+ years of experience and ${company.rating.count}+ 5-star reviews, we're San Diego's trusted pool service provider. We use quality parts, provide written estimates, and stand behind our work.` },
+    { question: `How do I schedule ${service.name.toLowerCase()}?`, answer: `Request a free quote online or call us at ${company.phone}. We'll discuss your needs, provide a custom quote, and schedule a convenient appointment.` },
+  ];
+}
+
+// === Static paths ===
+
+export const getStaticPaths = (async () => {
+  const cityParams = cities.map((city) => ({
+    params: { slug: `pool-service-${city.slug}` },
+    props: { type: 'city' as const, city, service: undefined as Service | undefined },
+  }));
+
+  const serviceParams = services.map((service) => ({
+    params: { slug: service.urlSlug },
+    props: { type: 'service' as const, service, city: undefined as City | undefined },
+  }));
+
+  const comboParams = getAllComboParams().map((p) => {
+    const combo = parseComboSlug(p.slug);
+    if (!combo) return null;
+    const svcUrl = getServiceUrlSlugFromComboSlug(combo.serviceSlug);
+    const svc = getServiceByUrlSlug(svcUrl);
+    const city = getCityBySlug(combo.citySlug);
+    if (!svc || !city) return null;
+    return {
+      params: { slug: p.slug },
+      props: { type: 'combo' as const, service: svc, city },
+    };
+  }).filter(Boolean) as { params: { slug: string }; props: { type: 'combo'; service: Service; city: City } }[];
+
+  return [...cityParams, ...serviceParams, ...comboParams];
+}) satisfies GetStaticPaths;
+
+// === Resolve props ===
+
+const { type, city, service } = Astro.props;
+
+// === Build metadata based on page type ===
+
+let pageTitle = '';
+let pageDescription = '';
+let pageCanonical = '';
+let pageKeywords: string[] = [];
+let pageOgTitle = '';
+let pageOgDescription = '';
+let pageGeoRegion = 'US-CA';
+let pageGeoPlacename = 'San Diego';
+let pageGeoPosition = `${company.coordinates.lat};${company.coordinates.lng}`;
+let schemas: object[] = [];
+
+if (type === 'city' && city) {
+  pageTitle = `${city.name} Pool Service | #1 Rated Pool Cleaning | PoolLogic`;
+  pageDescription = `${city.name} pool service & cleaning by CPO-certified technicians. Weekly maintenance, all chemicals included. ${company.rating.count}+ 5-star reviews. Call ${company.phone}!`;
+  pageCanonical = `${company.url}/pool-service-${city.slug}/`;
+  pageKeywords = [
+    `pool service ${city.name}`, `${city.name} pool service`, `pool cleaning ${city.name}`,
+    `${city.name} pool cleaning`, `pool service ${city.name} CA`, `pool maintenance ${city.name}`,
+    `pool service near me ${city.name}`, `pool company ${city.name}`, `best pool service ${city.name}`,
+  ];
+  pageOgTitle = `${city.name} Pool Service & Cleaning | PoolLogic Pool Service`;
+  pageOgDescription = `Professional pool service in ${city.name}, CA. Weekly cleaning, repairs & maintenance. Trusted by ${company.rating.count}+ families. Free quotes!`;
+  pageGeoPlacename = city.name;
+  pageGeoPosition = `${city.coordinates.lat};${city.coordinates.lng}`;
+
+  const localBusinessSchema = generateCityLocalBusinessSchema(city);
+  schemas.push(localBusinessSchema);
+  const cityFaqs = city.faqs;
+  const faqSchema = generateSimpleFAQSchema(cityFaqs);
+  if (faqSchema) schemas.push(faqSchema);
+} else if (type === 'service' && service) {
+  pageTitle = `${service.name} | San Diego Pool Service | PoolLogic Pool Service`;
+  pageDescription = `Professional ${service.name} in San Diego. ${service.longDescription.slice(0, 100)}... ${company.rating.count}+ reviews. Call ${company.phone}!`;
+  pageCanonical = `${company.url}/${service.urlSlug}/`;
+  pageKeywords = [
+    ...service.keywords,
+    `${service.name.toLowerCase()} near me`,
+    `${service.name.toLowerCase()} san diego`,
+    `${service.name.toLowerCase()} chula vista`,
+    `${service.name.toLowerCase()} carlsbad`,
+    `pool ${service.category} service`,
+  ];
+  pageOgTitle = pageTitle;
+  pageOgDescription = pageDescription;
+
+  const serviceSchema = generateServiceSchema(service);
+  schemas.push(serviceSchema);
+  const svcFaqs = getServiceFAQs(service);
+  const faqSchema = generateSimpleFAQSchema(svcFaqs);
+  if (faqSchema) schemas.push(faqSchema);
+} else if (type === 'combo' && service && city) {
+  const comboSlug = getComboUrlSlug(service, city);
+  pageTitle = `${service.name} in ${city.name}, CA | ${company.name}`;
+  pageDescription = `Professional ${service.name.toLowerCase()} in ${city.name}, San Diego County. CPO-certified technicians, ${company.rating.count}+ 5-star reviews. Call ${company.phone} for a free quote!`;
+  pageCanonical = `${company.url}/${comboSlug}/`;
+  pageKeywords = [
+    `${service.name.toLowerCase()} ${city.name.toLowerCase()}`,
+    `pool service ${city.name.toLowerCase()}`,
+    `${service.name.toLowerCase()} near me`,
+    ...service.keywords.slice(0, 3),
+  ];
+  pageOgTitle = pageTitle;
+  pageOgDescription = pageDescription;
+  pageGeoPlacename = city.name;
+  pageGeoPosition = `${city.coordinates.lat};${city.coordinates.lng}`;
+
+  const serviceSchema = generateServiceSchema(service);
+  schemas.push(serviceSchema);
+  const comboFaqs = getComboFAQs(service, city);
+  const faqSchema = generateSimpleFAQSchema(comboFaqs);
+  if (faqSchema) schemas.push(faqSchema);
+}
+
+// === City page data ===
+const nearbyCities = city ? getNearbyCities(city.slug) : [];
+const cityFaqs = (type === 'city' && city) ? city.faqs : [];
+
+// === Service page data ===
+const serviceFaqs = (type === 'service' && service) ? getServiceFAQs(service) : [];
+const primaryCities = getPrimaryCities().slice(0, 12);
+const relatedServices = (type === 'service' && service)
+  ? (service.relatedServices?.map((s) => getServiceBySlug(s)).filter(Boolean) as Service[])
+  : [];
+
+const categoryConfig: Record<string, { bg: string; light: string; text: string; border: string; label: string }> = {
+  maintenance: { bg: 'bg-[#00568c]', light: 'bg-[#88d2c7]/20', text: 'text-[#00568c]', border: 'border-[#88d2c7]/30', label: 'Maintenance Service' },
+  repair: { bg: 'bg-emerald-600', light: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-200', label: 'Repair Service' },
+  installation: { bg: 'bg-violet-600', light: 'bg-violet-50', text: 'text-violet-600', border: 'border-violet-200', label: 'Installation Service' },
+};
+
+const config = service ? categoryConfig[service.category] : categoryConfig.maintenance;
+
+// === Service page: related posts ===
+const topicMap: Record<string, string[]> = {
+  'weekly-pool-cleaning': ['pool-cleaning', 'general'],
+  'pool-filter-cleaning': ['pool-filter'],
+  'pool-drain-restart': ['pool-drain'],
+  'pool-algae-removal': ['pool-algae'],
+  'hot-tub-cleaning': ['hot-tub'],
+  'pool-acid-washing': ['pool-cleaning', 'pool-algae'],
+  'pool-heater-repair': ['pool-heater'],
+  'pool-pump-repair': ['pool-pump'],
+  'pool-filter-repair': ['pool-filter'],
+  'pool-light-repair': ['pool-light'],
+  'pool-automation-repair': ['pool-automation'],
+  'salt-water-pool-repair': ['saltwater'],
+  'pool-heater-installation': ['pool-heater'],
+  'pool-pump-installation': ['pool-pump'],
+  'pool-filter-installation': ['pool-filter'],
+  'pool-automation-installation': ['pool-automation'],
+};
+
+let relatedPosts: BlogPost[] = [];
+if (type === 'service' && service) {
+  const topics = topicMap[service.slug] || [];
+  const keywords = service.slug.split('-').filter((w) => w !== 'pool' && w.length > 2);
+  relatedPosts = posts
+    .filter((p) => {
+      const slugMatch = topics.some((t) => p.slug.includes(t));
+      const keywordMatch = keywords.some((k) => p.slug.includes(k) || p.title.toLowerCase().includes(k));
+      return slugMatch || keywordMatch;
+    })
+    .sort((a, b) => parseInt(b.readTime) - parseInt(a.readTime))
+    .slice(0, 4);
+}
+
+// === Combo page data ===
+let comboIntro = '';
+let comboFaqsList: { question: string; answer: string }[] = [];
+let comboSlug = '';
+let comboRelatedBlogPosts: BlogPost[] = [];
+if (type === 'combo' && service && city) {
+  comboSlug = getComboUrlSlug(service, city);
+  comboIntro = getComboIntro(service, city);
+  comboFaqsList = getComboFAQs(service, city);
+  const topicKeywords = service.name.toLowerCase().split(' ');
+  comboRelatedBlogPosts = posts
+    .filter((p: BlogPost) => topicKeywords.some((kw) => p.title.toLowerCase().includes(kw)))
+    .slice(0, 3);
+}
+
+// Service page how-it-works steps
+const serviceSteps = (type === 'service' && service) ? getServiceSteps(service) : [];
+
+// City page "What You Get" section cards
+const cityServiceCards = [
+  {
+    title: 'Water Chemistry',
+    items: [`Test pH, chlorine & alkalinity`, 'Balance all chemicals', `Adjust for ${city?.name || 'local'} water`],
+    iconPath: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z',
+  },
+  {
+    title: 'Surface Cleaning',
+    items: ['Skim all debris', 'Brush walls & tiles', 'Vacuum pool floor'],
+    iconPath: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z',
+  },
+  {
+    title: 'Equipment Check',
+    items: ['Inspect pump & filter', 'Check for issues', 'Empty baskets'],
+    iconPath: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z',
+    iconPath2: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z',
+  },
+  {
+    title: 'Service Report',
+    items: ['Photos & notes', 'Chemistry readings', 'Sent after each visit'],
+    iconPath: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+  },
+];
+
+// Whats included dark section items for city page
+const cityWhatsIncluded = [
+  'All pool chemicals included in every visit',
+  'CPO-certified technicians - cancel anytime',
+  'Same technician each week for consistency',
+  'Equipment repairs quoted separately',
+];
+
+const cityWhatsIncludedCard = [
+  'Weekly cleaning visits',
+  'All chemicals included',
+  'Water testing & balancing',
+  'Equipment inspection',
+  'Service reports after every visit',
+];
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={pageCanonical}
+  ogTitle={pageOgTitle}
+  ogDescription={pageOgDescription}
+  keywords={pageKeywords}
+  geoRegion={pageGeoRegion}
+  geoPlacename={pageGeoPlacename}
+  geoPosition={pageGeoPosition}
+  schemas={schemas}
+>
+
+{/* ================================================================ */}
+{/* CITY PAGE */}
+{/* ================================================================ */}
+{type === 'city' && city && (
+  <>
+    <!-- Breadcrumbs -->
+    <div class="py-2">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumbs items={[
+          { name: 'Home', url: '/' },
+          { name: `${city.name} Pool Service`, url: `/pool-service-${city.slug}/` },
+        ]} />
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative bg-white overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-[#88d2c7]/10 via-white to-white"></div>
+
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+        <div class="max-w-3xl">
+          <!-- Local badge -->
+          <div class="inline-flex items-center gap-2 bg-[#88d2c7]/10 border border-[#88d2c7]/30 rounded-full px-4 py-2 mb-6">
+            <svg class="h-5 w-5 text-[#00568c]" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-[#00568c] font-medium text-sm">
+              Local Pool Service in {city.name}, {city.state} &middot; {city.distanceFromHQ} from HQ
+            </span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+            {city.name} Pool Service
+            <span class="block text-[#00568c]">&amp; Pool Cleaning</span>
+          </h1>
+
+          <p class="text-xl lg:text-2xl text-gray-600 mb-8 leading-relaxed">
+            {city.heroDescription}
+          </p>
+
+          <!-- Trust signals -->
+          <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-gray-600">
+            <div class="flex items-center gap-2">
+              <div class="flex">
+                {[...Array(5)].map(() => (
+                  <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <span class="font-medium">{company.rating.value}/5</span>
+              <span class="text-gray-500">({company.rating.count}+ reviews)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              <span class="text-gray-600">Licensed &amp; Insured</span>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="flex flex-col sm:flex-row gap-4 mb-6">
+            <Button href={company.quoteUrl} external size="lg">
+              Get Free {city.name} Quote
+            </Button>
+            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg">
+              <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+              </svg>
+              {company.phone}
+            </Button>
+          </div>
+
+          <p class="text-sm text-gray-500">
+            Get a free, five minute quote &middot; CPO-certified technicians &middot; Cancel anytime
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="py-16 border-t border-b border-gray-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <TrustStats />
+      </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="py-20 lg:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 text-center">
+            #1 Rated Pool Cleaning Company in {city.name}, CA
+          </h2>
+          <div class="prose prose-lg text-gray-600 text-center">
+            {city.introContent.split('\n\n').map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What You Get Section -->
+    <section class="py-20 lg:py-28 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <p class="text-[#00568c] font-semibold mb-3">WEEKLY {city.name.toUpperCase()} POOL SERVICE</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            What&apos;s Included in {city.name} Pool Cleaning
+          </h2>
+          <p class="text-lg text-gray-600">
+            Complete pool care for {city.name} pools - one price, no hidden charges, all chemicals included.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {cityServiceCards.map((item) => (
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+              <div class="w-12 h-12 bg-[#88d2c7]/10 rounded-xl flex items-center justify-center text-[#00568c] mb-4">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d={item.iconPath} />
+                  {item.iconPath2 && <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d={item.iconPath2} />}
+                </svg>
+              </div>
+              <h3 class="font-bold text-gray-900 mb-3">{item.title}</h3>
+              <ul class="space-y-2">
+                {item.items.map((feature) => (
+                  <li class="flex items-center gap-2 text-sm text-gray-600">
+                    <svg class="h-4 w-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div class="text-center">
+          <GuaranteeBadge />
+        </div>
+      </div>
+    </section>
+
+    <!-- Local Expertise -->
+    <section class="py-20 lg:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <p class="text-[#00568c] font-semibold mb-3">LOCAL {city.name.toUpperCase()} POOL EXPERTS</p>
+            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+              Pool Service for Every {city.name} Neighborhood
+            </h2>
+            <p class="text-lg text-gray-600 mb-6">
+              {city.localExpertiseContent}
+            </p>
+            <p class="text-gray-600 mb-8">
+              {city.climateNotes}
+            </p>
+
+            <div class="space-y-4">
+              {[
+                `Just ${city.distanceFromHQ} from our San Diego headquarters`,
+                `Fast response for ${city.name} pool emergencies`,
+                `Technicians who know ${city.name} neighborhoods`,
+                `Service tailored to ${city.county} County water`,
+              ].map((item) => (
+                <div class="flex items-center gap-3">
+                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg class="h-4 w-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <span class="text-gray-700">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Neighborhoods -->
+          <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200">
+            <h3 class="font-bold text-gray-900 mb-6 text-xl">
+              {city.name} Neighborhoods We Service
+            </h3>
+            <div class="grid grid-cols-1 gap-4">
+              {city.neighborhoods.map((neighborhood) => (
+                <div class="flex items-start gap-3">
+                  <svg class="h-5 w-5 text-[#88d2c7] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                  </svg>
+                  <div>
+                    <span class="font-medium text-gray-900">{neighborhood.name}</span>
+                    <p class="text-sm text-gray-500">{neighborhood.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-200">
+              <p class="text-sm text-gray-500 mb-2">{city.name} ZIP codes we serve:</p>
+              <p class="font-medium text-gray-700">{city.zipCodes.join(', ')}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What's Included Dark Section -->
+    <section class="py-20 lg:py-28 bg-gray-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <p class="text-[#88d2c7] font-semibold mb-3">WHAT&apos;S INCLUDED IN {city.name.toUpperCase()} POOL SERVICE</p>
+            <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+              Complete Pool Care in {city.name} - No Hidden Fees
+            </h2>
+            <p class="text-gray-300 text-lg mb-8">
+              Your {city.name} pool service includes everything your pool needs -
+              all chemicals, all testing, all cleaning. One simple plan, no surprise charges.
+            </p>
+            <div class="space-y-4">
+              {cityWhatsIncluded.map((item) => (
+                <div class="flex items-center gap-3">
+                  <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="text-gray-300">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="bg-white text-gray-900 rounded-2xl p-8">
+            <div class="text-center mb-6">
+              <p class="text-gray-500 font-medium mb-2">Weekly Pool Service in {city.name}, CA</p>
+              <p class="text-2xl font-bold text-gray-900">Everything Your Pool Needs</p>
+            </div>
+
+            <ul class="space-y-3 mb-6">
+              {cityWhatsIncludedCard.map((item) => (
+                <li class="flex items-center gap-2 text-gray-600">
+                  <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <Button href={company.quoteUrl} external size="lg" class="w-full justify-center mb-4">
+              Get Free {city.name} Pool Quote
+            </Button>
+
+            <p class="text-center text-gray-500 text-sm">
+              Free custom quote &middot; No commitment &middot; Response within 24 hours
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Available in This City -->
+    <section class="py-20 lg:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <p class="text-[#00568c] font-semibold tracking-wide uppercase text-sm mb-3">Our Services</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Pool Services Available in {city.name}
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            From weekly cleaning to equipment repairs, we provide complete pool care for {city.name} homeowners.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((svc) => {
+            const catColors = {
+              maintenance: 'bg-blue-50 text-blue-700',
+              repair: 'bg-amber-50 text-amber-700',
+              installation: 'bg-green-50 text-green-700',
+            };
+            return (
+              <a
+                href={`/${svc.urlSlug}/`}
+                class="group bg-white rounded-xl border border-gray-200 p-6 hover:border-[#00568c]/30 hover:shadow-lg transition-all"
+              >
+                <span class={`inline-block text-xs font-semibold tracking-wider uppercase px-2.5 py-1 rounded-full mb-3 ${catColors[svc.category] || 'bg-gray-50 text-gray-700'}`}>
+                  {svc.category}
+                </span>
+                <h3 class="font-bold text-gray-900 group-hover:text-[#00568c] transition-colors mb-2">
+                  {svc.name}
+                </h3>
+                <p class="text-sm text-gray-600 mb-4 line-clamp-2">
+                  {svc.shortDescription}
+                </p>
+                <span class="inline-flex items-center text-sm font-semibold text-[#00568c]">
+                  Learn more
+                  <svg class="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 lg:py-28 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <p class="text-[#00568c] font-semibold mb-3">{city.name.toUpperCase()} POOL SERVICE REVIEWS</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            What {city.name} Pool Owners Say
+          </h2>
+          <p class="text-gray-600">
+            See why {city.name} homeowners choose PoolLogic Pool Service for pool service.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {[
+            { name: 'Sarah M.', neighborhood: city.neighborhoods[0]?.name || city.name, text: `Best pool service in ${city.name}! They show up every week like clockwork, and our pool has never looked better. The service reports are great - I always know what was done.` },
+            { name: 'Michael T.', neighborhood: city.neighborhoods[1]?.name || city.name, text: `Finally found a reliable ${city.name} pool company. No more chasing down unreliable services. Worth every penny for the peace of mind. Highly recommend!` },
+          ].map((testimonial) => (
+            <div class="bg-gray-50 rounded-2xl p-8">
+              <div class="flex gap-1 mb-4">
+                {[...Array(5)].map(() => (
+                  <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <p class="text-gray-700 mb-6">&ldquo;{testimonial.text}&rdquo;</p>
+              <div class="font-semibold text-gray-900">
+                {testimonial.name}
+                <span class="font-normal text-gray-500"> - {testimonial.neighborhood}, {city.name}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 lg:py-28 bg-gray-50">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <p class="text-[#00568c] font-semibold mb-3">{city.name.toUpperCase()} POOL SERVICE FAQ</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">
+            Frequently Asked Questions About Pool Service in {city.name}
+          </h2>
+        </div>
+
+        <div class="space-y-4">
+          {cityFaqs.map((faq) => (
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+              <h3 class="font-semibold text-gray-900 mb-2">{faq.question}</h3>
+              <p class="text-gray-600">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Nearby Cities -->
+    <section class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-2">
+          Pool Service Near {city.name}, California
+        </h2>
+        <p class="text-gray-600 mb-6">
+          We also provide pool cleaning and pool maintenance in these nearby cities:
+        </p>
+        <div class="flex flex-wrap gap-3">
+          {nearbyCities.map((nearbyCity) => (
+            <a
+              href={`/pool-service-${nearbyCity.slug}/`}
+              class="px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-[#88d2c7]/20 hover:text-[#00568c] transition-colors"
+            >
+              {nearbyCity.name} Pool Service
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-20 lg:py-28 bg-[#00568c]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+          Ready for Professional Pool Service in {city.name}?
+        </h2>
+        <p class="text-xl text-blue-100 mb-8">
+          Get a free quote for {city.name} pool cleaning today. CPO-certified technicians, no hidden fees - just crystal-clear water.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+          <Button href={company.quoteUrl} external size="lg" variant="secondary">
+            Get Free {city.name} Quote
+          </Button>
+          <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
+            <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+            </svg>
+            Call {company.phone}
+          </Button>
+        </div>
+
+        <p class="text-blue-200 text-sm">
+          Serving {city.name}, {city.state} and {city.county} County &middot; {company.rating.count}+ 5-star reviews &middot; Licensed &amp; insured
+        </p>
+      </div>
+    </section>
+  </>
+)}
+
+{/* ================================================================ */}
+{/* SERVICE PAGE */}
+{/* ================================================================ */}
+{type === 'service' && service && (
+  <>
+    <!-- Breadcrumbs -->
+    <div class="py-2">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumbs items={[
+          { name: 'Home', url: '/' },
+          { name: 'Services', url: '/services/' },
+          { name: service.name, url: `/${service.urlSlug}/` },
+        ]} />
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative bg-white overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-white"></div>
+
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+        <div class="max-w-3xl">
+          <!-- Category badge -->
+          <div class={`inline-flex items-center gap-2 ${config.light} ${config.border} border rounded-full px-4 py-2 mb-6`}>
+            <svg class={`h-5 w-5 ${config.text}`} fill="currentColor" viewBox="0 0 20 20">
+              {service.category === 'maintenance' && (
+                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+              )}
+              {service.category === 'repair' && (
+                <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+              )}
+              {service.category === 'installation' && (
+                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+              )}
+            </svg>
+            <span class={`${config.text} font-medium text-sm`}>
+              {config.label}
+            </span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+            {service.name}
+          </h1>
+
+          <p class="text-xl lg:text-2xl text-gray-600 mb-6 leading-relaxed">
+            {service.shortDescription}
+          </p>
+
+          <!-- Value badge -->
+          <div class="inline-flex items-center gap-3 bg-gray-900 text-white rounded-full px-5 py-3 mb-8">
+            <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-sm font-medium">Free Custom Quote - CPO-Certified Technicians</span>
+          </div>
+
+          <!-- Trust signals -->
+          <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-gray-600">
+            <div class="flex items-center gap-2">
+              <div class="flex">
+                {[...Array(5)].map(() => (
+                  <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <span class="font-medium">{company.rating.value}/5</span>
+              <span class="text-gray-500">({company.rating.count}+ reviews)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              <span class="text-gray-600">Licensed &amp; Insured</span>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="flex flex-col sm:flex-row gap-4 mb-6">
+            <Button href={company.quoteUrl} external size="lg">
+              Get Your Free Quote
+            </Button>
+            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg">
+              <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+              </svg>
+              {company.phone}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="py-16 border-t border-b border-gray-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <TrustStats />
+      </div>
+    </section>
+
+    <!-- Problem/Solution -->
+    <section class="py-20 lg:py-28">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <p class="text-[#00568c] font-semibold mb-3">WHY THIS MATTERS</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">
+            The problem we solve
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div class="bg-red-50 border border-red-100 rounded-2xl p-8">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-bold text-gray-900">The Problem</h3>
+            </div>
+            <p class="text-gray-700 leading-relaxed">{service.problemStatement}</p>
+          </div>
+
+          <div class={`${config.light} ${config.border} border rounded-2xl p-8`}>
+            <div class="flex items-center gap-3 mb-6">
+              <div class={`w-12 h-12 ${config.bg} rounded-xl flex items-center justify-center`}>
+                <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-bold text-gray-900">Our Solution</h3>
+            </div>
+            <p class="text-gray-700 leading-relaxed">{service.solutionStatement}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What's Included -->
+    <section class="py-20 lg:py-28 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <p class={`${config.text} font-semibold mb-3`}>WHAT&apos;S INCLUDED</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Everything you get
+          </h2>
+          <p class="text-lg text-gray-600">
+            {service.longDescription}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {service.features.map((feature) => (
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+              <div class={`w-10 h-10 ${config.light} rounded-xl flex items-center justify-center ${config.text} mb-4`}>
+                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <h3 class="font-bold text-gray-900 mb-2">{feature.title}</h3>
+              <p class="text-gray-600">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl p-8 max-w-2xl mx-auto">
+          <h3 class="font-bold text-gray-900 mb-6 text-center">Every Service Includes:</h3>
+          <ul class="space-y-4">
+            {service.includes.map((item) => (
+              <li class="flex items-start gap-3">
+                <div class={`w-6 h-6 ${config.bg} rounded-full flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                  <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <span class="text-gray-700">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="text-center mt-12">
+          <GuaranteeBadge />
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-20 lg:py-28 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16 lg:mb-20">
+          <p class="text-[#00568c] font-semibold tracking-wide uppercase text-sm mb-3">
+            How It Works
+          </p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Simple process, great results
+          </h2>
+          <p class="text-lg text-gray-600">
+            From quote to completion, we make {service.name.toLowerCase()} easy.
+          </p>
+        </div>
+
+        <div class="space-y-16 lg:space-y-24">
+          {serviceSteps.map((step, index) => {
+            const isReversed = index % 2 !== 0;
+            return (
+              <div class={`flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-8 lg:gap-16`}>
+                <!-- Image side -->
+                <div class="w-full lg:w-1/2">
+                  <div class="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/3]">
+                    <img
+                      src={step.image}
+                      alt={step.imageAlt}
+                      class={step.imageClassName || 'object-cover w-full h-full absolute inset-0'}
+                      loading="lazy"
+                    />
+                    <div class="absolute top-5 left-5 flex items-center justify-center w-12 h-12 rounded-full bg-[#00568c] text-white text-xl font-bold shadow-lg">
+                      {step.number}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Content side -->
+                <div class="w-full lg:w-1/2">
+                  <div class="max-w-lg">
+                    <span class="inline-block text-xs font-semibold tracking-wider uppercase text-[#00568c] bg-[#00568c]/10 px-3 py-1 rounded-full mb-4">
+                      Step {step.number}
+                    </span>
+                    <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
+                      {step.title}
+                    </h3>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-5">
+                      {step.description}
+                    </p>
+                    <div class="flex items-center gap-2 text-[#00568c] font-semibold">
+                      <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                      </svg>
+                      {step.highlight}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div class="text-center mt-16 lg:mt-20">
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button href={company.quoteUrl} external size="lg">
+              Get Your Free Quote
+            </Button>
+            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg">
+              <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+              </svg>
+              Call {company.phone}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dark Section: Know what you're getting -->
+    <section class="py-20 lg:py-28 bg-gray-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <p class="text-[#88d2c7] font-semibold mb-3">WHAT&apos;S INCLUDED</p>
+            <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+              Know exactly what you&apos;re getting
+            </h2>
+            <p class="text-gray-300 text-lg mb-8">
+              No hidden fees, no surprise charges. We provide detailed written estimates
+              before any work begins so you know exactly what to expect.
+            </p>
+            <div class="space-y-4">
+              {[
+                'Free, no-obligation custom quotes',
+                'Written estimates before work begins',
+                'All chemicals and materials included',
+                'Quality parts with warranty',
+              ].map((item) => (
+                <div class="flex items-center gap-3">
+                  <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="text-gray-300">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="bg-white text-gray-900 rounded-2xl p-8">
+            <div class="text-center mb-6">
+              <p class="text-gray-500 font-medium mb-2">{service.name}</p>
+              <p class="text-2xl font-bold text-gray-900">Get a Free Custom Quote</p>
+              <p class="text-gray-500 text-sm mt-2">Tailored to your pool and equipment</p>
+            </div>
+
+            <Button href={company.quoteUrl} external size="lg" class="w-full justify-center mb-4">
+              Get Your Free Quote
+            </Button>
+
+            <p class="text-center text-gray-500 text-sm">
+              Free quote &middot; No commitment required
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guarantee -->
+    <GuaranteeSection />
+
+    <!-- FAQ Section -->
+    <section class="py-20 lg:py-28 bg-gray-50">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <p class="text-[#00568c] font-semibold mb-3">FAQ</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">
+            Common questions about {service.name.toLowerCase()}
+          </h2>
+        </div>
+
+        <div class="space-y-4">
+          {serviceFaqs.map((faq) => (
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+              <h3 class="font-semibold text-gray-900 mb-2">{faq.question}</h3>
+              <p class="text-gray-600">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Service Areas -->
+    <section class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">
+          {service.name} available in these areas
+        </h2>
+        <div class="flex flex-wrap gap-3">
+          {primaryCities.map((c) => (
+            <a
+              href={`/pool-service-${c.slug}/`}
+              class="px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-[#88d2c7]/20 hover:text-[#00568c] transition-colors"
+            >
+              {c.name}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Services -->
+    {relatedServices && relatedServices.length > 0 && (
+      <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-xl font-bold text-gray-900 mb-8">
+            Related Services
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {relatedServices.map((related) => {
+              const relatedConfig = categoryConfig[related.category];
+              return (
+                <a
+                  href={`/${related.urlSlug}/`}
+                  class="group bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-gray-300 transition-all"
+                >
+                  <span class={`inline-block px-3 py-1 ${relatedConfig.light} ${relatedConfig.text} text-xs font-medium rounded-full mb-3 capitalize`}>
+                    {related.category}
+                  </span>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#00568c] transition-colors">
+                    {related.name}
+                  </h3>
+                  <p class="text-gray-600 text-sm line-clamp-2">{related.shortDescription}</p>
+                  <div class="mt-4 text-sm font-medium text-[#00568c]">
+                    Get a Free Quote
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Related Articles -->
+    {relatedPosts.length > 0 && (
+      <section class="py-20 lg:py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <p class="text-[#00568c] font-semibold tracking-wide uppercase text-sm mb-3">
+              Resources
+            </p>
+            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+              Learn More About {service.name}
+            </h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+              Expert tips and guides from our CPO-certified technicians.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {relatedPosts.map((post) => (
+              <a
+                href={`/resources/${post.slug}/`}
+                class="group flex flex-col bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-[#00568c]/30 transition-all"
+              >
+                {post.image && (
+                  <div class="relative aspect-[2/1] overflow-hidden">
+                    <img
+                      src={post.image}
+                      alt={post.imageAlt || post.title}
+                      class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                <div class="p-6 flex-1 flex flex-col">
+                  <div class="flex items-center gap-3 text-sm text-gray-500 mb-3">
+                    <span>{post.readTime} read</span>
+                    <span class="text-gray-300">&middot;</span>
+                    <span>{post.categoryName}</span>
+                  </div>
+                  <h3 class="font-bold text-gray-900 group-hover:text-[#00568c] transition-colors mb-2 line-clamp-2">
+                    {post.title}
+                  </h3>
+                  <p class="text-sm text-gray-600 line-clamp-2 mb-4 flex-1">
+                    {post.excerpt}
+                  </p>
+                  <span class="inline-flex items-center text-sm font-semibold text-[#00568c]">
+                    Read article
+                    <svg class="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <div class="text-center mt-10">
+            <a
+              href="/resources/"
+              class="inline-flex items-center text-[#00568c] font-semibold hover:underline"
+            >
+              View all articles
+              <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Final CTA -->
+    <section class="py-20 lg:py-28 bg-[#00568c]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+          Ready to get started?
+        </h2>
+        <p class="text-xl text-blue-100 mb-8">
+          Get a free, no-obligation quote for {service.name.toLowerCase()}.
+          Most quotes provided within 24 hours.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+          <Button href={company.quoteUrl} external size="lg" variant="secondary">
+            Get Your Free Quote
+          </Button>
+          <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
+            <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+            </svg>
+            Call {company.phone}
+          </Button>
+        </div>
+
+        <p class="text-blue-200 text-sm">
+          Bonded &amp; insured &middot; {company.rating.count}+ 5-star reviews &middot; Serving San Diego County
+        </p>
+      </div>
+    </section>
+  </>
+)}
+
+{/* ================================================================ */}
+{/* COMBO PAGE (City + Service) */}
+{/* ================================================================ */}
+{type === 'combo' && service && city && (
+  <>
+    <!-- Breadcrumbs -->
+    <div class="py-2">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumbs items={[
+          { name: 'Home', url: '/' },
+          { name: `${city.name} Pool Service`, url: `/pool-service-${city.slug}/` },
+          { name: service.name, url: `/${comboSlug}/` },
+        ]} />
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="relative bg-white overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-[#88d2c7]/10 via-white to-white"></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 bg-[#88d2c7]/10 border border-[#88d2c7]/30 rounded-full px-4 py-2 mb-6">
+            <svg class="h-5 w-5 text-[#00568c]" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-[#00568c] font-medium text-sm">
+              {service.name} in {city.name}, {city.state}
+            </span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+            {service.name}
+            <span class="block text-[#00568c]">in {city.name}, CA</span>
+          </h1>
+
+          <p class="text-xl lg:text-2xl text-gray-600 mb-8 leading-relaxed">
+            {service.shortDescription} Serving {city.name} and all of San Diego County.
+          </p>
+
+          <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-gray-600">
+            <div class="flex items-center gap-2">
+              <div class="flex">
+                {[...Array(5)].map(() => (
+                  <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <span class="font-medium">{company.rating.value}/5</span>
+              <span class="text-gray-500">({company.rating.count}+ reviews)</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4 mb-6">
+            <Button href={company.quoteUrl} external size="lg">
+              Get Free {city.name} Quote
+            </Button>
+            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg">
+              <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+              </svg>
+              {company.phone}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Intro Content -->
+    <section class="py-16 lg:py-20">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">
+          Professional {service.name} in {city.name}
+        </h2>
+        <p class="text-lg text-gray-600 text-center leading-relaxed">
+          {comboIntro}
+        </p>
+      </div>
+    </section>
+
+    <!-- Service Features -->
+    <section class="py-16 lg:py-20 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">
+          What&apos;s Included
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {service.features.map((feature) => (
+            <div class="bg-white border border-gray-200 rounded-xl p-6">
+              <h3 class="font-bold text-gray-900 mb-2">{feature.title}</h3>
+              <p class="text-sm text-gray-600">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Neighborhoods -->
+    <section class="py-16 lg:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">
+              {service.name} Across {city.name}
+            </h2>
+            <p class="text-lg text-gray-600 mb-6">
+              We provide {service.name.toLowerCase()} to every neighborhood in {city.name}. Our technicians
+              know the area and can reach you quickly for scheduled service or urgent repairs.
+            </p>
+            <p class="text-gray-600">
+              {city.climateNotes}
+            </p>
+          </div>
+          <div class="bg-gray-50 rounded-2xl p-8 border border-gray-200">
+            <h3 class="font-bold text-gray-900 mb-6 text-xl">
+              {city.name} Neighborhoods We Serve
+            </h3>
+            <div class="grid grid-cols-1 gap-3">
+              {city.neighborhoods.map((n) => (
+                <div class="flex items-center gap-3">
+                  <svg class="h-5 w-5 text-[#88d2c7] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="text-gray-700">{n.name}</span>
+                </div>
+              ))}
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-200">
+              <p class="text-sm text-gray-500 mb-1">ZIP codes we serve in {city.name}:</p>
+              <p class="font-medium text-gray-700">{city.zipCodes.join(', ')}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-16 lg:py-20 bg-gray-50">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
+          {service.name} in {city.name} FAQ
+        </h2>
+        <div class="space-y-4">
+          {comboFaqsList.map((faq) => (
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+              <h3 class="font-semibold text-gray-900 mb-2">{faq.question}</h3>
+              <p class="text-gray-600">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Blog Posts -->
+    {comboRelatedBlogPosts.length > 0 && (
+      <section class="py-16 lg:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">
+            {service.name} Resources
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {comboRelatedBlogPosts.map((post: BlogPost) => (
+              <a
+                href={`/resources/${post.slug}/`}
+                class="group bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow"
+              >
+                <h3 class="font-semibold text-gray-900 group-hover:text-[#00568c] transition-colors mb-2">
+                  {post.title}
+                </h3>
+                <p class="text-sm text-gray-600 line-clamp-2 mb-3">{post.excerpt}</p>
+                <span class="text-xs text-gray-500">{post.readTime}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Other Services in This City -->
+    <section class="py-16 lg:py-20 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+          Other Pool Services in {city.name}
+        </h2>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href={`/pool-service-${city.slug}/`}
+            class="px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-700 hover:border-[#00568c] hover:text-[#00568c] transition-colors text-sm"
+          >
+            All {city.name} Pool Services
+          </a>
+          {services
+            .filter((s) => s.slug !== service.slug)
+            .slice(0, 8)
+            .map((s) => (
+              <a
+                href={`/${s.urlSlug}/`}
+                class="px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-700 hover:border-[#00568c] hover:text-[#00568c] transition-colors text-sm"
+              >
+                {s.name}
+              </a>
+            ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Nearby Cities -->
+    <section class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">
+          {service.name} Near {city.name}
+        </h2>
+        <p class="text-gray-600 mb-6">
+          We also provide {service.name.toLowerCase()} in nearby cities:
+        </p>
+        <div class="flex flex-wrap gap-3">
+          {nearbyCities.map((nc) => (
+            <a
+              href={`/pool-service-${nc.slug}/`}
+              class="px-4 py-2 bg-gray-100 rounded-full text-gray-700 hover:bg-[#88d2c7]/20 hover:text-[#00568c] transition-colors"
+            >
+              {nc.name} Pool Service
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-20 lg:py-28 bg-[#00568c]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+          Get {service.name} in {city.name} Today
+        </h2>
+        <p class="text-xl text-blue-100 mb-8">
+          Free quote, no commitment. CPO-certified technicians ready to serve your {city.name} pool.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button href={company.quoteUrl} external size="lg" variant="secondary">
+            Get Free {city.name} Quote
+          </Button>
+          <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
+            Call {company.phone}
+          </Button>
+        </div>
+      </div>
+    </section>
+  </>
+)}
+
+</BaseLayout>
