@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
 import Button from '@/components/ui/Button.astro';
@@ -7,6 +8,7 @@ import GuaranteeSection from '@/components/ui/GuaranteeSection.astro';
 import { company } from '@/data/company';
 import { services, getMaintenanceServices, getRepairServices, getInstallationServices } from '@/data/services';
 import { generateOfferCatalogSchema } from '@/lib/schema/service';
+import heroServicesImg from '@/assets/images/pool/hero-services.webp';
 
 const maintenanceServices = getMaintenanceServices();
 const repairServices = getRepairServices();
@@ -38,23 +40,36 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
     </div>
   </div>
 
-  <!-- Hero Section -->
-  <section class="relative bg-white overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-[#88d2c7]/10 via-white to-white"></div>
+  <!-- Hero Section - Full background image -->
+  <section class="relative min-h-[460px] sm:min-h-[520px] lg:min-h-[600px] overflow-hidden">
+    <!-- Background Image -->
+    <Image
+      src={heroServicesImg}
+      alt="Residential pool serviced by PoolLogic in San Diego County"
+      class="absolute inset-0 w-full h-full object-cover object-center"
+      widths={[640, 1280, 1920]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <!-- Gradient overlays for text readability -->
+    <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/85 via-[#00568c]/55 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"></div>
 
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 flex items-center min-h-[460px] sm:min-h-[520px] lg:min-h-[600px]">
       <div class="max-w-3xl">
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
           Pool Services
-          <span class="text-[#00568c]"> Done Right</span>
+          <span class="block text-[#88d2c7]">Done Right</span>
         </h1>
-        <p class="text-xl lg:text-2xl text-gray-600 mb-8 leading-relaxed">
+        <p class="text-xl lg:text-2xl text-gray-200 mb-8 leading-relaxed">
           From weekly cleaning to complex repairs, we offer complete pool care solutions
           for residential and commercial properties across San Diego County.
         </p>
 
         <!-- Trust signals -->
-        <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-gray-600">
+        <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-white/90">
           <div class="flex items-center gap-2">
             <div class="flex">
               {[...Array(5)].map(() => (
@@ -64,7 +79,7 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
               ))}
             </div>
             <span class="font-medium">{company.rating.value}/5</span>
-            <span class="text-gray-500">({company.rating.count}+ reviews)</span>
+            <span class="text-white/70">({company.rating.count}+ reviews)</span>
           </div>
         </div>
 
@@ -72,7 +87,7 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
           <Button href={company.quoteUrl} external size="lg">
             Get Your Free Quote
           </Button>
-          <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg">
+          <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="bg-white/10 backdrop-blur-sm border-white/40 text-white hover:bg-white/20">
             <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
               <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
             </svg>

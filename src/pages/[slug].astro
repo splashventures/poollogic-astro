@@ -21,6 +21,7 @@ import TrustStats from '@/components/ui/TrustStats.astro';
 import GuaranteeBadge from '@/components/ui/GuaranteeBadge.astro';
 import GuaranteeSection from '@/components/ui/GuaranteeSection.astro';
 import { getImage } from '@/lib/images';
+import heroServicesImg from '@/assets/images/pool/hero-services.webp';
 
 // === How It Works steps data (per service) ===
 
@@ -393,33 +394,46 @@ const cityWhatsIncludedCard = [
       </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="relative bg-white overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-[#88d2c7]/10 via-white to-white"></div>
+    <!-- Hero Section - Full background image -->
+    <section class="relative min-h-[500px] sm:min-h-[580px] lg:min-h-[660px] overflow-hidden">
+      <!-- Background Image -->
+      <Image
+        src={heroServicesImg}
+        alt={`Pool service in ${city.name}, ${city.state} by PoolLogic`}
+        class="absolute inset-0 w-full h-full object-cover object-center"
+        widths={[640, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <!-- Gradient overlays for text readability -->
+      <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/85 via-[#00568c]/55 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"></div>
 
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 flex items-center min-h-[500px] sm:min-h-[580px] lg:min-h-[660px]">
         <div class="max-w-3xl">
           <!-- Local badge -->
-          <div class="inline-flex items-center gap-2 bg-[#88d2c7]/10 border border-[#88d2c7]/30 rounded-full px-4 py-2 mb-6">
-            <svg class="h-5 w-5 text-[#00568c]" fill="currentColor" viewBox="0 0 20 20">
+          <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 rounded-full px-4 py-2 mb-6">
+            <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
             </svg>
-            <span class="text-[#00568c] font-medium text-sm">
+            <span class="text-white font-medium text-sm">
               Local Pool Service in {city.name}, {city.state} &middot; {city.distanceFromHQ} from HQ
             </span>
           </div>
 
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
             {city.name} Pool Service
-            <span class="block text-[#00568c]">&amp; Pool Cleaning</span>
+            <span class="block text-[#88d2c7]">&amp; Pool Cleaning</span>
           </h1>
 
-          <p class="text-xl lg:text-2xl text-gray-600 mb-8 leading-relaxed">
+          <p class="text-xl lg:text-2xl text-gray-200 mb-8 leading-relaxed">
             {city.heroDescription}
           </p>
 
           <!-- Trust signals -->
-          <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-gray-600">
+          <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-white/90">
             <div class="flex items-center gap-2">
               <div class="flex">
                 {[...Array(5)].map(() => (
@@ -429,13 +443,13 @@ const cityWhatsIncludedCard = [
                 ))}
               </div>
               <span class="font-medium">{company.rating.value}/5</span>
-              <span class="text-gray-500">({company.rating.count}+ reviews)</span>
+              <span class="text-white/70">({company.rating.count}+ reviews)</span>
             </div>
             <div class="flex items-center gap-2">
-              <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+              <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
               </svg>
-              <span class="text-gray-600">Licensed &amp; Insured</span>
+              <span class="text-white/90">Licensed &amp; Insured</span>
             </div>
           </div>
 
@@ -444,7 +458,7 @@ const cityWhatsIncludedCard = [
             <Button href={company.quoteUrl} external size="lg">
               Get Free {city.name} Quote
             </Button>
-            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg">
+            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="bg-white/10 backdrop-blur-sm border-white/40 text-white hover:bg-white/20">
               <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
               </svg>
@@ -452,10 +466,10 @@ const cityWhatsIncludedCard = [
             </Button>
           </div>
 
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-white/75">
             Get a free, five minute quote &middot; CPO-certified technicians &middot; Cancel anytime
           </p>
-          <p class="text-xs text-gray-500 mt-3">Last Updated: April 10, 2026</p>
+          <p class="text-xs text-white/60 mt-3">Last Updated: April 10, 2026</p>
         </div>
       </div>
     </section>
@@ -819,15 +833,28 @@ const cityWhatsIncludedCard = [
       </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="relative bg-white overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-white"></div>
+    <!-- Hero Section - Full background image -->
+    <section class="relative min-h-[500px] sm:min-h-[580px] lg:min-h-[660px] overflow-hidden">
+      <!-- Background Image -->
+      <Image
+        src={heroServicesImg}
+        alt={`${service.name} from PoolLogic in San Diego County`}
+        class="absolute inset-0 w-full h-full object-cover object-center"
+        widths={[640, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <!-- Gradient overlays for text readability -->
+      <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/85 via-[#00568c]/55 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"></div>
 
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 flex items-center min-h-[500px] sm:min-h-[580px] lg:min-h-[660px]">
         <div class="max-w-3xl">
           <!-- Category badge -->
-          <div class={`inline-flex items-center gap-2 ${config.light} ${config.border} border rounded-full px-4 py-2 mb-6`}>
-            <svg class={`h-5 w-5 ${config.text}`} fill="currentColor" viewBox="0 0 20 20">
+          <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 rounded-full px-4 py-2 mb-6">
+            <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
               {service.category === 'maintenance' && (
                 <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
               )}
@@ -838,29 +865,29 @@ const cityWhatsIncludedCard = [
                 <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
               )}
             </svg>
-            <span class={`${config.text} font-medium text-sm`}>
+            <span class="text-white font-medium text-sm">
               {config.label}
             </span>
           </div>
 
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
             {service.name}
           </h1>
 
-          <p class="definition-paragraph text-xl lg:text-2xl text-gray-600 mb-6 leading-relaxed">
+          <p class="definition-paragraph text-xl lg:text-2xl text-gray-200 mb-6 leading-relaxed">
             {service.shortDescription}
           </p>
 
           <!-- Value badge -->
-          <div class="inline-flex items-center gap-3 bg-gray-900 text-white rounded-full px-5 py-3 mb-8">
-            <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+          <div class="inline-flex items-center gap-3 bg-white/15 backdrop-blur-sm border border-white/25 text-white rounded-full px-5 py-3 mb-8">
+            <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
             </svg>
-            <span class="text-sm font-medium">Free Custom Quote - CPO-Certified Technicians</span>
+            <span class="text-sm font-medium">Free Custom Quote &middot; CPO-Certified Technicians</span>
           </div>
 
           <!-- Trust signals -->
-          <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-gray-600">
+          <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-white/90">
             <div class="flex items-center gap-2">
               <div class="flex">
                 {[...Array(5)].map(() => (
@@ -870,13 +897,13 @@ const cityWhatsIncludedCard = [
                 ))}
               </div>
               <span class="font-medium">{company.rating.value}/5</span>
-              <span class="text-gray-500">({company.rating.count}+ reviews)</span>
+              <span class="text-white/70">({company.rating.count}+ reviews)</span>
             </div>
             <div class="flex items-center gap-2">
-              <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+              <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
               </svg>
-              <span class="text-gray-600">Licensed &amp; Insured</span>
+              <span class="text-white/90">Licensed &amp; Insured</span>
             </div>
           </div>
 
@@ -885,14 +912,14 @@ const cityWhatsIncludedCard = [
             <Button href={company.quoteUrl} external size="lg">
               Get Your Free Quote
             </Button>
-            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg">
+            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="bg-white/10 backdrop-blur-sm border-white/40 text-white hover:bg-white/20">
               <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
               </svg>
               {company.phone}
             </Button>
           </div>
-          <p class="text-xs text-gray-500">Last Updated: April 10, 2026</p>
+          <p class="text-xs text-white/60">Last Updated: April 10, 2026</p>
         </div>
       </div>
     </section>
@@ -1338,30 +1365,44 @@ const cityWhatsIncludedCard = [
       </div>
     </div>
 
-    <!-- Hero -->
-    <section class="relative bg-white overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-[#88d2c7]/10 via-white to-white"></div>
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+    <!-- Hero - Full background image -->
+    <section class="relative min-h-[480px] sm:min-h-[560px] lg:min-h-[640px] overflow-hidden">
+      <!-- Background Image -->
+      <Image
+        src={heroServicesImg}
+        alt={`${service.name} in ${city.name}, ${city.state} by PoolLogic`}
+        class="absolute inset-0 w-full h-full object-cover object-center"
+        widths={[640, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <!-- Gradient overlays -->
+      <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/85 via-[#00568c]/55 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"></div>
+
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 flex items-center min-h-[480px] sm:min-h-[560px] lg:min-h-[640px]">
         <div class="max-w-3xl">
-          <div class="inline-flex items-center gap-2 bg-[#88d2c7]/10 border border-[#88d2c7]/30 rounded-full px-4 py-2 mb-6">
-            <svg class="h-5 w-5 text-[#00568c]" fill="currentColor" viewBox="0 0 20 20">
+          <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 rounded-full px-4 py-2 mb-6">
+            <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
             </svg>
-            <span class="text-[#00568c] font-medium text-sm">
+            <span class="text-white font-medium text-sm">
               {service.name} in {city.name}, {city.state}
             </span>
           </div>
 
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
             {service.name}
-            <span class="block text-[#00568c]">in {city.name}, CA</span>
+            <span class="block text-[#88d2c7]">in {city.name}, CA</span>
           </h1>
 
-          <p class="text-xl lg:text-2xl text-gray-600 mb-8 leading-relaxed">
+          <p class="text-xl lg:text-2xl text-gray-200 mb-8 leading-relaxed">
             {service.shortDescription} Serving {city.name} and all of San Diego County.
           </p>
 
-          <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-gray-600">
+          <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-white/90">
             <div class="flex items-center gap-2">
               <div class="flex">
                 {[...Array(5)].map(() => (
@@ -1371,7 +1412,7 @@ const cityWhatsIncludedCard = [
                 ))}
               </div>
               <span class="font-medium">{company.rating.value}/5</span>
-              <span class="text-gray-500">({company.rating.count}+ reviews)</span>
+              <span class="text-white/70">({company.rating.count}+ reviews)</span>
             </div>
           </div>
 
@@ -1379,7 +1420,7 @@ const cityWhatsIncludedCard = [
             <Button href={company.quoteUrl} external size="lg">
               Get Free {city.name} Quote
             </Button>
-            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg">
+            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="bg-white/10 backdrop-blur-sm border-white/40 text-white hover:bg-white/20">
               <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
               </svg>

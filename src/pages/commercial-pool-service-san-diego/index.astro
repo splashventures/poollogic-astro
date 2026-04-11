@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
 import DualCTA from '@/components/ui/DualCTA.astro';
@@ -6,6 +7,7 @@ import MobileDualCTA from '@/components/ui/MobileDualCTA.astro';
 import { company } from '@/data/company';
 import { cities } from '@/data/cities';
 import { generateSimpleFAQSchema } from '@/lib/schema/faq';
+import heroCommercialImg from '@/assets/images/pool/hero-commercial.webp';
 
 const title = 'Commercial Pool Service | HOA, Hotel & Business Pools | PoolLogic Pool Service';
 const description = `Professional commercial pool service for HOAs, hotels, apartments & businesses in San Diego County. Health dept compliance, flexible scheduling, 24/7 emergency service. Call ${company.phone}.`;
@@ -148,18 +150,33 @@ const schemas = faqSchema ? [faqSchema] : [];
     </div>
   </div>
 
-  <!-- Hero Section -->
-  <section class="bg-gray-900 text-white py-16 lg:py-24">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+  <!-- Hero Section - Full background image -->
+  <section class="relative min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] overflow-hidden">
+    <!-- Background Image -->
+    <Image
+      src={heroCommercialImg}
+      alt="Commercial resort pool serviced by PoolLogic in San Diego County"
+      class="absolute inset-0 w-full h-full object-cover object-center"
+      widths={[640, 1280, 1920]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <!-- Gradient overlays for text readability -->
+    <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/85 via-[#00568c]/55 to-[#00568c]/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-32 flex items-center min-h-[500px] sm:min-h-[600px] lg:min-h-[700px]">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
         <div>
-          <span class="inline-block px-3 py-1 bg-[#00568c] rounded-full text-sm font-medium mb-4">
+          <span class="inline-block px-3 py-1 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full text-sm font-medium mb-4 text-white">
             Commercial Services
           </span>
-          <h1 class="text-4xl lg:text-5xl font-bold mb-4">
+          <h1 class="text-4xl lg:text-5xl font-bold mb-4 text-white leading-tight">
             Commercial Pool Service for San Diego County
           </h1>
-          <p class="text-xl text-gray-300 mb-6">
+          <p class="text-xl text-gray-200 mb-6 leading-relaxed">
             Professional pool maintenance for HOAs, hotels, apartments, fitness centers,
             and commercial properties. Health department compliant, fully insured, and
             available 24/7 for emergencies.
@@ -169,10 +186,10 @@ const schemas = faqSchema ? [faqSchema] : [];
           <div class="flex flex-wrap gap-4 mb-8">
             {['Health Dept Compliant', 'Fully Insured', '24/7 Emergency Service'].map((benefit) => (
               <div class="flex items-center gap-2">
-                <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                 </svg>
-                <span class="text-gray-300">{benefit}</span>
+                <span class="text-white/95">{benefit}</span>
               </div>
             ))}
           </div>
@@ -181,16 +198,16 @@ const schemas = faqSchema ? [faqSchema] : [];
         </div>
 
         <!-- Stats -->
-        <div class="grid grid-cols-2 gap-6">
+        <div class="grid grid-cols-2 gap-4 sm:gap-6">
           {[
             { value: '100+', label: 'Commercial Clients' },
             { value: '24/7', label: 'Emergency Support' },
             { value: `${company.yearsInBusiness}+`, label: 'Years Experience' },
             { value: '100%', label: 'Compliance Rate' },
           ].map((stat) => (
-            <div class="bg-gray-800 rounded-xl p-6 text-center">
+            <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-5 sm:p-6 text-center">
               <div class="text-3xl font-bold text-[#88d2c7] mb-1">{stat.value}</div>
-              <div class="text-gray-400">{stat.label}</div>
+              <div class="text-white/90 text-sm">{stat.label}</div>
             </div>
           ))}
         </div>
