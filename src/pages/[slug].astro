@@ -20,6 +20,7 @@ import Button from '@/components/ui/Button.astro';
 import TrustStats from '@/components/ui/TrustStats.astro';
 import GuaranteeBadge from '@/components/ui/GuaranteeBadge.astro';
 import GuaranteeSection from '@/components/ui/GuaranteeSection.astro';
+import GoogleReviews from '@/components/ui/GoogleReviews.astro';
 import { getImage } from '@/lib/images';
 import heroServicesImg from '@/assets/images/pool/hero-services.webp';
 
@@ -475,7 +476,7 @@ const cityWhatsIncludedCard = [
     </section>
 
     <!-- Stats -->
-    <section class="py-16">
+    <section class="pb-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <TrustStats />
       </div>
@@ -925,7 +926,7 @@ const cityWhatsIncludedCard = [
     </section>
 
     <!-- Stats -->
-    <section class="py-16">
+    <section class="pb-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <TrustStats />
       </div>
@@ -1160,6 +1161,11 @@ const cityWhatsIncludedCard = [
     </section>
 
     <!-- Guarantee -->
+    <GoogleReviews
+      placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+      googleProfileUrl="https://g.co/kgs/NKwnBPz"
+    />
+
     <GuaranteeSection />
 
     <!-- FAQ Section -->

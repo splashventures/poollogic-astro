@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
 import Button from '@/components/ui/Button.astro';
 import TrustStats from '@/components/ui/TrustStats.astro';
 import GuaranteeSection from '@/components/ui/GuaranteeSection.astro';
+import GoogleReviews from '@/components/ui/GoogleReviews.astro';
 import { company } from '@/data/company';
 import { services, getMaintenanceServices, getRepairServices, getInstallationServices } from '@/data/services';
 import { generateOfferCatalogSchema } from '@/lib/schema/service';
@@ -99,7 +100,7 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
   </section>
 
   <!-- Stats Section -->
-  <section class="py-16">
+  <section class="pb-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <TrustStats />
     </div>
@@ -266,6 +267,11 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
   </section>
 
   <!-- Guarantee Section -->
+  <GoogleReviews
+    placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+    googleProfileUrl="https://g.co/kgs/NKwnBPz"
+  />
+
   <GuaranteeSection />
 
   <!-- Commercial CTA -->
