@@ -49,9 +49,39 @@ try {
   // Graceful fallback: render link-only section
 }
 
+// External reviews from Trustindex and Thumbtack (scraped 2026-04-13)
+const externalReviews: Review[] = [
+  { reviewerName: 'Chelsea Royse', reviewerPhotoUrl: null, rating: 5, text: "PoolLogic has been a lifesaver for us. We tried handling our own pool cleaning in San Diego for years, but it always felt like a losing battle. Since switching to their weekly service, our pool has been crystal clear, balanced, and ready to use at any time.", relativeTimeDescription: 'Trustindex', publishedAt: null, googleReviewUrl: null, placeId: '', businessName: 'PoolLogic' },
+  { reviewerName: 'Derek W.', reviewerPhotoUrl: null, rating: 5, text: "We've used PoolLogic for about 2 years now and our pool has never looked and performed better. Rony is prompt and professional and does a fantastic job. We love the detail and the education. Highly recommend!", relativeTimeDescription: 'Thumbtack', publishedAt: null, googleReviewUrl: null, placeId: '', businessName: 'PoolLogic' },
+  { reviewerName: 'Melissa Rigby', reviewerPhotoUrl: null, rating: 5, text: "We live in La Jolla and the ocean air makes it tough to keep our pool water fresh. PoolLogic came out and performed a full filter cleaning, and the improvement was immediate. This is easily the most thorough filter cleaning service I've had in San Diego County.", relativeTimeDescription: 'Trustindex', publishedAt: null, googleReviewUrl: null, placeId: '', businessName: 'PoolLogic' },
+  { reviewerName: 'Sean O.', reviewerPhotoUrl: null, rating: 5, text: "We are new pool owners and after an unpleasant experience with a prior pool cleaning service, I was referred to PoolLogic. Our service technicians Alex and Carlos have demonstrated professionalism, promptness, service knowledge, and are very courteous!", relativeTimeDescription: 'Thumbtack', publishedAt: null, googleReviewUrl: null, placeId: '', businessName: 'PoolLogic' },
+  { reviewerName: 'Clint Phillips', reviewerPhotoUrl: null, rating: 5, text: "PoolLogic has been handling our weekly pool service in Mission Hills for a few months now, and the difference is night and day. Before, we were constantly fighting cloudy water. Since hiring them, our pool has been spotless. The technician leaves a service summary after every visit.", relativeTimeDescription: 'Trustindex', publishedAt: null, googleReviewUrl: null, placeId: '', businessName: 'PoolLogic' },
+  { reviewerName: 'Emma V.', reviewerPhotoUrl: null, rating: 5, text: "We have been using PoolLogic for our pool and spa services and had a great experience the entire time. The automated billing is convenient. After every maintenance we receive real time data on the health of our pool. Roni takes care of our pool weekly and is always on time. 10/10 will recommend!", relativeTimeDescription: 'Thumbtack', publishedAt: null, googleReviewUrl: null, placeId: '', businessName: 'PoolLogic' },
+  { reviewerName: 'Michelle Nails', reviewerPhotoUrl: null, rating: 5, text: "We recently had issues with our pool automation system. PoolLogic sent a technician who knew exactly what he was doing. He diagnosed the problem, replaced a faulty part, and walked us through how to better use the system. Now everything works from my phone again.", relativeTimeDescription: 'Trustindex', publishedAt: null, googleReviewUrl: null, placeId: '', businessName: 'PoolLogic' },
+  { reviewerName: 'Dylan Robert', reviewerPhotoUrl: null, rating: 5, text: "I've tried other pool companies in the past, and none of them compare to PoolLogic. They're reliable, responsive, and always keep me in the loop. I especially love the detailed reports and photos they send after each visit. My pool is in good hands!", relativeTimeDescription: 'Trustindex', publishedAt: null, googleReviewUrl: null, placeId: '', businessName: 'PoolLogic' },
+  { reviewerName: 'Anthony Perri', reviewerPhotoUrl: null, rating: 5, text: "I called Pool Logic after my pool in Chula Vista turned cloudy and my pump stopped circulating water properly. Their technician came out the next day, diagnosed the issue, and cleaned out a clogged impeller. Everything was running perfectly again within hours.", relativeTimeDescription: 'Trustindex', publishedAt: null, googleReviewUrl: null, placeId: '', businessName: 'PoolLogic' },
+  { reviewerName: 'Wayne H.', reviewerPhotoUrl: null, rating: 5, text: "Great pool service. Our pool water has been crystal clear, starting from the first day of PoolLogic's service.", relativeTimeDescription: 'Thumbtack', publishedAt: null, googleReviewUrl: null, placeId: '', businessName: 'PoolLogic' },
+];
+
+// Merge Google + external reviews, interleave for variety
+const allReviews: Review[] = [];
+const maxExternal = Math.min(externalReviews.length, 10);
+let extIdx = 0;
+for (let i = 0; i < reviews.length; i++) {
+  allReviews.push(reviews[i]);
+  // Insert an external review every 2 Google reviews
+  if ((i + 1) % 2 === 0 && extIdx < maxExternal) {
+    allReviews.push(externalReviews[extIdx++]);
+  }
+}
+// Append remaining external reviews
+while (extIdx < maxExternal) {
+  allReviews.push(externalReviews[extIdx++]);
+}
+
 // For an infinite-loop marquee we need the content duplicated so the
 // translateX animation wraps seamlessly from 0 to -50%.
-const marqueeReviews = reviews.length > 0 ? [...reviews, ...reviews] : [];
+const marqueeReviews = allReviews.length > 0 ? [...allReviews, ...allReviews] : [];
 
 function getInitials(name: string): string {
   return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
@@ -63,7 +93,7 @@ function truncateText(text: string, max: number): string {
 }
 
 // Pace the marquee: longer duration for more reviews so the scroll stays slow.
-const marqueeDuration = Math.max(40, reviews.length * 6);
+const marqueeDuration = Math.max(40, allReviews.length * 6);
 ---
 
 <section class="py-14 lg:py-20 bg-gradient-to-b from-white to-gray-50">
@@ -114,7 +144,7 @@ const marqueeDuration = Math.max(40, reviews.length * 6);
           {marqueeReviews.map((review, idx) => (
             <div
               class="w-[300px] sm:w-[340px] flex-shrink-0 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col"
-              aria-hidden={idx >= reviews.length ? 'true' : 'false'}
+              aria-hidden={idx >= allReviews.length ? 'true' : 'false'}
             >
               <!-- Reviewer info -->
               <div class="flex items-center gap-3 mb-4">
@@ -139,13 +169,19 @@ const marqueeDuration = Math.max(40, reviews.length * 6);
                   <p class="font-semibold text-gray-900 text-sm truncate">{review.reviewerName}</p>
                   <p class="text-gray-500 text-xs">{review.relativeTimeDescription}</p>
                 </div>
-                <!-- Google G in corner -->
-                <svg class="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                </svg>
+                <!-- Source icon -->
+                {review.placeId ? (
+                  <svg class="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                  </svg>
+                ) : (
+                  <svg class="h-4 w-4 flex-shrink-0 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                )}
               </div>
               <!-- Stars -->
               <div class="flex gap-0.5 mb-3">
