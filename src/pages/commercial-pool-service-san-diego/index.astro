@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import Button from '@/components/ui/Button.astro';
 import DualCTA from '@/components/ui/DualCTA.astro';
 import MobileDualCTA from '@/components/ui/MobileDualCTA.astro';
 import { company } from '@/data/company';
@@ -194,7 +195,17 @@ const schemas = faqSchema ? [faqSchema] : [];
             ))}
           </div>
 
-          <DualCTA quoteText="Request Commercial Quote" class="justify-start" />
+          <div class="flex flex-col sm:flex-row gap-4">
+            <Button href={company.quoteUrl} external size="lg" variant="secondary">
+              Request Commercial Quote
+            </Button>
+            <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
+              <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+              </svg>
+              {company.phone}
+            </Button>
+          </div>
         </div>
 
         <!-- Stats -->
@@ -205,7 +216,7 @@ const schemas = faqSchema ? [faqSchema] : [];
             { value: `${company.yearsInBusiness}+`, label: 'Years Experience' },
             { value: '100%', label: 'Compliance Rate' },
           ].map((stat) => (
-            <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-5 sm:p-6 text-center">
+            <div class="border-2 border-white/60 rounded-xl p-5 sm:p-6 text-center">
               <div class="text-3xl font-bold text-[#88d2c7] mb-1">{stat.value}</div>
               <div class="text-white/90 text-sm">{stat.label}</div>
             </div>
