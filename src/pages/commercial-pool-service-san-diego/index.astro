@@ -226,6 +226,86 @@ const schemas = faqSchema ? [faqSchema] : [];
     </div>
   </section>
 
+  <!-- Trusted Clients -->
+  <section class="py-12 lg:py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-sm font-semibold text-[#00568c] uppercase tracking-wider mb-3">Our Clients</p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">Trusted by 200+ Commercial Properties</h2>
+      <div class="flex flex-wrap justify-center items-center gap-x-10 gap-y-6 max-w-4xl mx-auto text-gray-500">
+        {[
+          'H.G. Fenton Company',
+          'Hilton',
+          'Marriott',
+          'Walters Management',
+          'Boys & Girls Clubs',
+          'IHG Hotels & Resorts',
+          'Sun Outdoors',
+          'U.S. Dept. of Veterans Affairs',
+          'Best Western',
+        ].map((name) => (
+          <span class="text-base sm:text-lg font-semibold text-gray-600 whitespace-nowrap">{name}</span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- A Seamless Transition -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <p class="text-sm font-semibold text-[#00568c] uppercase tracking-wider mb-3">Getting Started</p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          A Seamless Transition. Three Simple Steps.
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          { step: '01', title: 'Complimentary Site Audit', desc: 'We visit your property to inspect equipment, assess compliance, and understand your needs before quoting.' },
+          { step: '02', title: 'Flat-Rate Proposal', desc: 'Receive a transparent monthly plan designed for budget stability. No hidden fees or surprise surcharges.' },
+          { step: '03', title: 'Crystal Clear Water', desc: 'We handle the takeover completely. You receive digital reports after every visit. No micromanagement needed.' },
+        ].map((item) => (
+          <div class="text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#00568c] text-white font-bold text-lg mb-4">{item.step}</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
+            <p class="text-gray-600">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- What's Included with Every Visit -->
+  <section class="py-16 lg:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <p class="text-sm font-semibold text-[#00568c] uppercase tracking-wider mb-3">Weekly Service</p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          What's Included with Every Visit
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4 max-w-3xl mx-auto">
+        {[
+          'Check and balance all pool chemicals',
+          'Inspect filter system and backwash',
+          'Manually vacuum all pool surfaces',
+          'Treat for algae prevention',
+          'Clean skimmer and pump baskets',
+          'Brush steps, walls, and tile line',
+          'Skim water and remove all debris',
+          'Maintain automatic pool vacuum',
+          'Detailed post-service report with photos',
+        ].map((item) => (
+          <div class="flex items-start gap-3 py-2">
+            <svg class="h-5 w-5 text-[#00568c] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-gray-700">{item}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- Why Commercial Needs Are Different -->
   <section class="py-16 lg:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
