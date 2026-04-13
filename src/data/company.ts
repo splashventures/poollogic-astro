@@ -47,7 +47,7 @@ export const company = {
 
   // Trust Signals
   rating: {
-    value: 5.0,
+    value: 4.9,
     count: 500,
     source: 'Google',
   },

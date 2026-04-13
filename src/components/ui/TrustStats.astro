@@ -2,7 +2,7 @@
 import { company } from '@/data/company';
 
 const stats = [
-  { value: '5.0', label: 'Google Rating', isStar: true, href: 'https://g.co/kgs/NKwnBPz' },
+  { value: `${company.rating.value}`, label: 'Google Rating', isStar: true, href: 'https://g.co/kgs/NKwnBPz' },
   { value: `${company.poolsServed.toLocaleString()}+`, label: 'Pools Served' },
   { value: '22', label: 'Cities Served' },
   { value: '100%', label: 'Satisfaction Guarantee' },
