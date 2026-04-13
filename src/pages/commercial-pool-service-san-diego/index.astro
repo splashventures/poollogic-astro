@@ -232,7 +232,7 @@ const schemas = faqSchema ? [faqSchema] : [];
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <p class="text-sm font-semibold text-[#00568c] uppercase tracking-wider mb-3">Our Clients</p>
       <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">Trusted by 200+ Commercial Properties</h2>
-      <div class="flex flex-wrap justify-center items-center gap-x-10 gap-y-8 max-w-5xl mx-auto">
+      <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-6 sm:gap-8 max-w-5xl mx-auto items-center justify-items-center">
         {[
           { name: 'H.G. Fenton Company', src: '/images/clients/hgfenton.png' },
           { name: 'Hilton', src: '/images/clients/hilton.svg' },
@@ -247,7 +247,7 @@ const schemas = faqSchema ? [faqSchema] : [];
           <img
             src={client.src}
             alt={client.name}
-            class="h-8 sm:h-10 w-auto object-contain grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+            class="h-7 sm:h-8 max-w-[100px] sm:max-w-[120px] w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
             loading="lazy"
           />
         ))}
