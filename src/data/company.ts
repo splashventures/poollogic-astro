@@ -1,15 +1,15 @@
 export const company = {
   name: 'Cabana Pool Service',
 
-  phone: '(888) 388-9689',
-  phoneRaw: '+18883889689',
+  phone: '(888) 831-8926',
+  phoneRaw: '+18888318926',
   email: 'hello@cabanapools.com',
 
   phones: {
-    sd: { display: '(888) 388-9689', raw: '+18883889689' },
-    la: { display: '(888) 388-9689', raw: '+18883889689' },
-    oc: { display: '(888) 388-9689', raw: '+18883889689' },
-    sac: { display: '(916) 909-1244', raw: '+19169091244' },
+    sd: { display: '(888) 831-8926', raw: '+18888318926' },
+    la: { display: '(888) 831-8926', raw: '+18888318926' },
+    oc: { display: '(888) 831-8926', raw: '+18888318926' },
+    sac: { display: '(888) 831-8926', raw: '+18888318926' },
   },
 
   address: {
@@ -42,7 +42,7 @@ export const company = {
     sunday: { open: '08:00', close: '17:00' },
   },
 
-  hoursDisplay: 'Sun - Sat: 8:00 AM - 5:00 PM PST',
+  hoursDisplay: 'Sun - Sat : 8:00 AM - 5:00 PM PST',
 
   openingHoursSpecification: [
     { dayOfWeek: 'Monday', opens: '08:00', closes: '17:00' },
@@ -55,8 +55,8 @@ export const company = {
   ],
 
   rating: {
-    value: 5.0,
-    count: 51,
+    value: 4.9,
+    count: 2200,
     source: 'Google',
   },
 

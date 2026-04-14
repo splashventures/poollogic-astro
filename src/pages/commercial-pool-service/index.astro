@@ -33,16 +33,14 @@ const description = `Professional commercial pool service for HOAs, apartment co
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl">
         <h1 class="text-4xl lg:text-5xl font-bold mb-6">
-          Commercial Pool Service
+          Commercial Pool Service. Compliant. Insured. Reliable.
         </h1>
         <p class="text-xl text-blue-100 mb-8">
-          {company.name} provides reliable, professional pool maintenance for HOAs, apartment complexes,
-          gyms, hotels, and other commercial properties across California. We keep your facility safe,
-          compliant, and swim-ready year round.
+          Protect your property and your residents. We provide CPO-certified maintenance, health department logs, and $2M liability coverage. Keep your pool open and your residents happy.
         </p>
         <div class="flex flex-col sm:flex-row gap-4">
           <Button href={company.quoteUrl} external size="lg" variant="secondary">
-            Get a Commercial Quote
+            Request a Proposal
           </Button>
           <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
             <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -55,43 +53,28 @@ const description = `Professional commercial pool service for HOAs, apartment co
     </div>
   </section>
 
-  <!-- Who We Serve -->
+  <!-- Mitigate Your Risk -->
   <section class="py-16 lg:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
         <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-          Commercial Properties We Serve
+          Mitigate Your Risk. Maximize Tenant Satisfaction.
         </h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          From community pools to resort amenities, we have the expertise and capacity to maintain any commercial aquatic facility.
-        </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {[
           {
-            title: 'HOA & Community Pools',
-            description: 'Keep your community pool clean, safe, and compliant with all health regulations. We handle scheduling, chemical management, and reporting for HOA boards.',
+            title: 'Audit-Ready Logs',
+            description: 'We maintain digital chemical records compliant with local health department codes.',
           },
           {
-            title: 'Apartment Complexes',
-            description: 'Reliable pool maintenance that keeps residents happy and management worry-free. Consistent service schedules with detailed documentation.',
+            title: 'Proactive Repairs',
+            description: 'We spot equipment failure before the pool turns green, preventing costly downtime.',
           },
           {
-            title: 'Hotels & Resorts',
-            description: 'Crystal-clear pools that impress guests and meet hospitality standards. Flexible scheduling to minimize disruption during peak hours.',
-          },
-          {
-            title: 'Gyms & Fitness Centers',
-            description: 'High-traffic pools and spas require specialized attention. We manage heavy bather loads and maintain optimal water chemistry throughout the day.',
-          },
-          {
-            title: 'Country Clubs & Recreation Centers',
-            description: 'Premium maintenance for premium facilities. We understand the elevated standards that members expect from their aquatic amenities.',
-          },
-          {
-            title: 'Municipal & Public Pools',
-            description: 'Health department compliant service with detailed record-keeping, chemical logs, and proactive maintenance to keep public pools operating safely.',
+            title: 'Liability Protection',
+            description: 'Fully licensed, bonded, and insured. We take the liability off your plate.',
           },
         ].map((item) => (
           <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
@@ -103,56 +86,60 @@ const description = `Professional commercial pool service for HOAs, apartment co
     </div>
   </section>
 
-  <!-- Commercial Services -->
+  <!-- A Higher Standard of Pool Care -->
   <section class="py-16 lg:py-24 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
         <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-          Our Commercial Services
+          A Higher Standard of Pool Care.
         </h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-        {[
-          'Weekly chemical testing and water balancing',
-          'Surface skimming and debris removal',
-          'Tile and deck cleaning',
-          'Filter maintenance and cleaning',
-          'Equipment inspection and repair',
-          'Health department compliance support',
-          'Emergency service and on-call support',
-          'Detailed service logs and reporting',
-          'Seasonal opening and closing',
-          'Renovation and resurfacing coordination',
-        ].map((service) => (
-          <div class="flex items-start gap-3">
-            <svg class="h-6 w-6 text-[#00568c] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-gray-700 text-lg">{service}</span>
-          </div>
-        ))}
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div class="text-center">
+          <h3 class="text-xl font-bold text-gray-900 mb-3">A Community Amenity, Not a Liability.</h3>
+          <p class="text-gray-600">
+            Whether it's attracting new tenants or keeping homeowners happy, a closed pool is a headache. We prioritize "uptime", responding rapidly to issues to ensure your amenity remains open, safe, and sparkling.
+          </p>
+        </div>
+        <div class="text-center">
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Total Visibility for Property Managers.</h3>
+          <p class="text-gray-600">
+            We provide service logs, photo proof of every visit, and proactive equipment alerts. You'll have the answers before the residents even ask the questions.
+          </p>
+        </div>
+        <div class="text-center">
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Predictable Costs, No Surprises.</h3>
+          <p class="text-gray-600">
+            We understand strict budgets and reserve planning. Our commercial plans are designed for fiscal stability, focusing on preventative maintenance to extend equipment life and avoid the "sticker shock" of unexpected repairs.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Why Cabana for Commercial -->
+  <!-- What's Included with Weekly Service -->
   <section class="py-16 lg:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
         <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-          Why Choose {company.name}?
+          What's included with our weekly pool cleaning service?
         </h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
         {[
-          { title: 'Licensed & Insured', description: `CA Contractors License #${company.contractorsLicense}. Fully bonded and insured for your protection.` },
-          { title: 'Dedicated Account Manager', description: 'A single point of contact who understands your property and handles all scheduling and communication.' },
-          { title: 'Digital Service Reports', description: 'Detailed reports after every visit with photos, chemical readings, and equipment status updates.' },
-          { title: 'Flexible Scheduling', description: 'Service schedules designed around your property needs, including weekends and early mornings.' },
+          { title: 'Check & Balance Pool Chemicals', description: 'Say farewell to hassle as we balance your pool chemicals for optimum water quality.' },
+          { title: 'Inspect Filter System & Backwash', description: 'Clean filters are the secret to an immaculate pool all year long.' },
+          { title: 'Manually Vacuum Pool Surfaces', description: 'Nothing can replace a thorough, hand cleaning.' },
+          { title: 'Treat for Algae', description: 'Conquer the green with our expert algae treatments.' },
+          { title: 'Clean Skimmer & Pump Baskets', description: 'We keep the water flowing freely to help ensure your pool is immaculate.' },
+          { title: 'Empty Catch & Maintain Automatic Pool Vacuum', description: "It's all about peace of mind that everything's operating optimally." },
+          { title: 'Brush Steps & Walls', description: 'Regular deep cleaning ensures you have a tranquil oasis.' },
+          { title: 'Skim Water, Clean Leaves, Remove Debris', description: 'We leave your pool looking immaculate for worry-free enjoyment.' },
+          { title: 'Detailed Post-Service Report', description: 'We detail every step and all our findings so you can make accurate decisions.' },
         ].map((item) => (
-          <div class="text-center">
+          <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
             <h3 class="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
             <p class="text-gray-600 text-sm">{item.description}</p>
           </div>
@@ -161,19 +148,94 @@ const description = `Professional commercial pool service for HOAs, apartment co
     </div>
   </section>
 
+  <!-- Expertly Handling Commercial Needs -->
+  <section class="py-16 lg:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Expertly Handling Your Commercial Pool Service Needs
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        {[
+          { title: 'Health Code Compliance', description: 'Precise chemical balancing to meet local health department standards, minimizing the risk of closures or liability issues.' },
+          { title: 'Asset Preservation', description: "We don't just clean; we inspect. Proactive checks on pumps, filters, and heaters to catch small issues before they become expensive CapEx repairs." },
+          { title: 'Aesthetic Excellence', description: 'We understand the pool is your top leasing amenity. We ensure the water, tile, and surface are tour-ready every single day.' },
+          { title: 'Algae Prevention Guarantee', description: 'We stop problems before they start. Our preventative chemical protocols ensure your community never wakes up to a green pool.' },
+          { title: 'Audit-ready reporting', description: 'Receive a detailed service report after every visit. Includes photos and chemical readings, perfect for HOA board meetings or owner reports.' },
+          { title: 'Priority Dispatch', description: 'Commercial clients get VIP status. If equipment fails, we prioritize your repair to minimize downtime and keep residents happy.' },
+        ].map((item) => (
+          <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
+            <p class="text-gray-600 text-sm">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Seamless Transition -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          A Seamless Transition to a Better Commercial Pool Service
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-[#00568c] rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-2xl font-bold text-white">1</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Complimentary Site Audit</h3>
+          <p class="text-gray-600">
+            We don't guess. We visit your property to inspect equipment, assess safety compliance, and understand your specific needs before quoting.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-16 h-16 bg-[#00568c] rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-2xl font-bold text-white">2</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">The Flat-Rate Proposal</h3>
+          <p class="text-gray-600">
+            Receive a transparent monthly plan designed for budget stability. No hidden fees or surprise surcharges, just predictable costs.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-16 h-16 bg-[#00568c] rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-2xl font-bold text-white">3</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Autonomous Operation</h3>
+          <p class="text-gray-600">
+            We handle the takeover and operations completely. You receive digital reports after every visit, keeping you informed without the micromanagement.
+          </p>
+        </div>
+      </div>
+
+      <div class="text-center mt-12">
+        <Button href={company.quoteUrl} external size="lg" variant="secondary">
+          Request a Proposal
+        </Button>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA Section -->
   <section class="py-16 lg:py-24 bg-[#00568c]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
-        Get a Commercial Pool Service Quote
+        Make the Pool the Easiest Part of Your Property.
       </h2>
       <p class="text-xl text-blue-100 mb-8">
-        Tell us about your property and we will provide a customized maintenance plan and quote.
-        No obligation, no pressure.
+        Stop micromanaging your pool vendor. Join the Multi-Family properties and HOAs that trust Cabana for compliant, headache-free asset management. Get a higher standard of service without the stress.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <Button href={company.quoteUrl} external size="lg" variant="secondary">
-          Request a Commercial Quote
+          Request a Proposal
         </Button>
         <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
           <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">

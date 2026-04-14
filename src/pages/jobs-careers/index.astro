@@ -33,57 +33,94 @@ const description = `Join the ${company.name} team. We are hiring pool technicia
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl">
         <h1 class="text-4xl lg:text-5xl font-bold mb-6">
-          Join the {company.name} Team
+          Jobs & Careers
         </h1>
         <p class="text-xl text-blue-100 mb-8">
-          We are one of the fastest-growing pool service companies in California, and we are always looking
-          for great people. If you take pride in your work, enjoy being outdoors, and want a career with real
-          growth potential, we want to hear from you.
+          Build a future with Cabana, the team on a mission to improve pool service nationwide.
         </p>
-        <Button href={`mailto:${company.email}?subject=Career Inquiry`} size="lg" variant="secondary">
-          Apply Now
+        <Button href="#openings" size="lg" variant="secondary">
+          View job openings
         </Button>
       </div>
     </div>
   </section>
 
-  <!-- Why Work at Cabana -->
+  <!-- Intro -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <p class="text-xl text-gray-700 leading-relaxed">
+          We're looking for talented people to join us in building the first ever nationwide pool service brand.
+        </p>
+      </div>
+      <div class="prose prose-lg max-w-none text-gray-600">
+        <p>Every day, thousands of pool professionals wake up before dawn. They check their routes, load their trucks, and head out to take care of America's pools. It's skilled work that demands precision, knowledge, and dedication. But the tools and systems they're given? They haven't changed in decades. Until now.</p>
+        <p>At Cabana, we see the craftspeople behind the perfect pool. The technicians who know every pump, every chemical balance, every equipment quirk. The professionals who deserve technology that matches their expertise.</p>
+        <p>We're building what pool service always should have been. A company that gives its technicians the best technology, the best training, and the best opportunity to build a real career. Where your experience is valued, your growth is supported, and your work is respected.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What Makes Cabana Different -->
+  <section class="py-16 lg:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          What makes a career at Cabana different?
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div class="bg-white border border-gray-200 rounded-xl p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Traditional Service Jobs</h3>
+          <ul class="space-y-3 text-gray-600">
+            <li>Outdated systems and endless paperwork</li>
+            <li>Limited tools that make your job harder</li>
+            <li>Flat career path with few advancement options</li>
+            <li>Little recognition for your skills and effort</li>
+            <li>Same responsibilities year after year</li>
+          </ul>
+        </div>
+        <div class="bg-[#00568c] text-white rounded-xl p-6">
+          <h3 class="text-lg font-semibold mb-4">Cabana</h3>
+          <ul class="space-y-3">
+            <li>Cutting-edge technology that amplifies your skills</li>
+            <li>Clear growth path from entry-level to leadership</li>
+            <li>Expert team backing you every step of the way</li>
+            <li>Opportunity to help build something revolutionary</li>
+            <li>New challenges and responsibilities as we expand nationwide</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Can Offer -->
   <section class="py-16 lg:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
         <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-          Why Work at {company.name}?
+          What we can offer you
         </h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          We believe that taking care of our team is how we take care of our customers.
-        </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         {[
           {
-            title: 'Competitive Pay',
-            description: 'We pay above industry average because we want the best people. Weekly pay with clear paths to raises.',
+            title: 'Work that values your expertise.',
+            description: "Pool service requires precision, skill, and technical knowledge that few people have. At Cabana, your expertise isn't just appreciated, it's critical to our success. We're not looking for just another pair of hands; we're looking for your knowledge and skill to help build a new standard for pool service across the country.",
           },
           {
-            title: 'Benefits Package',
-            description: 'Health insurance, paid time off, and retirement savings options for full-time team members.',
+            title: 'Technology that makes your job easier.',
+            description: "Imagine starting your day actually knowing what each pool needs before you arrive. Having water chemistry data right on your phone. Getting help instantly when you need it. We've built tools based on input from real technicians like you, so you can ditch the paperwork headaches and focus on what you're good at: keeping pools in perfect condition.",
           },
           {
-            title: 'Career Growth',
-            description: 'Start as a technician and grow into route management, operations, or leadership roles. We promote from within.',
+            title: 'A real career path with growth opportunities.',
+            description: "Let's be honest, pool service jobs don't usually come with a career ladder. At Cabana, we're changing that. Want to be a lead technician? Regional trainer? Operations manager? As we grow across the country, you can grow with us. And we'll provide the training and support to help you get there.",
           },
           {
-            title: 'Training & Certification',
-            description: 'We invest in your skills with paid CPO certification, ongoing training, and professional development.',
-          },
-          {
-            title: 'Modern Tools & Equipment',
-            description: 'Company vehicle, uniforms, professional-grade equipment, and a mobile app for route management.',
-          },
-          {
-            title: 'Supportive Team Culture',
-            description: 'No micromanagement. We trust our team, provide clear expectations, and are always here when you need support.',
+            title: 'A team that has your back.',
+            description: "When you join Cabana, you're not on your own. Need help with a tricky pool issue? We've got experts ready to assist. Want to learn new skills? We offer ongoing training in the latest techniques and equipment. Plus, we pay competitively and make sure your compensation grows as your skills and contributions do.",
           },
         ].map((item) => (
           <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
@@ -95,28 +132,99 @@ const description = `Join the ${company.name} team. We are hiring pool technicia
     </div>
   </section>
 
-  <!-- Open Roles -->
+  <!-- Team Testimonials -->
   <section class="py-16 lg:py-24 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
         <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-          Types of Roles We Hire For
+          What our team says
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        {[
+          { name: 'Jason, Lead Technician', text: "I started as a technician six months ago and I'm already training new team members. The growth opportunities here are real." },
+          { name: 'Michael, Cabana Technician', text: "I've worked for three other pool companies before joining Cabana. The difference is night and day. I'm not just cleaning pools anymore. I'm building a career with real potential." },
+          { name: 'Jared, Cabana Technician', text: "Cabana tech makes my job so much easier. I can focus on taking care of customers instead of paperwork, and my routes are optimized so I spend less time driving." },
+        ].map((testimonial) => (
+          <div class="bg-white border border-gray-200 rounded-xl p-6">
+            <p class="text-gray-700 mb-4 leading-relaxed">&ldquo;{testimonial.text}&rdquo;</p>
+            <p class="font-semibold text-gray-900 text-sm">{testimonial.name}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Who We're Looking For -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Who we're looking for
         </h2>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Even if you do not see your exact role listed, we are always interested in talented, motivated people.
+          We're growing and need people who:
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+      <ul class="space-y-4 text-gray-600 text-lg max-w-2xl mx-auto mb-8">
+        <li class="flex items-start gap-3">
+          <svg class="h-6 w-6 text-[#00568c] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          Take pride in doing great work and delivering results
+        </li>
+        <li class="flex items-start gap-3">
+          <svg class="h-6 w-6 text-[#00568c] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          Want to be part of building something big (and get credit for it)
+        </li>
+        <li class="flex items-start gap-3">
+          <svg class="h-6 w-6 text-[#00568c] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          Are open to learning new things and using better technology
+        </li>
+        <li class="flex items-start gap-3">
+          <svg class="h-6 w-6 text-[#00568c] flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          Think pool service should be better than it is today
+        </li>
+      </ul>
+
+      <p class="text-center text-gray-600">
+        Whether you're already in pools or coming from another industry, we have opportunities at all levels, from technicians to managers to support roles.
+      </p>
+    </div>
+  </section>
+
+  <!-- Job Openings -->
+  <section id="openings" class="py-16 lg:py-24 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Ready to dive in? Here are our job openings:
+        </h2>
+      </div>
+
+      <div class="space-y-4">
         {[
-          { title: 'Pool Service Technician', description: 'Maintain residential and commercial pools on assigned routes. No experience needed; we train you.' },
-          { title: 'Senior Pool Technician', description: 'Experienced techs who can handle complex repairs, equipment diagnostics, and mentoring new hires.' },
-          { title: 'Route Manager', description: 'Oversee a team of technicians, manage scheduling, quality assurance, and customer relationships.' },
-          { title: 'Operations & Admin', description: 'Support the team from the office with scheduling, customer service, and business operations.' },
-        ].map((role) => (
-          <div class="bg-white border border-gray-200 rounded-xl p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">{role.title}</h3>
-            <p class="text-gray-600 text-sm">{role.description}</p>
+          { title: 'Pool Service Technician', location: 'Temecula, CA', type: 'Full-time' },
+          { title: 'Pool Service Technician', location: 'Fallbrook, CA', type: 'Full-time' },
+          { title: 'Pool Service Technician', location: 'San Diego, CA', type: 'Full-time' },
+          { title: 'Pool Repair Technician', location: 'Lomita, CA', type: 'Full-time' },
+        ].map((job) => (
+          <div class="bg-white border border-gray-200 rounded-xl p-6 flex items-center justify-between">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">{job.title}</h3>
+              <p class="text-gray-500 text-sm">{job.location} &middot; {job.type}</p>
+            </div>
+            <Button href={`mailto:${company.email}?subject=Application: ${job.title} - ${job.location}`} variant="outline" size="sm">
+              Apply
+            </Button>
           </div>
         ))}
       </div>
@@ -127,14 +235,14 @@ const description = `Join the ${company.name} team. We are hiring pool technicia
   <section class="py-16 lg:py-24 bg-[#00568c]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
-        Ready to Apply?
+        Growing together
       </h2>
       <p class="text-xl text-blue-100 mb-8">
-        Send us your info and tell us a bit about yourself. We will get back to you within a few business days.
+        You're not just joining a company; you're becoming part of something bigger. We're giving pool professionals the tools, opportunities, and respect they've always deserved. As we expand across the country, we need people who take pride in their work, who want to build something that matters, and who think pool service can be so much better than it is today. We're just getting started, and we'd love to have you along for the ride.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <Button href={`mailto:${company.email}?subject=Career Inquiry`} size="lg" variant="secondary">
-          Email Your Application
+          Apply Now
         </Button>
         <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
           <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
