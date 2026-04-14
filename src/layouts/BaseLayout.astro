@@ -26,8 +26,8 @@ interface Props {
 }
 
 const {
-  title = `${company.name} | San Diego Pool Service`,
-  description = `Professional pool cleaning and maintenance services in San Diego County. Serving San Diego, Chula Vista, Carlsbad & 20+ cities. ${company.rating.count}+ 5-star reviews. Call ${company.phone}!`,
+  title = `${company.name} | California Pool Service`,
+  description = `Professional pool cleaning, maintenance, repairs and installations in San Diego, Los Angeles, Orange County & Sacramento. ${company.rating.count}+ 5-star reviews. Call ${company.phone}!`,
   canonical = company.url + '/',
   ogTitle,
   ogDescription,
@@ -66,8 +66,8 @@ const webSiteSchema = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" href="/images/logos/poollogic-logo.png" type="image/png" />
-    <link rel="apple-touch-icon" href="/images/logos/poollogic-logo.png" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     <meta name="author" content={company.name} />
     <meta name="creator" content={company.name} />
     <meta name="publisher" content={company.name} />
@@ -85,36 +85,66 @@ const webSiteSchema = {
     <meta property="og:url" content={ogUrl || canonical} />
     <meta property="og:site_name" content={company.name} />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:image" content={`${company.url}/images/logos/poollogic-logo.png`} />
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
-    <meta property="og:image:alt" content={`${company.name} Logo`} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={twitterTitle || ogTitle || title} />
     <meta name="twitter:description" content={twitterDescription || ogDescription || description} />
-    <meta name="twitter:image" content={`${company.url}/images/logos/poollogic-logo.png`} />
 
     <!-- Geo tags -->
     {geoRegion && <meta name="geo.region" content={geoRegion} />}
     {geoPlacename && <meta name="geo.placename" content={geoPlacename} />}
     {geoPosition && <meta name="geo.position" content={geoPosition} />}
 
-    <!-- Preconnect to external quote domain -->
-    <link rel="preconnect" href="https://quote.poollogicsd.com" />
-    <link rel="dns-prefetch" href="https://quote.poollogicsd.com" />
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://quote.cabanapools.com" />
+    <link rel="dns-prefetch" href="https://quote.cabanapools.com" />
+    <link rel="preconnect" href="https://file.cabanapools.com" />
 
-    <!-- GA4: uncomment and replace GA_MEASUREMENT_ID when ready -->
-    <!--
-    <script src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
+    <!-- GTM (server-side proxy) -->
+    <script is:inline src={company.tracking.gtmServerUrl}></script>
+    <script is:inline define:vars={{ gtmId: company.tracking.gtmId }}>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'GA_MEASUREMENT_ID');
     </script>
-    -->
+
+    <!-- Facebook Pixel -->
+    <script is:inline define:vars={{ fbPixelId: company.tracking.fbPixelId }}>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', fbPixelId);
+      fbq('track', 'PageView');
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+        src={`https://www.facebook.com/tr?id=${company.tracking.fbPixelId}&ev=PageView&noscript=1`} />
+    </noscript>
+
+    <!-- Bing UET -->
+    <script is:inline define:vars={{ bingUetId: company.tracking.bingUetId }}>
+      (function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:bingUetId,enableAutoSpaTracking:true};
+      o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,
+      n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),
+      n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)
+      })(window,document,"script","//bat.bing.com/bat.js","uetq");
+    </script>
+
+    <!-- Nextdoor Pixel -->
+    <script is:inline define:vars={{ nextdoorPixelId: company.tracking.nextdoorPixelId }}>
+      !function(n,e,x,t,d,o,r){if(!n[d]){n[d]=function(){(n[d].q=n[d].q||[]).push(arguments)};
+      var o=e.createElement(x);o.async=1;o.src=t;var r=e.getElementsByTagName(x)[0];
+      r.parentNode.insertBefore(o,r)}n[d]&&n[d]('track','PageView')}
+      (window,document,'script','https://ads.nextdoor.com/public/pixel/tr.js','ndp');
+      ndp('init', nextdoorPixelId);
+      ndp('track', 'PageView');
+    </script>
 
     <!-- View Transitions -->
     <ViewTransitions />

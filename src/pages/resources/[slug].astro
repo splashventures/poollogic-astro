@@ -1,15 +1,12 @@
 ---
-import { Image } from 'astro:assets';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { posts, getPostBySlug, getRelatedPosts } from '@/data/posts';
 import { company } from '@/data/company';
 import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
-import DualCTA from '@/components/ui/DualCTA.astro';
+import Button from '@/components/ui/Button.astro';
 import { generateArticleSchema } from '@/lib/schema/article';
 import { generateSimpleFAQSchema } from '@/lib/schema/faq';
-import { getImage } from '@/lib/images';
-import kyleBowmanImg from '@/assets/images/pool/kyle-bowman.webp';
 
 export const getStaticPaths = (async () => {
   return posts.map((post) => ({
@@ -25,7 +22,7 @@ const faqSchema = generateSimpleFAQSchema(post.faqs);
 const schemas = [articleSchema, ...(faqSchema ? [faqSchema] : [])];
 
 const FALLBACK_IMAGE = '/images/pool/hero-pool.webp';
-const FALLBACK_IMAGE_ALT = 'PoolLogic professional pool service in San Diego';
+const FALLBACK_IMAGE_ALT = 'Cabana professional pool service in San Diego';
 
 const categoryPath = `/resources/category/${post.category}/`;
 const categoryLabel = post.categoryName;
@@ -66,17 +63,17 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
       </a>
       <h1 class="text-3xl lg:text-4xl font-bold mb-4">{post.title}</h1>
       <div class="flex flex-wrap items-center gap-4 text-blue-200 text-sm">
-        <a href="/about/kyle-bowman/" class="inline-flex items-center gap-2 hover:text-white transition-colors">
-          <Image
-            src={kyleBowmanImg}
+        <span class="inline-flex items-center gap-2">
+          <img
+            src="/images/pool/kyle-bowman.webp"
             alt={post.author}
-            width={28}
-            height={28}
+            width="28"
+            height="28"
             loading="lazy"
             class="rounded-full object-cover"
           />
           By {post.author}
-        </a>
+        </span>
         <span class="hidden sm:inline">&middot;</span>
         <time datetime={post.date}>
           {new Date(post.date).toLocaleDateString('en-US', {
@@ -158,25 +155,14 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
 
         <!-- Featured Image -->
         <div class="relative w-full aspect-video rounded-xl overflow-hidden mb-8">
-          {getImage(post.image || FALLBACK_IMAGE) ? (
-            <Image
-              src={getImage(post.image || FALLBACK_IMAGE)!}
-              alt={post.imageAlt || FALLBACK_IMAGE_ALT}
-              width={800}
-              height={450}
-              class="w-full h-full object-cover"
-              loading="eager"
-            />
-          ) : (
-            <img
-              src={post.image || FALLBACK_IMAGE}
-              alt={post.imageAlt || FALLBACK_IMAGE_ALT}
-              width="800"
-              height="450"
-              class="w-full h-full object-cover"
-              loading="eager"
-            />
-          )}
+          <img
+            src={post.image || FALLBACK_IMAGE}
+            alt={post.imageAlt || FALLBACK_IMAGE_ALT}
+            width="800"
+            height="450"
+            class="w-full h-full object-cover"
+            loading="eager"
+          />
         </div>
 
         <!-- Content Sections -->
@@ -213,11 +199,11 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
         <section class="mt-12 border-t border-gray-200 pt-8">
           <div class="flex items-start gap-4">
             <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
-              <Image
-                src={kyleBowmanImg}
+              <img
+                src="/images/pool/kyle-bowman.webp"
                 alt="Kyle Bowman"
-                width={128}
-                height={128}
+                width="128"
+                height="128"
                 loading="lazy"
                 class="w-full h-full object-cover"
               />
@@ -226,9 +212,9 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
               <a href="/about/kyle-bowman/" class="text-lg font-semibold text-gray-900 hover:text-[#00568c] transition-colors">
                 Kyle Bowman
               </a>
-              <p class="text-sm text-[#00568c] font-medium mb-2">Founder of PoolLogic &middot; CPO-Certified</p>
+              <p class="text-sm text-[#00568c] font-medium mb-2">Founder of Cabana &middot; CPO-Certified</p>
               <p class="text-gray-600 text-sm leading-relaxed">
-                Kyle is the Founder of PoolLogic Pool Service and a Certified Pool Operator (CPO) with deep expertise in pool service, water chemistry, and pool equipment repair. He oversees every aspect of PoolLogic's operations to ensure San Diego pool owners receive expert-level care.
+                Kyle is the Founder of Cabana Pool Service and a Certified Pool Operator (CPO) with deep expertise in pool service, water chemistry, and pool equipment repair. He oversees every aspect of Cabana's operations to ensure San Diego pool owners receive expert-level care.
               </p>
             </div>
           </div>
@@ -242,7 +228,7 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
           <p class="text-gray-600 mb-6">
             {company.name} provides expert pool cleaning, maintenance, and repair services throughout San Diego County.
           </p>
-          <DualCTA quoteText="Get a Free Quote" variant="compact" />
+          <Button href={company.quoteUrl} external size="lg">Get a Free Quote</Button>
         </section>
       </article>
     </div>
@@ -260,25 +246,14 @@ const postUrl = `${company.url}/resources/${post.slug}/`;
               class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group"
             >
               <div class="relative w-full aspect-video overflow-hidden">
-                {getImage(related.image || FALLBACK_IMAGE) ? (
-                  <Image
-                    src={getImage(related.image || FALLBACK_IMAGE)!}
-                    alt={related.imageAlt || related.title}
-                    width={800}
-                    height={450}
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                ) : (
-                  <img
-                    src={related.image || FALLBACK_IMAGE}
-                    alt={related.imageAlt || related.title}
-                    width="800"
-                    height="450"
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                )}
+                <img
+                  src={related.image || FALLBACK_IMAGE}
+                  alt={related.imageAlt || related.title}
+                  width="800"
+                  height="450"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
               </div>
               <div class="p-6">
                 <span class="text-xs font-medium text-[#00568c] uppercase tracking-wide">

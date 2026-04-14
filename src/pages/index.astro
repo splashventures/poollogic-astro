@@ -1,158 +1,44 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { company } from '@/data/company';
-import { cities } from '@/data/cities';
+import { services } from '@/data/services';
+import { metros } from '@/data/cities/index';
 import Button from '@/components/ui/Button.astro';
-import TrustStats from '@/components/ui/TrustStats.astro';
-import HowItWorks from '@/components/ui/HowItWorks.astro';
-import GoogleReviews from '@/components/ui/GoogleReviews.astro';
-import Comparison from '@/components/ui/Comparison.astro';
-import GuaranteeSection from '@/components/ui/GuaranteeSection.astro';
-import heroPoolImg from '@/assets/images/pool/hero-pool.webp';
-import techTestingImg from '@/assets/images/pool/pool-tech-testing-chemicals.webp';
-import techEquipmentImg from '@/assets/images/pool/pool-tech-equipment.webp';
-import techSkimmingImg from '@/assets/images/pool/pool-tech-skimming.webp';
-import techServiceUpdateImg from '@/assets/images/pool/pool-tech-service-update.webp';
 import FAQ from '@/components/ui/FAQ.astro';
-import PricingPreview from '@/components/ui/PricingPreview.astro';
+import { reviews } from '@/data/reviews';
 
-const title = 'Pool Service San Diego | #1 Pool Cleaning Company | PoolLogic';
-const description = `San Diego pool service & cleaning. Serving San Diego, Chula Vista, Carlsbad & 20+ cities. All chemicals included. ${company.rating.count}+ 5-star reviews. Call ${company.phone}!`;
-const keywords = [
-  'pool service near me',
-  'pool service san diego',
-  'pool cleaning near me',
-  'san diego pool service',
-  'pool service san diego ca',
-  'pool cleaning chula vista',
-  'pool maintenance san diego',
-  'pool company near me',
-  'weekly pool service',
-  'residential pool service',
-  'pool service san diego county',
-];
-
-const painPoints = [
-  {
-    pain: '"I spend every weekend testing water and adding chemicals"',
-    solution: 'We handle all pool chemistry - you just swim',
-  },
-  {
-    pain: '"My pool service never shows up when they say they will"',
-    solution: 'Same day, same time, every single week',
-  },
-  {
-    pain: '"I\'m always getting surprise charges for chemicals"',
-    solution: 'All chemicals included - one simple price',
-  },
-];
+const title = `${company.name} | California's Trusted Pool Service`;
+const description = `Professional pool cleaning, maintenance, repairs and installations across California. ${company.poolsServed.toLocaleString()}+ satisfied customers. ${company.rating.value}/5 Google rating. Call ${company.phone}!`;
 ---
 
 <BaseLayout
   title={title}
   description={description}
   canonical={`${company.url}/`}
-  ogTitle="Pool Service San Diego | #1 Pool Cleaning Company | PoolLogic"
-  ogDescription={`Professional pool service for San Diego. Weekly cleaning, all chemicals included, CPO-certified technicians. ${company.rating.count}+ 5-star reviews.`}
+  ogTitle={`${company.name} | California's Trusted Pool Service`}
+  ogDescription={`Professional pool service across California. Weekly cleaning, repairs, installations. ${company.rating.count}+ 5-star reviews.`}
   ogUrl={`${company.url}/`}
-  twitterTitle="Pool Service San Diego | PoolLogic Pool Service"
-  twitterDescription={`San Diego's #1 rated pool service. All chemicals included. Call ${company.phone}!`}
-  keywords={keywords}
-  geoRegion="US-CA"
-  geoPlacename="San Diego"
-  geoPosition={`${company.coordinates.lat};${company.coordinates.lng}`}
+  twitterTitle={`${company.name} | California Pool Service`}
+  twitterDescription={`California's trusted pool service. ${company.poolsServed.toLocaleString()}+ satisfied customers. Call ${company.phone}!`}
 >
-  <!-- Hero Section - Full background image -->
-  <section class="relative min-h-[520px] sm:min-h-[620px] lg:min-h-[680px] overflow-hidden">
-    <!-- Background Image -->
-    <Image
-      src={heroPoolImg}
-      alt="Crystal clear swimming pool maintained by PoolLogic in San Diego"
-      class="absolute inset-0 w-full h-full object-cover object-[30%_center] 2xl:object-center"
-      widths={[640, 1280, 1920]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    />
-    <!-- Gradient overlay for text readability -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/80 via-[#00568c]/50 to-transparent"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 flex items-center min-h-[520px] sm:min-h-[620px] lg:min-h-[680px]">
-      <div class="max-w-[940px]">
-        <!-- Trust badge -->
-        <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-4 sm:mb-6">
-          <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-          </svg>
-          <span class="text-white font-medium text-sm">
-            Trusted by {company.poolsServed.toLocaleString()}+ San Diego Families
-          </span>
-        </div>
-
-        <!-- H1 - Primary keyword: "San Diego Pool Service" -->
-        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6">
-          San Diego Pool Service
-          <span class="block text-[#88d2c7]">&amp; Pool Cleaning</span>
+  <!-- Hero Section -->
+  <section class="relative bg-brand-blue overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-blue via-brand-blue to-brand-blue-light opacity-90"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
+      <div class="max-w-3xl">
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+          California's Trusted
+          <span class="block text-brand-sky">Pool Service</span>
         </h1>
-
-        <!-- Subheadline with keywords -->
-        <p class="text-lg sm:text-xl lg:text-2xl text-gray-200 mb-6 sm:mb-8 leading-relaxed">
-          Professional pool service for San Diego, Chula Vista, Carlsbad, and 20+ San Diego County cities.
-          Weekly pool cleaning by CPO-certified technicians - all chemicals included.
+        <p class="text-lg sm:text-xl text-blue-100 mb-8 leading-relaxed max-w-2xl">
+          Cabana Pools provides professional pool cleaning, maintenance, repairs, and installations
+          across San Diego, Los Angeles, Orange County, and Sacramento. All chemicals included, no contracts required.
         </p>
-
-        <!-- Value props -->
-        <div class="flex flex-wrap gap-x-6 gap-y-3 mb-6 text-white/90">
-          <div class="flex items-center gap-2">
-            <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-            </svg>
-            <span>All chemicals included</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-            </svg>
-            <span>CPO-certified technicians</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-            </svg>
-            <span>Same technician weekly</span>
-          </div>
-        </div>
-
-        <!-- Trust signals -->
-        <div class="flex flex-wrap gap-x-6 gap-y-3 mb-6 sm:mb-8">
-          <div class="flex items-center gap-2">
-            <div class="flex">
-              {[...Array(5)].map(() => (
-                <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-            </div>
-            <span class="font-medium text-white">{company.rating.value}/5</span>
-            <span class="text-gray-300">({company.rating.count}+ reviews)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-gray-200">Bonded &amp; Insured</span>
-          </div>
-        </div>
-
-        <!-- CTA -->
         <div class="flex flex-col sm:flex-row gap-4">
           <Button href={company.quoteUrl} external size="lg" variant="secondary">
             Get Your Free Quote
           </Button>
-          <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
+          <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-brand-blue">
             <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
               <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
             </svg>
@@ -163,183 +49,230 @@ const painPoints = [
     </div>
   </section>
 
-  <!-- Trust Stats -->
-  <section class="pb-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <TrustStats />
-    </div>
-  </section>
-
-  <!-- Google Reviews - placed high for social proof -->
-  <GoogleReviews
-    placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
-    googleProfileUrl="https://g.co/kgs/NKwnBPz"
-  />
-
-  <!-- Introduction Section - SEO content -->
-  <section class="py-16 lg:py-28">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-        <!-- Image Grid (order-2 on mobile so text comes first) -->
-        <div class="grid grid-cols-2 gap-4 order-2 lg:order-1">
-          <div class="space-y-4">
-            <div class="rounded-xl overflow-hidden">
-              <Image
-                src={techTestingImg}
-                alt="PoolLogic technician testing pool water chemistry"
-                width={600}
-                height={400}
-                loading="lazy"
-                class="w-full h-auto object-cover"
-              />
-            </div>
-            <div class="rounded-xl overflow-hidden">
-              <Image
-                src={techEquipmentImg}
-                alt="PoolLogic technician with pool pump and filter equipment"
-                width={600}
-                height={400}
-                loading="lazy"
-                class="w-full h-auto object-cover"
-              />
-            </div>
-          </div>
-          <div class="space-y-4 pt-8">
-            <div class="rounded-xl overflow-hidden">
-              <Image
-                src={techSkimmingImg}
-                alt="PoolLogic technician skimming leaves from pool"
-                width={600}
-                height={400}
-                loading="lazy"
-                class="w-full h-auto object-cover"
-              />
-            </div>
-            <div class="rounded-xl overflow-hidden">
-              <Image
-                src={techServiceUpdateImg}
-                alt="PoolLogic technician sending digital service report"
-                width={600}
-                height={400}
-                loading="lazy"
-                class="w-full h-auto object-cover"
-              />
-            </div>
-          </div>
+  <!-- Trust Stats Bar -->
+  <section class="bg-white border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 text-center">
+        <div>
+          <p class="text-3xl sm:text-4xl font-bold text-brand-blue">{company.poolsServed.toLocaleString()}+</p>
+          <p class="text-gray-600 mt-1">Satisfied Customers</p>
         </div>
-
-        <!-- Text Content (order-1 on mobile so it appears first) -->
-        <div class="order-1 lg:order-2">
-          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-            #1 Rated Pool Company in San Diego
-          </h2>
-          <div class="prose prose-lg text-gray-600">
-            <p>
-              Looking for <strong>pool service near you</strong>? PoolLogic Pool Service has provided professional <strong>pool service in San Diego</strong> since 2020. Based in San Diego, we serve homeowners throughout <strong>San Diego County</strong> with weekly pool cleaning and maintenance.
-            </p>
-            <p>
-              Whether you need <strong>pool cleaning in Chula Vista</strong>, <strong>pool service in Carlsbad</strong>, or <strong>pool maintenance in La Jolla</strong> - we&apos;re your trusted local pool company. Our {company.rating.count}+ 5-star reviews speak for themselves.
-            </p>
+        <div>
+          <div class="flex items-center justify-center gap-1 mb-1">
+            <p class="text-3xl sm:text-4xl font-bold text-brand-blue">{company.rating.value}</p>
+            <div class="flex ml-1">
+              {[...Array(5)].map(() => (
+                <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
           </div>
-          <div class="mt-8">
-            <Button href={company.quoteUrl} external>
-              Get a Free Quote
-            </Button>
-          </div>
+          <p class="text-gray-600">Google Rating</p>
+        </div>
+        <div>
+          <p class="text-3xl sm:text-4xl font-bold text-brand-blue">Licensed</p>
+          <p class="text-gray-600 mt-1">Bonded &amp; Insured</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Pain Point Section -->
-  <section class="py-16 lg:py-28 bg-gray-50">
+  <!-- Services Overview Grid -->
+  <section class="py-16 lg:py-24 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-3xl mx-auto text-center mb-10 sm:mb-16">
-        <p class="text-[#00568c] font-semibold mb-3">WHY HIRE A POOL SERVICE?</p>
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
-          Pool Maintenance Shouldn&apos;t Be This Hard
+      <div class="text-center mb-12">
+        <p class="text-brand-blue font-semibold mb-3">OUR SERVICES</p>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Complete Pool Care for Every Need
         </h2>
-        <p class="text-lg text-gray-600">
-          Sound familiar?
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          From weekly cleaning to equipment installation, our certified technicians handle it all.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
-        {painPoints.map((item) => (
-          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100">
-            <div class="text-red-500 mb-4">
-              <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {services.map((service) => (
+          <a
+            href={`/${service.urlSlug}/`}
+            class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-brand-sky/30 transition-all group"
+          >
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-10 h-10 bg-brand-blue/10 rounded-lg flex items-center justify-center">
+                {service.category === 'maintenance' && (
+                  <svg class="w-5 h-5 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                )}
+                {service.category === 'repair' && (
+                  <svg class="w-5 h-5 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                )}
+                {service.category === 'installation' && (
+                  <svg class="w-5 h-5 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                )}
+              </div>
+              <div class="flex-1 min-w-0">
+                <h3 class="font-semibold text-gray-900 group-hover:text-brand-blue transition-colors">
+                  {service.name}
+                </h3>
+                <p class="text-sm text-gray-500 mt-1 line-clamp-2">{service.shortDescription}</p>
+              </div>
+              <svg class="w-5 h-5 text-gray-300 group-hover:text-brand-blue transition-colors flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
               </svg>
             </div>
-            <p class="text-gray-700 font-medium mb-4 italic">{item.pain}</p>
-            <div class="flex items-start gap-2 text-green-700">
-              <svg class="h-5 w-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-              </svg>
-              <span class="font-medium">{item.solution}</span>
-            </div>
-          </div>
+          </a>
         ))}
-      </div>
-
-      <div class="text-center mt-10 sm:mt-14">
-        <Button href={company.quoteUrl} external variant="secondary" size="lg">
-          Stop the Headaches - Get a Free Quote
-        </Button>
-        <p class="text-sm text-gray-500 mt-3">No commitment. Cancel anytime.</p>
       </div>
     </div>
   </section>
 
   <!-- How It Works -->
-  <HowItWorks />
-
-  <!-- Comparison -->
-  <Comparison />
-
-  <!-- Service Promise -->
-  <PricingPreview />
-
-  <!-- Guarantee -->
-  <GuaranteeSection />
-
-  <!-- Service Areas - Critical for local SEO -->
-  <section class="py-16 lg:py-28">
+  <section class="py-16 lg:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-8 sm:mb-12">
-        <p class="text-[#00568c] font-semibold mb-3">POOL SERVICE AREAS</p>
+      <div class="text-center mb-12">
+        <p class="text-brand-blue font-semibold mb-3">HOW IT WORKS</p>
         <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-          Pool Service Throughout San Diego County
+          Three Simple Steps to a Crystal-Clear Pool
         </h2>
-        <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-          From San Diego to Oceanside, we provide professional pool cleaning and pool maintenance
-          across San Diego County, California.
-        </p>
       </div>
 
-      <div class="bg-gray-50 rounded-2xl p-5 sm:p-8 mb-8 sm:mb-12">
-        <h3 class="text-xl font-bold text-gray-900 mb-2">San Diego County Pool Service</h3>
-        <p class="text-gray-600 text-sm mb-6">Pool cleaning &amp; maintenance in these San Diego County cities:</p>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {cities.map((city) => (
-            <a
-              href={`/pool-service-${city.slug}/`}
-              class="block py-2.5 text-gray-700 hover:text-[#00568c] transition-colors"
-            >
-              {city.name} Pool Service
-            </a>
-          ))}
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-brand-blue rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-2xl font-bold text-white">1</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Get a Quote</h3>
+          <p class="text-gray-600">
+            Fill out our quick online form or call us. We will put together a custom quote for your pool within minutes.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-16 h-16 bg-brand-blue rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-2xl font-bold text-white">2</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Regular Specialist Visits</h3>
+          <p class="text-gray-600">
+            Your dedicated technician arrives on the same day each week. Consistent care from someone who knows your pool.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-16 h-16 bg-brand-blue rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-2xl font-bold text-white">3</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Guaranteed Results</h3>
+          <p class="text-gray-600">
+            Enjoy a sparkling pool without lifting a finger. Digital service reports after every visit so you always know the status.
+          </p>
         </div>
       </div>
 
-      <div class="text-center">
+      <div class="text-center mt-12">
+        <Button href={company.quoteUrl} external size="lg" variant="secondary">
+          Get Started Today
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Areas -->
+  <section class="py-16 lg:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <p class="text-brand-blue font-semibold mb-3">SERVICE AREAS</p>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Serving Four Major California Metros
+        </h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Professional pool service from San Diego to Sacramento. Find your area below.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {metros.map((metro) => {
+          const hubCity = metro.cities.find(c => c.isPrimary);
+          const href = hubCity?.urlPath || '#';
+          return (
+            <a
+              href={href}
+              class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-brand-sky/30 transition-all text-center group"
+            >
+              <div class="w-12 h-12 bg-brand-blue/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-6 h-6 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-blue transition-colors mb-1">
+                {metro.name}
+              </h3>
+              <p class="text-sm text-gray-500">{metro.cities.length} cities served</p>
+            </a>
+          );
+        })}
+      </div>
+
+      <div class="text-center mt-10">
         <p class="text-gray-600 mb-4">
-          Don&apos;t see your city? We likely serve your area. Contact us for availability.
+          Don&apos;t see your city? We likely serve your area.
         </p>
         <Button href={company.quoteUrl} external>
-          Check Service Availability
+          Check Availability
         </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <p class="text-brand-blue font-semibold mb-3">CUSTOMER REVIEWS</p>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          What Our Customers Say
+        </h2>
+        <div class="flex items-center justify-center gap-2 mb-2">
+          <div class="flex">
+            {[...Array(5)].map(() => (
+              <svg class="h-6 w-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            ))}
+          </div>
+          <span class="font-semibold text-gray-900">{company.rating.value}/5</span>
+          <span class="text-gray-500">({company.rating.count}+ reviews on Google)</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {reviews.map((review) => (
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <div class="flex mb-3">
+              {[...Array(review.rating)].map(() => (
+                <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p class="text-gray-700 mb-4 leading-relaxed">&ldquo;{review.text}&rdquo;</p>
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 bg-brand-blue/10 rounded-full flex items-center justify-center">
+                <span class="text-sm font-semibold text-brand-blue">{review.customerName.charAt(0)}</span>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900 text-sm">{review.customerName}</p>
+                <p class="text-xs text-gray-500">{review.city}, CA</p>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -347,53 +280,29 @@ const painPoints = [
   <!-- FAQ -->
   <FAQ />
 
-  <!-- Post-FAQ CTA -->
-  <section class="py-12 lg:py-16 bg-gray-50 border-t border-gray-100">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
-        Ready to get started?
-      </h2>
-      <p class="text-gray-600 mb-6">
-        Join {company.poolsServed.toLocaleString()}+ San Diego families who trust PoolLogic. Get a free, no-obligation quote today.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button href={company.quoteUrl} external size="lg" variant="secondary">
-          Get Your Free Quote
-        </Button>
-        <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg">
-          <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-          </svg>
-          Call {company.phone}
-        </Button>
-      </div>
-    </div>
-  </section>
-
   <!-- Final CTA -->
-  <section class="py-16 lg:py-28 bg-[#00568c]">
+  <section class="py-16 lg:py-24 bg-brand-blue">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6">
-        Ready for Professional Pool Service?
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6">
+        Ready for a Pool You Can Enjoy?
       </h2>
-      <p class="text-lg sm:text-xl text-blue-100 mb-6 sm:mb-8">
-        Get a free quote for pool service in San Diego. CPO-certified technicians, no hidden fees, just crystal-clear water.
+      <p class="text-lg sm:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        Join {company.poolsServed.toLocaleString()}+ satisfied customers across California.
+        Get a free, no-obligation quote today.
       </p>
-
       <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
         <Button href={company.quoteUrl} external size="lg" variant="secondary">
           Get Your Free Quote
         </Button>
-        <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
+        <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-brand-blue">
           <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
             <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
           </svg>
           Call {company.phone}
         </Button>
       </div>
-
       <p class="text-blue-200 text-sm">
-        Serving San Diego County &middot; {company.rating.count}+ 5-star reviews &middot; Bonded &amp; insured
+        {company.serviceAreaDescription} &middot; {company.rating.count}+ 5-star reviews &middot; Licensed, bonded &amp; insured
       </p>
     </div>
   </section>

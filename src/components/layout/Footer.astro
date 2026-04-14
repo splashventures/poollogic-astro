@@ -1,37 +1,40 @@
 ---
-import { Image } from 'astro:assets';
 import { company } from '@/data/company';
 import { formatPhoneLink } from '@/lib/utils';
-import logoLight from '@/assets/images/logos/poollogic-logo-light.png';
 
-const serviceLinks = [
-  { name: 'Weekly Pool Cleaning', href: '/pool-cleaning-service-san-diego/' },
-  { name: 'Pool Filter Cleaning', href: '/pool-filter-cleaning-service-san-diego/' },
-  { name: 'Pool Algae Removal', href: '/pool-algae-removal-service-san-diego/' },
-  { name: 'Pool Heater Repair', href: '/pool-heater-repair-san-diego/' },
-  { name: 'Pool Pump Repair', href: '/pool-pump-repair-san-diego/' },
-  { name: 'Pool Automation', href: '/pool-automation-installation-san-diego/' },
-];
-
-const serviceAreaLinks = [
-  { name: 'San Diego', href: '/pool-service-san-diego/' },
-  { name: 'Chula Vista', href: '/pool-service-chula-vista/' },
-  { name: 'Carlsbad', href: '/pool-service-carlsbad/' },
-  { name: 'Oceanside', href: '/pool-service-oceanside/' },
-  { name: 'Escondido', href: '/pool-service-escondido/' },
-  { name: 'La Jolla', href: '/pool-service-la-jolla/' },
-  { name: 'El Cajon', href: '/pool-service-el-cajon/' },
-  { name: 'La Mesa', href: '/pool-service-la-mesa/' },
-  { name: 'Poway', href: '/pool-service-poway/' },
-  { name: 'Encinitas', href: '/pool-service-encinitas/' },
-];
-
-const companyLinks = [
-  { name: 'About Us', href: '/about/' },
-  { name: 'Reviews', href: '/reviews/' },
-  { name: 'Commercial Services', href: '/commercial-pool-service-san-diego/' },
+const quickLinks = [
+  { name: 'Get a Quote', href: company.quoteUrl },
+  { name: 'Commercial Pool Service', href: '/commercial-pool-service/' },
   { name: 'Resources', href: '/resources/' },
-  { name: 'Contact', href: '/about/#contact' },
+  { name: 'Reviews', href: '/reviews/' },
+  { name: 'Jobs & Careers', href: '/jobs-careers/' },
+  { name: 'Sell Your Pool Service Company', href: '/sell-pool-service-company/' },
+];
+
+const maintenanceLinks = [
+  { name: 'Weekly Pool Cleaning', href: '/weekly-pool-cleaning-service/' },
+  { name: 'Pool Filter Cleaning', href: '/pool-filter-cleaning-service/' },
+  { name: 'Pool Drain & Restart', href: '/pool-draining-restart-service/' },
+  { name: 'Pool Algae Removal', href: '/pool-algae-removal-service/' },
+  { name: 'Hot Tub Cleaning', href: '/hot-tub-cleaning-service/' },
+  { name: 'Pool Acid Washing', href: '/pool-acid-washing-service/' },
+];
+
+const repairLinks = [
+  { name: 'Pool Heater Repair', href: '/pool-heater-repair-service/' },
+  { name: 'Pool Pump Repair', href: '/pool-pump-repair-service/' },
+  { name: 'Pool Filter Repair', href: '/pool-filter-repair-service/' },
+  { name: 'Pool Light Repair', href: '/pool-light-repair-service/' },
+  { name: 'Pool Light Replacement', href: '/pool-light-replacement-service/' },
+  { name: 'Pool Automation Repair', href: '/pool-automation-repair-service/' },
+  { name: 'Salt Water Pool Repair', href: '/salt-water-pool-repair-service/' },
+];
+
+const installLinks = [
+  { name: 'Pool Heater Install', href: '/pool-heater-installation-service/' },
+  { name: 'Pool Pump Install', href: '/pool-pump-installation-service/' },
+  { name: 'Pool Filter Install', href: '/pool-filter-installation-service/' },
+  { name: 'Pool Automation Install', href: '/pool-automation-installation-service/' },
 ];
 
 const legalLinks = [
@@ -44,128 +47,79 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer class="bg-gray-900 text-gray-300">
-  <!-- Main footer content -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
-      <!-- Company info with NAP -->
-      <div class="lg:col-span-2">
+      <!-- Company info -->
+      <div class="lg:col-span-1">
         <a href="/" class="inline-block mb-4">
-          <Image
-            src={logoLight}
-            alt={`${company.name} - San Diego Pool Service`}
-            width={140}
-            height={100}
-            loading="lazy"
-            class="h-16 w-auto"
-          />
+          <span class="text-2xl font-bold text-white tracking-tight">Cabana</span>
         </a>
-
-        <p class="text-gray-400 mb-4 max-w-md">
-          Professional pool cleaning and maintenance services for greater San Diego County.
-          Trusted by over 1,000 San Diego families.
+        <p class="text-gray-400 mb-4 text-sm">
+          Professional pool cleaning, maintenance, repairs, and installations across California.
         </p>
-
-        <!-- NAP - Must be identical to all other instances -->
         <div class="space-y-2 text-sm">
           <p class="font-semibold text-white">{company.name}</p>
           <p>{company.address.full}</p>
           <p>
-            <a
-              href={formatPhoneLink(company.phone)}
-              class="hover:text-white transition-colors"
-            >
+            <a href={formatPhoneLink(company.phone)} class="hover:text-white transition-colors">
               {company.phone}
             </a>
           </p>
           <p>
-            <a
-              href={`mailto:${company.email}`}
-              class="hover:text-white transition-colors"
-            >
+            <a href={`mailto:${company.email}`} class="hover:text-white transition-colors">
               {company.email}
             </a>
           </p>
-          <p class="text-gray-400">{company.hoursDisplay}</p>
+          <p class="text-gray-500">Contractors License #: {company.contractorsLicense}</p>
         </div>
       </div>
 
-      <!-- Services -->
+      <!-- Quick Links -->
       <div>
-        <h3 class="text-white font-semibold mb-4">Services</h3>
+        <h3 class="text-white font-semibold mb-4">Quick Links</h3>
         <ul class="space-y-2 text-sm">
-          {serviceLinks.map((link) => (
+          {quickLinks.map((link) => (
             <li>
-              <a
-                href={link.href}
-                class="hover:text-white transition-colors"
-              >
-                {link.name}
-              </a>
-            </li>
-          ))}
-          <li>
-            <a
-              href="/services/"
-              class="text-[#88d2c7] hover:text-[#88d2c7]/80 font-medium"
-            >
-              View All Services
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Service Areas -->
-      <div>
-        <h3 class="text-white font-semibold mb-4">Service Areas</h3>
-        <ul class="space-y-2 text-sm">
-          {serviceAreaLinks.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class="hover:text-white transition-colors"
-              >
-                {link.name}
-              </a>
+              <a href={link.href} class="hover:text-white transition-colors">{link.name}</a>
             </li>
           ))}
         </ul>
       </div>
 
-      <!-- Company -->
+      <!-- Maintenance Services -->
       <div>
-        <h3 class="text-white font-semibold mb-4">Company</h3>
+        <h3 class="text-white font-semibold mb-4">Maintenance Services</h3>
         <ul class="space-y-2 text-sm">
-          {companyLinks.map((link) => (
+          {maintenanceLinks.map((link) => (
             <li>
-              <a
-                href={link.href}
-                class="hover:text-white transition-colors"
-              >
-                {link.name}
-              </a>
+              <a href={link.href} class="hover:text-white transition-colors">{link.name}</a>
             </li>
           ))}
         </ul>
+      </div>
 
-        <!-- Trust badges -->
-        <div class="mt-6 space-y-2">
-          {company.certifications.map((cert) => (
-            <div class="inline-flex items-center gap-2 text-xs text-gray-400">
-              <svg
-                class="h-4 w-4 text-green-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              {cert}
-            </div>
+      <!-- Repair Services -->
+      <div>
+        <h3 class="text-white font-semibold mb-4">Repair Services</h3>
+        <ul class="space-y-2 text-sm">
+          {repairLinks.map((link) => (
+            <li>
+              <a href={link.href} class="hover:text-white transition-colors">{link.name}</a>
+            </li>
           ))}
-        </div>
+        </ul>
+      </div>
+
+      <!-- Equipment Installs -->
+      <div>
+        <h3 class="text-white font-semibold mb-4">Equipment Installs</h3>
+        <ul class="space-y-2 text-sm">
+          {installLinks.map((link) => (
+            <li>
+              <a href={link.href} class="hover:text-white transition-colors">{link.name}</a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </div>
@@ -175,14 +129,11 @@ const currentYear = new Date().getFullYear();
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
         <p class="text-sm text-gray-400">
-          &copy; {currentYear} {company.name}. All rights reserved.
+          &copy; {currentYear} Cabana. All rights reserved.
         </p>
         <div class="flex gap-6 text-sm">
           {legalLinks.map((link) => (
-            <a
-              href={link.href}
-              class="text-gray-400 hover:text-white transition-colors"
-            >
+            <a href={link.href} class="text-gray-400 hover:text-white transition-colors">
               {link.name}
             </a>
           ))}

@@ -1,0 +1,153 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import Button from '@/components/ui/Button.astro';
+import { company } from '@/data/company';
+
+const title = `Sell Your Pool Service Company | ${company.name}`;
+const description = `Looking to sell your pool service company? ${company.name} acquires pool service businesses across California. Fair valuations, smooth transitions, and your team is taken care of.`;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={`${company.url}/sell-pool-service-company/`}
+  ogTitle={title}
+  ogDescription="Sell your pool service company to Cabana. Fair valuations, smooth transitions, and your team is taken care of."
+  ogUrl={`${company.url}/sell-pool-service-company/`}
+>
+  <!-- Breadcrumbs -->
+  <div class="py-2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Sell Your Pool Service Company', url: '/sell-pool-service-company/' },
+        ]}
+      />
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-[#00568c] to-[#00568c]/80 text-white py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl lg:text-5xl font-bold mb-6">
+          Sell Your Pool Service Company
+        </h1>
+        <p class="text-xl text-blue-100 mb-4">
+          Thinking about selling your pool route or pool service business? {company.name} is actively
+          acquiring pool service companies across California. Whether you are ready to retire, looking for a
+          partner, or want to take the next step, we would love to talk.
+        </p>
+        <p class="text-lg text-blue-200 mb-8">
+          Fair valuations. Smooth transitions. Your customers and team are in good hands.
+        </p>
+        <Button href={`mailto:${company.email}?subject=Interested in selling my pool service company`} size="lg" variant="secondary">
+          Start the Conversation
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Sell to Cabana -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Why Sell to {company.name}?
+        </h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          We are not a faceless investment firm. We are pool service operators who understand the business
+          from the inside out.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {[
+          {
+            title: 'Fair, Transparent Valuations',
+            description: 'We provide honest, market-based valuations with no hidden fees or last-minute renegotiations. You will know exactly what to expect.',
+          },
+          {
+            title: 'Your Team Stays Employed',
+            description: 'We retain your technicians and staff whenever possible. Your people built the business, and we want them to keep doing great work.',
+          },
+          {
+            title: 'Customers Stay Happy',
+            description: 'We maintain the same service quality your customers expect. Transitions are smooth, with minimal disruption to routes and schedules.',
+          },
+          {
+            title: 'Flexible Deal Structures',
+            description: 'Whether you want a clean exit, a phased transition, or a partnership arrangement, we will structure the deal to fit your goals.',
+          },
+          {
+            title: 'Quick, Simple Process',
+            description: 'No dragging things out. We move fast with clear timelines and straightforward paperwork so you can get on with your next chapter.',
+          },
+          {
+            title: 'Legacy Preserved',
+            description: 'You built something valuable. We respect that and invest in growing what you started rather than dismantling it.',
+          },
+        ].map((item) => (
+          <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">{item.title}</h3>
+            <p class="text-gray-600">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-16 lg:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          How It Works
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+        {[
+          { step: '1', title: 'Initial Conversation', description: 'Tell us about your business. We will ask about your routes, customer count, revenue, and what you are looking for.' },
+          { step: '2', title: 'Valuation', description: 'We provide a fair market valuation based on your financials, customer base, and route density.' },
+          { step: '3', title: 'Agreement', description: 'Once terms are agreed upon, we handle the paperwork and set a clear timeline for the transition.' },
+          { step: '4', title: 'Smooth Transition', description: 'We onboard your customers and team with care, ensuring service continuity throughout.' },
+        ].map((item) => (
+          <div class="text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#00568c] text-white text-xl font-bold mb-4">
+              {item.step}
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
+            <p class="text-gray-600 text-sm">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 lg:py-24 bg-[#00568c]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+        Ready to Talk?
+      </h2>
+      <p class="text-xl text-blue-100 mb-8">
+        Every conversation is confidential. Reach out and let us know what you are thinking.
+        No obligation, no pressure.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button href={`mailto:${company.email}?subject=Interested in selling my pool service company`} size="lg" variant="secondary">
+          Email Us
+        </Button>
+        <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
+          <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+          </svg>
+          Call {company.phone}
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

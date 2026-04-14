@@ -1,21 +1,24 @@
 @import "tailwindcss";
-@import "@fontsource/inter/400.css";
-@import "@fontsource/inter/500.css";
-@import "@fontsource/inter/600.css";
-@import "@fontsource/inter/700.css";
+@import "@fontsource/dm-sans/400.css";
+@import "@fontsource/dm-sans/500.css";
+@import "@fontsource/dm-sans/600.css";
+@import "@fontsource/dm-sans/700.css";
 
 @theme inline {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --color-brand-aqua: #88d2c7;
-  --color-brand-blue: #00568c;
-  --color-brand-blue-dark: #2a4589;
-  --color-brand-aqua-light: #b8e6df;
-  --color-brand-aqua-dark: #5fb8aa;
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --color-brand-blue: #0B3D91;
+  --color-brand-blue-light: #1a5bb5;
+  --color-brand-blue-dark: #082b66;
+  --color-brand-sky: #4A90D9;
+  --color-brand-sky-light: #7db3eb;
+  --color-brand-navy: #0a2540;
+  --color-brand-white: #ffffff;
+  --color-brand-gray: #f8fafc;
 }
 
 /* Ensure font-display: swap for faster text rendering */
 @font-face {
-  font-family: 'Inter';
+  font-family: 'DM Sans';
   font-display: swap;
 }
 
@@ -37,7 +40,7 @@ html:has(:target) {
 
 /* Focus styles for accessibility */
 *:focus-visible {
-  outline: 2px solid #00568c;
+  outline: 2px solid #0B3D91;
   outline-offset: 2px;
 }
 
@@ -103,18 +106,18 @@ html:has(:target) {
 }
 
 .prose a {
-  color: #00568c;
+  color: #0B3D91;
   text-decoration: underline;
-  text-decoration-color: rgba(0, 86, 140, 0.3);
+  text-decoration-color: rgba(11, 61, 145, 0.3);
   transition: text-decoration-color 0.15s;
 }
 
 .prose a:hover {
-  text-decoration-color: #00568c;
+  text-decoration-color: #0B3D91;
 }
 
 .prose blockquote {
-  border-left: 4px solid #00568c;
+  border-left: 4px solid #0B3D91;
   padding-left: 1rem;
   margin: 1.5rem 0;
   color: #4b5563;
@@ -193,6 +196,6 @@ img {
 
 /* Selection color */
 ::selection {
-  background: #88d2c7;
-  color: #2a4589;
+  background: #4A90D9;
+  color: #ffffff;
 }

@@ -4,7 +4,7 @@ export interface BlogPost {
   author: string;
   date: string;
   dateModified?: string;
-  category: 'pool-care-tips' | 'local-guides';
+  category: string;
   categoryName: string;
   excerpt: string;
   readTime: string;
