@@ -1,0 +1,370 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { company } from '@/data/company';
+import { allCities, metros } from '@/data/cities';
+import { services } from '@/data/services';
+import Button from '@/components/ui/Button.astro';
+import FAQ from '@/components/ui/FAQ.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import { generateCityLocalBusinessSchema } from '@/lib/schema/localBusiness';
+import type { City, Metro } from '@/types';
+
+export function getStaticPaths() {
+  return allCities.map((city) => {
+    const pathAfterCalifornia = city.urlPath.replace(/^\/california\//, '').replace(/\/$/, '');
+    return {
+      params: { path: pathAfterCalifornia },
+      props: { city },
+    };
+  });
+}
+
+const { city } = Astro.props as { city: City };
+const metro = metros.find(m => m.slug === city.metro) as Metro;
+const metroPhone = metro.phone;
+const citySchema = generateCityLocalBusinessSchema(city);
+
+// Build breadcrumbs: Home > California > Metro Hub > City
+const metroHub = allCities.find(c => c.metro === city.metro && c.isPrimary);
+const breadcrumbItems: { name: string; url: string }[] = [
+  { name: 'Home', url: '/' },
+];
+
+if (city.isPrimary) {
+  // This IS the metro hub page
+  breadcrumbItems.push({ name: `${city.name} Pool Service`, url: city.urlPath });
+} else {
+  // Sub-city: link back to metro hub
+  if (metroHub) {
+    breadcrumbItems.push({ name: `${metroHub.name} Pool Service`, url: metroHub.urlPath });
+  }
+  breadcrumbItems.push({ name: `${city.name} Pool Service`, url: city.urlPath });
+}
+
+// Resolve nearby cities from slugs to full City objects
+const nearbyCities = city.nearbyCities
+  .map(slug => allCities.find(c => c.slug === slug))
+  .filter((c): c is City => c !== undefined);
+
+// Group services by category
+const maintenanceServices = services.filter(s => s.category === 'maintenance');
+const repairServices = services.filter(s => s.category === 'repair');
+const installationServices = services.filter(s => s.category === 'installation');
+
+// FAQ schema for structured data
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: city.faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={city.metaTitle}
+  description={city.metaDescription}
+  canonical={`${company.url}${city.urlPath}`}
+  ogTitle={city.metaTitle}
+  ogDescription={city.metaDescription}
+  ogUrl={`${company.url}${city.urlPath}`}
+  keywords={[
+    `pool service ${city.name}`,
+    `pool cleaning ${city.name}`,
+    `pool maintenance ${city.name}`,
+    `${city.name} pool company`,
+    `pool service ${city.name} CA`,
+  ]}
+  geoRegion="US-CA"
+  geoPlacename={city.name}
+  geoPosition={`${city.coordinates.lat};${city.coordinates.lng}`}
+  schemas={[citySchema, faqSchema]}
+>
+  <!-- Breadcrumbs -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+    <Breadcrumbs items={breadcrumbItems} />
+  </div>
+
+  <!-- Hero Section -->
+  <section class="bg-brand-blue py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <!-- Trust badge -->
+        <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-6">
+          <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <span class="text-white font-medium text-sm">
+            {company.rating.value}/5 Stars ({company.rating.count}+ Reviews)
+          </span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
+          {city.name} Pool Service
+          <span class="block text-brand-sky-light">&amp; Pool Cleaning</span>
+        </h1>
+
+        <p class="text-lg sm:text-xl text-blue-100 mb-8 leading-relaxed">
+          {city.heroDescription}
+        </p>
+
+        <!-- Value props -->
+        <div class="flex flex-wrap gap-x-6 gap-y-3 mb-8 text-white/90">
+          <div class="flex items-center gap-2">
+            <svg class="h-5 w-5 text-brand-sky-light" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            <span>All chemicals included</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="h-5 w-5 text-brand-sky-light" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            <span>CPO-certified technicians</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="h-5 w-5 text-brand-sky-light" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            <span>No long-term contracts</span>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <Button href={company.quoteUrl} external size="lg" variant="secondary">
+            Get Your Free Quote
+          </Button>
+          <Button href={`tel:${metroPhone.raw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-brand-blue">
+            <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+            </svg>
+            {metroPhone.display}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro Content -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+          Professional Pool Service in {city.name}, California
+        </h2>
+        <div class="prose prose-lg text-gray-600">
+          <p>{city.introContent}</p>
+        </div>
+
+        {city.climateNotes && (
+          <div class="mt-8 bg-brand-gray rounded-xl p-6 border border-gray-100">
+            <h3 class="font-semibold text-gray-900 mb-2">Local Climate Considerations</h3>
+            <p class="text-gray-600">{city.climateNotes}</p>
+          </div>
+        )}
+
+        {city.waterNotes && (
+          <div class="mt-4 bg-brand-gray rounded-xl p-6 border border-gray-100">
+            <h3 class="font-semibold text-gray-900 mb-2">Water Quality Notes</h3>
+            <p class="text-gray-600">{city.waterNotes}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Overview -->
+  <section class="py-16 lg:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <p class="text-brand-blue font-semibold mb-3">OUR SERVICES</p>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Pool Services Available in {city.name}
+        </h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          From weekly cleaning to equipment installation, we offer comprehensive pool care for {city.name} homeowners.
+        </p>
+      </div>
+
+      <!-- Maintenance -->
+      <div class="mb-10">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <svg class="h-6 w-6 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Maintenance &amp; Cleaning
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {maintenanceServices.map(service => (
+            <div class="bg-white rounded-xl p-5 border border-gray-200 hover:border-brand-sky transition-colors">
+              <h4 class="font-semibold text-gray-900 mb-2">{service.name}</h4>
+              <p class="text-sm text-gray-600">{service.shortDescription}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Repair -->
+      <div class="mb-10">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <svg class="h-6 w-6 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Repair Services
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {repairServices.map(service => (
+            <div class="bg-white rounded-xl p-5 border border-gray-200 hover:border-brand-sky transition-colors">
+              <h4 class="font-semibold text-gray-900 mb-2">{service.name}</h4>
+              <p class="text-sm text-gray-600">{service.shortDescription}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Installation -->
+      <div class="mb-10">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <svg class="h-6 w-6 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          Installation Services
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {installationServices.map(service => (
+            <div class="bg-white rounded-xl p-5 border border-gray-200 hover:border-brand-sky transition-colors">
+              <h4 class="font-semibold text-gray-900 mb-2">{service.name}</h4>
+              <p class="text-sm text-gray-600">{service.shortDescription}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="text-center mt-8">
+        <Button href={company.quoteUrl} external size="lg">
+          Get a Free Quote for {city.name}
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Neighborhoods Section -->
+  {city.neighborhoods.length > 0 && (
+    <section class="py-16 lg:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <p class="text-brand-blue font-semibold mb-3">SERVICE AREAS</p>
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Neighborhoods We Serve in {city.name}
+          </h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Our technicians run established weekly routes throughout {city.name}, covering these neighborhoods and surrounding areas.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {city.neighborhoods.map(neighborhood => (
+            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-brand-blue/10 rounded-lg flex items-center justify-center">
+                  <svg class="h-5 w-5 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <h3 class="font-semibold text-gray-900 text-lg">{neighborhood.name}</h3>
+              </div>
+              <p class="text-gray-600 text-sm leading-relaxed">{neighborhood.description}</p>
+            </div>
+          ))}
+        </div>
+
+        {city.landmarks.length > 0 && (
+          <div class="mt-10 bg-brand-gray rounded-xl p-6 border border-gray-100">
+            <h3 class="font-semibold text-gray-900 mb-3">Notable Landmarks Near {city.name}</h3>
+            <div class="flex flex-wrap gap-2">
+              {city.landmarks.map(landmark => (
+                <span class="inline-flex items-center px-3 py-1.5 bg-white rounded-full text-sm text-gray-700 border border-gray-200">
+                  {landmark}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  <!-- FAQ Section -->
+  {city.faqs.length > 0 && (
+    <FAQ
+      faqs={city.faqs}
+      title={`Frequently Asked Questions About Pool Service in ${city.name}`}
+    />
+  )}
+
+  <!-- Nearby Cities -->
+  {nearbyCities.length > 0 && (
+    <section class="py-16 lg:py-24 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+          <p class="text-brand-blue font-semibold mb-3">NEARBY SERVICE AREAS</p>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+            Pool Service Near {city.name}
+          </h2>
+          <p class="text-gray-600">
+            We also provide pool service in these nearby cities.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {nearbyCities.map(nearby => (
+            <a
+              href={nearby.urlPath}
+              class="block bg-white rounded-xl p-4 border border-gray-200 hover:border-brand-sky hover:shadow-sm transition-all text-center"
+            >
+              <span class="font-medium text-gray-900 hover:text-brand-blue transition-colors">
+                {nearby.name} Pool Service
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA Section -->
+  <section class="py-16 lg:py-24 bg-brand-blue">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6">
+        Ready for Professional Pool Service in {city.name}?
+      </h2>
+      <p class="text-lg sm:text-xl text-blue-100 mb-8">
+        Get a free quote for pool service in {city.name}. CPO-certified technicians, all chemicals included, no long-term contracts.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+        <Button href={company.quoteUrl} external size="lg" variant="secondary">
+          Get Your Free Quote
+        </Button>
+        <Button href={`tel:${metroPhone.raw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-brand-blue">
+          <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+          </svg>
+          Call {metroPhone.display}
+        </Button>
+      </div>
+
+      <p class="text-blue-200 text-sm">
+        Serving {city.name} &amp; {metro.name} &middot; {company.rating.count}+ 5-star reviews &middot; Bonded &amp; insured
+      </p>
+    </div>
+  </section>
+</BaseLayout>

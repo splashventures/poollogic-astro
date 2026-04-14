@@ -1,0 +1,110 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { company } from '@/data/company';
+
+const title = `End User License Agreement | ${company.name}`;
+const description = 'End User License Agreement for the Cabana Pool Service QuickBooks integration.';
+const lastUpdated = 'January 1, 2024';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  noindex={true}
+>
+  <!-- Content -->
+  <section class="py-12 lg:py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">End User License Agreement</h1>
+      <p class="text-gray-500 mb-8">Last updated: {lastUpdated}</p>
+
+      <div class="prose prose-lg max-w-none text-gray-600">
+        <p>
+          This End User License Agreement ("Agreement") is a legal agreement between you ("User") and
+          {company.name} ("Company," "we," "us," or "our") governing your use of our QuickBooks
+          integration application ("Application").
+        </p>
+
+        <h2>1. License Grant</h2>
+        <p>
+          Subject to the terms of this Agreement, we grant you a limited, non-exclusive, non-transferable,
+          revocable license to use the Application solely in connection with your authorized use of
+          QuickBooks and {company.name} services.
+        </p>
+
+        <h2>2. Restrictions</h2>
+        <p>You agree not to:</p>
+        <ul>
+          <li>Copy, modify, or distribute the Application</li>
+          <li>Reverse engineer, decompile, or disassemble the Application</li>
+          <li>Rent, lease, lend, sell, or sublicense the Application</li>
+          <li>Use the Application for any unlawful purpose</li>
+          <li>Remove any proprietary notices from the Application</li>
+        </ul>
+
+        <h2>3. Data Access and Use</h2>
+        <p>
+          The Application accesses your QuickBooks data solely to provide the services described in our
+          documentation. We access only the data necessary to perform the integration functions, including
+          customer records, invoices, and payment information. Your data is handled in accordance with our
+          <a href="/qb-privacypolicy/" class="text-[#00568c] hover:underline">Privacy Policy</a>.
+        </p>
+
+        <h2>4. Intellectual Property</h2>
+        <p>
+          The Application, including all code, design, and documentation, is the intellectual property
+          of {company.name} and is protected by copyright and other intellectual property laws. This
+          Agreement does not transfer any ownership rights to you.
+        </p>
+
+        <h2>5. Disclaimer of Warranties</h2>
+        <p>
+          THE APPLICATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+          BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+          NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE APPLICATION WILL BE UNINTERRUPTED, ERROR-FREE,
+          OR COMPLETELY SECURE.
+        </p>
+
+        <h2>6. Limitation of Liability</h2>
+        <p>
+          TO THE MAXIMUM EXTENT PERMITTED BY LAW, {company.name.toUpperCase()} SHALL NOT BE LIABLE FOR
+          ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS
+          OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR
+          OTHER INTANGIBLE LOSSES RESULTING FROM YOUR USE OF THE APPLICATION.
+        </p>
+
+        <h2>7. Termination</h2>
+        <p>
+          This Agreement is effective until terminated. We may terminate this Agreement at any time if
+          you fail to comply with any term. Upon termination, you must cease all use of the Application.
+          You may terminate this Agreement at any time by disconnecting the Application from your
+          QuickBooks account.
+        </p>
+
+        <h2>8. Changes to This Agreement</h2>
+        <p>
+          We reserve the right to modify this Agreement at any time. Changes will be posted on this page
+          with an updated effective date. Continued use of the Application after changes constitutes
+          acceptance of the modified Agreement.
+        </p>
+
+        <h2>9. Governing Law</h2>
+        <p>
+          This Agreement is governed by the laws of the State of California, without regard to conflict
+          of law principles. Any disputes arising under this Agreement shall be resolved in the courts
+          of San Diego County, California.
+        </p>
+
+        <h2>10. Contact</h2>
+        <p>
+          If you have questions about this Agreement, please contact us:
+        </p>
+        <ul>
+          <li>Email: {company.email}</li>
+          <li>Phone: {company.phone}</li>
+          <li>Address: {company.address.full}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

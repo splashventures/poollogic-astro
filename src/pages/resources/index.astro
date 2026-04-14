@@ -1,11 +1,9 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { posts, topicGroups } from '@/data/posts';
 import { company } from '@/data/company';
 import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
-import DualCTA from '@/components/ui/DualCTA.astro';
-import { getImage } from '@/lib/images';
+import Button from '@/components/ui/Button.astro';
 
 const quickTips = [
   'Test your water chemistry at least once a week during swimming season.',
@@ -46,11 +44,11 @@ const localGuides = sortedPosts.filter((p) => p.category === 'local-guides').sli
 ---
 
 <BaseLayout
-  title="Pool Care Resources & Tips | PoolLogic Pool Service"
-  description="Helpful pool care guides, maintenance tips, and expert advice from PoolLogic Pool Service. Learn how to keep your pool clean, safe, and beautiful."
+  title="Pool Care Resources & Tips | Cabana Pool Service"
+  description="Helpful pool care guides, maintenance tips, and expert advice from Cabana Pool Service. Learn how to keep your pool clean, safe, and beautiful."
   canonical={`${company.url}/resources/`}
-  ogTitle="Pool Care Resources & Tips | PoolLogic Pool Service"
-  ogDescription="Helpful pool care guides, maintenance tips, and expert advice from PoolLogic Pool Service."
+  ogTitle="Pool Care Resources & Tips | Cabana Pool Service"
+  ogDescription="Helpful pool care guides, maintenance tips, and expert advice from Cabana Pool Service."
   ogUrl={`${company.url}/resources/`}
 >
   <!-- Breadcrumbs -->
@@ -142,25 +140,14 @@ const localGuides = sortedPosts.filter((p) => p.category === 'local-guides').sli
             class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group"
           >
             <div class="relative w-full aspect-video overflow-hidden">
-              {getImage(post.image || FALLBACK_IMAGE) ? (
-                <Image
-                  src={getImage(post.image || FALLBACK_IMAGE)!}
-                  alt={post.imageAlt || post.title}
-                  width={800}
-                  height={450}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-              ) : (
-                <img
-                  src={post.image || FALLBACK_IMAGE}
-                  alt={post.imageAlt || post.title}
-                  width="800"
-                  height="450"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-              )}
+              <img
+                src={post.image || FALLBACK_IMAGE}
+                alt={post.imageAlt || post.title}
+                width="800"
+                height="450"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
             </div>
             <div class="p-6">
               <span class="text-xs font-medium text-[#00568c] uppercase tracking-wide">
@@ -207,25 +194,14 @@ const localGuides = sortedPosts.filter((p) => p.category === 'local-guides').sli
             class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group"
           >
             <div class="relative w-full aspect-[16/9] overflow-hidden">
-              {getImage(post.image || FALLBACK_IMAGE) ? (
-                <Image
-                  src={getImage(post.image || FALLBACK_IMAGE)!}
-                  alt={post.imageAlt || post.title}
-                  width={800}
-                  height={450}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-              ) : (
-                <img
-                  src={post.image || FALLBACK_IMAGE}
-                  alt={post.imageAlt || post.title}
-                  width="800"
-                  height="450"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-              )}
+              <img
+                src={post.image || FALLBACK_IMAGE}
+                alt={post.imageAlt || post.title}
+                width="800"
+                height="450"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
             </div>
             <div class="p-6">
               <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-[#00568c] transition-colors">
@@ -447,7 +423,9 @@ const localGuides = sortedPosts.filter((p) => p.category === 'local-guides').sli
           Whether you're a customer or just need advice, reach out and we'll
           point you in the right direction.
         </p>
-        <DualCTA quoteText="Get a Free Quote" class="justify-center" />
+        <div class="flex justify-center">
+          <Button href={company.quoteUrl} external size="lg">Get a Free Quote</Button>
+        </div>
       </div>
     </div>
   </section>

@@ -1,0 +1,182 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import Button from '@/components/ui/Button.astro';
+import { company } from '@/data/company';
+import { services } from '@/data/services';
+
+const title = `Pool Service Pricing Guide | ${company.name}`;
+const description = `How much does pool service cost in California? See average pricing ranges for weekly cleaning, filter service, repairs, and installations. Get an exact quote from ${company.name}.`;
+
+const maintenanceServices = services.filter(s => s.category === 'maintenance');
+const repairServices = services.filter(s => s.category === 'repair');
+const installationServices = services.filter(s => s.category === 'installation');
+
+const pricingRanges = [
+  { name: 'Weekly Pool Cleaning', range: '$120 - $200/mo', note: 'All chemicals included with Cabana' },
+  { name: 'Pool Filter Cleaning', range: '$75 - $150', note: 'Cartridge, sand, or DE filters' },
+  { name: 'Green Pool Cleanup', range: '$300 - $800', note: 'Depends on severity' },
+  { name: 'Pool Pump Repair', range: '$150 - $600', note: 'Parts and labor' },
+  { name: 'Pool Heater Repair', range: '$200 - $800', note: 'Diagnosis and repair' },
+  { name: 'Pool Replastering', range: '$4,000 - $10,000+', note: 'Size and material dependent' },
+  { name: 'Pool Equipment Installation', range: '$500 - $5,000+', note: 'Varies by equipment type' },
+  { name: 'Salt System Installation', range: '$1,500 - $3,500', note: 'Equipment and installation' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={`${company.url}/pool-service-pricing-guide/`}
+  ogTitle={title}
+  ogDescription="How much does pool service cost? See average pricing ranges for cleaning, repairs, and installations in California."
+  ogUrl={`${company.url}/pool-service-pricing-guide/`}
+  keywords={['pool service cost', 'pool cleaning price', 'how much is pool service', 'pool maintenance cost']}
+>
+  <!-- Breadcrumbs -->
+  <div class="py-2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Pricing Guide', url: '/pool-service-pricing-guide/' },
+        ]}
+      />
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-[#00568c] to-[#00568c]/80 text-white py-16 lg:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl lg:text-5xl font-bold mb-4">
+          Pool Service Pricing Guide
+        </h1>
+        <p class="text-xl text-blue-100 mb-8">
+          Wondering how much pool service costs? Here are typical pricing ranges for pool cleaning,
+          maintenance, repairs, and installations in California. For an exact quote tailored to your pool,
+          get in touch with our team.
+        </p>
+        <Button href={company.quoteUrl} external size="lg" variant="secondary">
+          Get Your Exact Quote
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Table -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
+        Average Pool Service Costs
+      </h2>
+
+      <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <div class="hidden sm:grid grid-cols-3 bg-gray-50 border-b border-gray-200 px-6 py-4">
+          <span class="font-semibold text-gray-900">Service</span>
+          <span class="font-semibold text-gray-900">Typical Price Range</span>
+          <span class="font-semibold text-gray-900">Notes</span>
+        </div>
+        {pricingRanges.map((item, index) => (
+          <div class={`grid grid-cols-1 sm:grid-cols-3 px-6 py-4 ${index < pricingRanges.length - 1 ? 'border-b border-gray-100' : ''}`}>
+            <span class="font-medium text-gray-900 mb-1 sm:mb-0">{item.name}</span>
+            <span class="text-[#00568c] font-semibold mb-1 sm:mb-0">{item.range}</span>
+            <span class="text-gray-500 text-sm">{item.note}</span>
+          </div>
+        ))}
+      </div>
+
+      <p class="text-gray-500 text-sm mt-4 text-center">
+        Prices are estimates for the California market. Your actual price depends on pool size, condition, and specific requirements.
+      </p>
+    </div>
+  </section>
+
+  <!-- Services by Category -->
+  <section class="py-16 lg:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Our Services
+        </h2>
+        <p class="text-lg text-gray-600">
+          We offer a full range of pool services across California.
+        </p>
+      </div>
+
+      <div class="space-y-10">
+        {[
+          { title: 'Maintenance Services', items: maintenanceServices },
+          { title: 'Repair Services', items: repairServices },
+          { title: 'Installation Services', items: installationServices },
+        ].filter(group => group.items.length > 0).map((group) => (
+          <div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">{group.title}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {group.items.map((service) => (
+                <a
+                  href={`/services/${service.urlSlug}/`}
+                  class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-lg transition-shadow group"
+                >
+                  <h4 class="font-semibold text-gray-900 group-hover:text-[#00568c] transition-colors mb-2">
+                    {service.name}
+                  </h4>
+                  <p class="text-gray-600 text-sm line-clamp-2">{service.shortDescription}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- What Affects Pricing -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
+        What Affects Pool Service Pricing?
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {[
+          { title: 'Pool Size', description: 'Larger pools require more chemicals, more time, and more water to maintain. A 40,000-gallon pool costs more than a 10,000-gallon pool.' },
+          { title: 'Pool Condition', description: 'A well-maintained pool costs less to service than one that has been neglected. Green pool cleanups and initial deep cleans add to the cost.' },
+          { title: 'Service Frequency', description: 'Weekly service is the standard for California pools. Bi-weekly service may seem cheaper but often leads to more problems and higher long-term costs.' },
+          { title: 'Equipment Age & Type', description: 'Older equipment may need more attention and repairs. Variable-speed pumps, salt systems, and automation add complexity.' },
+          { title: 'Location & Access', description: 'Pool accessibility, distance from service routes, and local cost of living all factor into pricing.' },
+          { title: 'Additional Features', description: 'Spas, water features, slides, and multiple bodies of water increase the scope and cost of service.' },
+        ].map((item) => (
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="font-semibold text-gray-900 mb-2">{item.title}</h3>
+            <p class="text-gray-600 text-sm">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 lg:py-24 bg-[#00568c]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+        Get Your Exact Price
+      </h2>
+      <p class="text-xl text-blue-100 mb-8">
+        Every pool is different. Get a free, personalized quote from {company.name} in under 2 minutes.
+        All chemicals included, no hidden fees.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button href={company.quoteUrl} external size="lg" variant="secondary">
+          Get Your Free Quote
+        </Button>
+        <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
+          <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+          </svg>
+          Call {company.phone}
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

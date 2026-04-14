@@ -1,31 +1,28 @@
 ---
-import { Image } from 'astro:assets';
 import { company } from '@/data/company';
 import { formatPhoneLink } from '@/lib/utils';
 import Button from '@/components/ui/Button.astro';
-import logoHeader from '@/assets/images/logos/poollogic-logo-header.png';
 
 const navigation = [
-  { name: 'Services', href: '/services/' },
+  { name: 'Services', href: '/weekly-pool-cleaning-service/' },
   { name: 'Service Areas', href: '#service-areas', hasDropdown: true },
-  { name: 'Commercial', href: '/commercial-pool-service-san-diego/' },
-  { name: 'About', href: '/about/' },
+  { name: 'Commercial', href: '/commercial-pool-service/' },
+  { name: 'Reviews', href: '/reviews/' },
+  { name: 'Resources', href: '/resources/' },
 ];
 
 const serviceAreas = [
-  { name: 'San Diego', href: '/pool-service-san-diego/' },
-  { name: 'Chula Vista', href: '/pool-service-chula-vista/' },
-  { name: 'La Jolla', href: '/pool-service-la-jolla/' },
-  { name: 'Carlsbad', href: '/pool-service-carlsbad/' },
-  { name: 'Escondido', href: '/pool-service-escondido/' },
-  { name: 'Oceanside', href: '/pool-service-oceanside/' },
-  { name: 'View All Cities', href: '/services/', isViewAll: true },
+  { name: 'San Diego', href: '/california/san-diego-pool-service/' },
+  { name: 'Los Angeles', href: '/california/los-angeles-pool-service/' },
+  { name: 'Orange County', href: '/california/orange-county-pool-service/' },
+  { name: 'Sacramento', href: '/california/sacramento-pool-service/' },
+  { name: 'Find Your City', href: '/pool-service-near-me/', isViewAll: true },
 ];
 ---
 
 <header class="bg-white shadow-sm sticky top-0 z-50">
   <!-- Top bar with phone -->
-  <div class="bg-[#00568c] text-white py-2">
+  <div class="bg-brand-blue text-white py-2">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center text-sm">
       <div class="flex items-center gap-4">
         <span class="text-xs sm:text-sm">{company.hoursDisplay}</span>
@@ -34,14 +31,9 @@ const serviceAreas = [
       </div>
       <a
         href={formatPhoneLink(company.phone)}
-        class="flex items-center gap-2 font-semibold hover:text-[#88d2c7] transition-colors min-h-[44px] sm:min-h-0 items-center"
+        class="flex items-center gap-2 font-semibold hover:text-brand-sky-light transition-colors min-h-[44px] sm:min-h-0 items-center"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
           <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
         </svg>
         {company.phone}
@@ -52,18 +44,9 @@ const serviceAreas = [
   <!-- Main navigation -->
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16 sm:h-20">
-      <!-- Logo -->
+      <!-- Text Logo -->
       <a href="/" class="flex items-center py-2">
-        <Image
-          src={logoHeader}
-          alt="PoolLogic Pool Service"
-          width={200}
-          height={96}
-          loading="eager"
-          fetchpriority="high"
-          class="!h-[42px] sm:!h-[52px] w-auto"
-          style="height: 42px; width: auto;"
-        />
+        <span class="text-2xl sm:text-3xl font-bold text-brand-blue tracking-tight">Cabana</span>
       </a>
 
       <!-- Desktop Navigation -->
@@ -72,20 +55,10 @@ const serviceAreas = [
           <div class="relative">
             {item.hasDropdown ? (
               <div class="relative" data-dropdown>
-                <button class="flex items-center gap-1 text-gray-700 hover:text-[#00568c] font-medium transition-colors" data-dropdown-trigger>
+                <button class="flex items-center gap-1 text-gray-700 hover:text-brand-blue font-medium transition-colors" data-dropdown-trigger>
                   {item.name}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4 transition-transform"
-                    data-dropdown-arrow
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform" data-dropdown-arrow viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                   </svg>
                 </button>
                 <div class="absolute top-full left-0 pt-2 w-56 z-50 hidden" data-dropdown-menu>
@@ -96,8 +69,8 @@ const serviceAreas = [
                         class:list={[
                           'block px-4 py-2 text-sm',
                           area.isViewAll
-                            ? 'text-[#00568c] font-semibold border-t border-gray-100 mt-2 pt-3'
-                            : 'text-gray-700 hover:bg-[#88d2c7]/10 hover:text-[#00568c]',
+                            ? 'text-brand-blue font-semibold border-t border-gray-100 mt-2 pt-3'
+                            : 'text-gray-700 hover:bg-brand-sky/10 hover:text-brand-blue',
                         ]}
                       >
                         {area.name}
@@ -107,10 +80,7 @@ const serviceAreas = [
                 </div>
               </div>
             ) : (
-              <a
-                href={item.href}
-                class="text-gray-700 hover:text-[#00568c] font-medium transition-colors"
-              >
+              <a href={item.href} class="text-gray-700 hover:text-brand-blue font-medium transition-colors">
                 {item.name}
               </a>
             )}
@@ -128,39 +98,15 @@ const serviceAreas = [
       <!-- Mobile menu button -->
       <button
         type="button"
-        class="lg:hidden inline-flex items-center justify-center p-2.5 rounded-md text-gray-700 hover:text-[#00568c] hover:bg-gray-100 min-h-[44px] min-w-[44px]"
+        class="lg:hidden inline-flex items-center justify-center p-2.5 rounded-md text-gray-700 hover:text-brand-blue hover:bg-gray-100 min-h-[44px] min-w-[44px]"
         id="mobile-menu-button"
         aria-label="Open main menu"
       >
-        <svg
-          class="h-6 w-6"
-          id="menu-icon-open"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
+        <svg class="h-6 w-6" id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
-        <svg
-          class="h-6 w-6 hidden"
-          id="menu-icon-close"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
+        <svg class="h-6 w-6 hidden" id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
     </div>
@@ -178,18 +124,8 @@ const serviceAreas = [
                   aria-expanded="false"
                 >
                   {item.name}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4 transition-transform"
-                    data-mobile-accordion-arrow
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform" data-mobile-accordion-arrow viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                   </svg>
                 </button>
                 <div class="mt-2 ml-4 flex flex-col gap-2 hidden" data-mobile-accordion-panel>
@@ -197,10 +133,10 @@ const serviceAreas = [
                     <a
                       href={area.href}
                       class:list={[
-                        'text-sm',
+                        'text-sm py-1',
                         area.isViewAll
-                          ? 'text-[#00568c] font-semibold'
-                          : 'text-gray-600 hover:text-[#00568c]',
+                          ? 'text-brand-blue font-semibold'
+                          : 'text-gray-600 hover:text-brand-blue',
                       ]}
                     >
                       {area.name}
@@ -209,10 +145,7 @@ const serviceAreas = [
                 </div>
               </div>
             ) : (
-              <a
-                href={item.href}
-                class="text-gray-700 font-medium hover:text-[#00568c]"
-              >
+              <a href={item.href} class="text-gray-700 font-medium hover:text-brand-blue py-2 block">
                 {item.name}
               </a>
             )}
@@ -230,23 +163,19 @@ const serviceAreas = [
 
 <script>
   function initHeader() {
-    // Desktop dropdown (hover)
     document.querySelectorAll('[data-dropdown]').forEach((dropdown) => {
       const menu = dropdown.querySelector('[data-dropdown-menu]') as HTMLElement;
       const arrow = dropdown.querySelector('[data-dropdown-arrow]') as HTMLElement;
-
       dropdown.addEventListener('mouseenter', () => {
         menu?.classList.remove('hidden');
         arrow?.classList.add('rotate-180');
       });
-
       dropdown.addEventListener('mouseleave', () => {
         menu?.classList.add('hidden');
         arrow?.classList.remove('rotate-180');
       });
     });
 
-    // Mobile menu toggle
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     const menuIconOpen = document.getElementById('menu-icon-open');
@@ -258,7 +187,6 @@ const serviceAreas = [
       menuIconClose?.classList.toggle('hidden');
     });
 
-    // Mobile accordion for Service Areas
     document.querySelectorAll('[data-mobile-accordion-trigger]').forEach((trigger) => {
       trigger.addEventListener('click', () => {
         const panel = trigger.parentElement?.querySelector('[data-mobile-accordion-panel]') as HTMLElement;
@@ -270,7 +198,6 @@ const serviceAreas = [
       });
     });
 
-    // Close mobile menu when a link is clicked
     mobileMenu?.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => {
         mobileMenu?.classList.add('hidden');
@@ -280,6 +207,5 @@ const serviceAreas = [
     });
   }
 
-  // Re-initialize after View Transitions navigation
   document.addEventListener('astro:page-load', initHeader);
 </script>

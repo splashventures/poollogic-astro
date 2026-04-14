@@ -6,7 +6,7 @@ import { company } from '@/data/company';
 import { reviews } from '@/data/reviews';
 
 const title = `Customer Reviews | ${company.name}`;
-const description = `Read ${reviews.length} five-star reviews from real ${company.name} customers in San Diego. See why families trust us for weekly pool cleaning, repairs, and maintenance.`;
+const description = `Read ${reviews.length} five-star reviews from real ${company.name} customers across California. See why families trust us for weekly pool cleaning, repairs, and maintenance.`;
 
 const schema = {
   '@context': 'https://schema.org',
@@ -42,7 +42,7 @@ const schema = {
   title={title}
   description={description}
   ogTitle={title}
-  ogDescription={`Read ${reviews.length} five-star reviews from real customers in San Diego.`}
+  ogDescription={`Read ${reviews.length} five-star reviews from real customers across California.`}
   ogUrl={`${company.url}/reviews/`}
   canonical={`${company.url}/reviews/`}
   schemas={[schema]}
@@ -128,7 +128,7 @@ const schema = {
         Join Our {company.poolsServed.toLocaleString()}+ Satisfied Customers
       </h2>
       <p class="text-lg text-gray-600 mb-8">
-        Experience the pool service that San Diego families trust. Get a free quote in under 2 minutes.
+        Experience the pool service that California families trust. Get a free quote in under 2 minutes.
       </p>
       <DualCTA quoteText="Get Your Free Quote" class="justify-center" />
     </div>

@@ -1,0 +1,107 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { company } from '@/data/company';
+
+const title = `QuickBooks Integration Privacy Policy | ${company.name}`;
+const description = 'Privacy policy for the Cabana Pool Service QuickBooks integration. Learn how we handle your QuickBooks data.';
+const lastUpdated = 'January 1, 2024';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  noindex={true}
+>
+  <!-- Content -->
+  <section class="py-12 lg:py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">QuickBooks Integration Privacy Policy</h1>
+      <p class="text-gray-500 mb-8">Last updated: {lastUpdated}</p>
+
+      <div class="prose prose-lg max-w-none text-gray-600">
+        <p>
+          This Privacy Policy describes how {company.name} ("we," "us," or "our") collects, uses,
+          and protects information when you use our QuickBooks integration application ("Application").
+          This policy supplements our general <a href="/privacy-policy/" class="text-[#00568c] hover:underline">Privacy Policy</a>.
+        </p>
+
+        <h2>Information We Access</h2>
+        <p>
+          When you connect our Application to your QuickBooks account, we may access the following data:
+        </p>
+        <ul>
+          <li>Company information (name, address, contact details)</li>
+          <li>Customer records (names, addresses, contact information)</li>
+          <li>Invoice and payment data</li>
+          <li>Account and financial summary information</li>
+        </ul>
+
+        <h2>How We Use Your Data</h2>
+        <p>
+          We use the data accessed through QuickBooks solely to:
+        </p>
+        <ul>
+          <li>Synchronize customer and billing information between our systems</li>
+          <li>Generate and manage invoices for pool services</li>
+          <li>Process payments and track account balances</li>
+          <li>Provide customer service and support</li>
+        </ul>
+
+        <h2>Data Storage and Security</h2>
+        <p>
+          Your QuickBooks data is transmitted using industry-standard encryption (TLS/SSL). We store
+          only the data necessary for our integration to function. Data is stored on secure,
+          access-controlled servers. We do not sell, rent, or share your QuickBooks data with third
+          parties except as required to provide our services or as required by law.
+        </p>
+
+        <h2>Data Retention</h2>
+        <p>
+          We retain your QuickBooks data for as long as your account is active and the integration
+          is connected. When you disconnect the Application from your QuickBooks account, we will
+          delete your QuickBooks data within 30 days, unless we are required by law to retain it.
+        </p>
+
+        <h2>Third-Party Services</h2>
+        <p>
+          Our Application uses the Intuit QuickBooks API to access your data. Intuit's use of your
+          data is governed by <a href="https://www.intuit.com/privacy/" class="text-[#00568c] hover:underline" target="_blank" rel="noopener noreferrer">Intuit's Privacy Statement</a>.
+          We are not responsible for Intuit's data practices.
+        </p>
+
+        <h2>Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+          <li>Disconnect the Application from your QuickBooks account at any time</li>
+          <li>Request information about the data we have accessed</li>
+          <li>Request deletion of your data from our systems</li>
+          <li>Opt out of any non-essential data processing</li>
+        </ul>
+
+        <h2>California Privacy Rights</h2>
+        <p>
+          California residents have additional rights under the CCPA, including the right to know,
+          the right to delete, and the right to opt out of the sale of personal information. We do
+          not sell personal information obtained through the QuickBooks integration.
+        </p>
+
+        <h2>Changes to This Policy</h2>
+        <p>
+          We may update this Privacy Policy from time to time. Changes will be posted on this page
+          with an updated effective date.
+        </p>
+
+        <h2>Contact Us</h2>
+        <p>
+          If you have questions about this Privacy Policy or how we handle your QuickBooks data,
+          please contact us:
+        </p>
+        <ul>
+          <li>Email: {company.email}</li>
+          <li>Phone: {company.phone}</li>
+          <li>Address: {company.address.full}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
