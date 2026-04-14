@@ -1,39 +1,48 @@
 export const company = {
-  // Business Name (must be identical everywhere)
-  name: 'PoolLogic Pool Service',
+  name: 'Cabana Pool Service',
 
-  // Contact (NAP must be 100% consistent)
-  phone: '(619) 913-9335',
-  phoneRaw: '+16199139335',
-  email: 'hello@poollogicsd.com',
+  phone: '(888) 388-9689',
+  phoneRaw: '+18883889689',
+  email: 'hello@cabanapools.com',
 
-  // Address
+  phones: {
+    sd: { display: '(888) 388-9689', raw: '+18883889689' },
+    la: { display: '(888) 388-9689', raw: '+18883889689' },
+    oc: { display: '(888) 388-9689', raw: '+18883889689' },
+    sac: { display: '(916) 909-1244', raw: '+19169091244' },
+  },
+
   address: {
-    street: '1223 Cleveland Ave, #200-301',
+    street: '1223 Cleveland Ave. Ste 200-305',
     city: 'San Diego',
     state: 'CA',
     zip: '92103',
-    full: '1223 Cleveland Ave, #200-301, San Diego, CA 92103',
+    full: '1223 Cleveland Ave. Ste 200-305, San Diego, CA 92103',
   },
 
-  // Coordinates (San Diego, CA)
+  addressSac: {
+    street: '2281 Lava Ridge Court Suite 200',
+    city: 'Roseville',
+    state: 'CA',
+    zip: '95661',
+    full: '2281 Lava Ridge Court Suite 200, Roseville, CA 95661',
+  },
+
   coordinates: {
     lat: 32.7494,
     lng: -117.1694,
   },
 
-  // URLs
-  url: 'https://poollogicsd.com',
-  quoteUrl: 'https://quote.poollogicsd.com',
+  url: 'https://cabanapools.com',
+  quoteUrl: 'https://quote.cabanapools.com',
 
-  // Business Hours
   hours: {
     weekdays: { open: '08:00', close: '17:00' },
     saturday: { open: '08:00', close: '17:00' },
     sunday: { open: '08:00', close: '17:00' },
   },
 
-  hoursDisplay: 'Mon-Sun: 8AM - 5PM',
+  hoursDisplay: 'Sun - Sat: 8:00 AM - 5:00 PM PST',
 
   openingHoursSpecification: [
     { dayOfWeek: 'Monday', opens: '08:00', closes: '17:00' },
@@ -45,38 +54,41 @@ export const company = {
     { dayOfWeek: 'Sunday', opens: '08:00', closes: '17:00' },
   ],
 
-  // Trust Signals
   rating: {
-    value: 4.9,
-    count: 500,
+    value: 5.0,
+    count: 51,
     source: 'Google',
   },
 
-  // Customer count
-  poolsServed: 1042,
-
+  poolsServed: 5000,
   yearsInBusiness: 6,
   foundedYear: 2020,
 
-  // Certifications/Trust Badges
+  contractorsLicense: '1133031',
+
   certifications: [
     'Bonded & Insured',
-    'Certified Technicians',
+    'Licensed Contractors',
   ],
 
-  // Social Media
   social: {
-    facebook: 'https://facebook.com/PoolLogicPoolService',
-    instagram: 'https://instagram.com/poollogicsd',
-    yelp: 'https://yelp.com/biz/poollogic-pool-service-san-diego',
-    google: 'https://g.page/poollogicsd',
+    facebook: 'https://facebook.com/cabanapoolservice',
+    instagram: 'https://instagram.com/cabanapools',
+    yelp: 'https://yelp.com/biz/cabana-pool-service-san-diego',
+    google: 'https://g.page/cabanapools',
   },
 
-  // Service Area Description
-  serviceAreaDescription: 'Serving greater San Diego County',
+  serviceAreaDescription: 'Serving San Diego, Los Angeles, Orange County & Sacramento',
 
-  // Price Range (for schema)
   priceRange: '$$',
+
+  tracking: {
+    gtmId: 'GTM-T5D9ZXXK',
+    gtmServerUrl: 'https://file.cabanapools.com/gtm.js',
+    fbPixelId: '1696161025101791',
+    bingUetId: '343173798',
+    nextdoorPixelId: 'a4e3828b-aa4f-48f8-bcbe-09e02d81a424',
+  },
 } as const;
 
 export type Company = typeof company;

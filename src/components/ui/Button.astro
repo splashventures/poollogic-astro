@@ -22,10 +22,10 @@ const {
 } = Astro.props;
 
 const variantStyles: Record<string, string> = {
-  primary: 'bg-[#00568c] text-white hover:bg-[#ffb12b] hover:text-gray-900 focus:ring-[#00568c] shadow-sm',
-  secondary: 'bg-[#ffb12b] text-gray-900 hover:bg-[#e9a025] focus:ring-[#ffb12b] shadow-sm font-bold',
-  outline: 'border-2 border-[#00568c] text-[#00568c] hover:bg-[#ffb12b] hover:border-[#ffb12b] hover:text-gray-900 focus:ring-[#00568c]',
-  ghost: 'text-[#00568c] hover:bg-[#ffb12b]/20 focus:ring-[#00568c]',
+  primary: 'bg-brand-blue text-white hover:bg-brand-blue-light focus:ring-brand-blue shadow-sm',
+  secondary: 'bg-brand-sky text-white hover:bg-brand-sky-light focus:ring-brand-sky shadow-sm font-bold',
+  outline: 'border-2 border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white focus:ring-brand-blue',
+  ghost: 'text-brand-blue hover:bg-brand-sky/10 focus:ring-brand-blue',
 };
 
 const sizeStyles: Record<string, string> = {

@@ -1,0 +1,148 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import Button from '@/components/ui/Button.astro';
+import { company } from '@/data/company';
+
+const title = `Jobs & Careers | ${company.name}`;
+const description = `Join the ${company.name} team. We are hiring pool technicians, route managers, and more across California. Competitive pay, benefits, and room to grow.`;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={`${company.url}/jobs-careers/`}
+  ogTitle={title}
+  ogDescription={`Join the ${company.name} team. Competitive pay, benefits, and room to grow.`}
+  ogUrl={`${company.url}/jobs-careers/`}
+>
+  <!-- Breadcrumbs -->
+  <div class="py-2">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Breadcrumbs
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Jobs & Careers', url: '/jobs-careers/' },
+        ]}
+      />
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-[#00568c] to-[#00568c]/80 text-white py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h1 class="text-4xl lg:text-5xl font-bold mb-6">
+          Join the {company.name} Team
+        </h1>
+        <p class="text-xl text-blue-100 mb-8">
+          We are one of the fastest-growing pool service companies in California, and we are always looking
+          for great people. If you take pride in your work, enjoy being outdoors, and want a career with real
+          growth potential, we want to hear from you.
+        </p>
+        <Button href={`mailto:${company.email}?subject=Career Inquiry`} size="lg" variant="secondary">
+          Apply Now
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Work at Cabana -->
+  <section class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Why Work at {company.name}?
+        </h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          We believe that taking care of our team is how we take care of our customers.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {[
+          {
+            title: 'Competitive Pay',
+            description: 'We pay above industry average because we want the best people. Weekly pay with clear paths to raises.',
+          },
+          {
+            title: 'Benefits Package',
+            description: 'Health insurance, paid time off, and retirement savings options for full-time team members.',
+          },
+          {
+            title: 'Career Growth',
+            description: 'Start as a technician and grow into route management, operations, or leadership roles. We promote from within.',
+          },
+          {
+            title: 'Training & Certification',
+            description: 'We invest in your skills with paid CPO certification, ongoing training, and professional development.',
+          },
+          {
+            title: 'Modern Tools & Equipment',
+            description: 'Company vehicle, uniforms, professional-grade equipment, and a mobile app for route management.',
+          },
+          {
+            title: 'Supportive Team Culture',
+            description: 'No micromanagement. We trust our team, provide clear expectations, and are always here when you need support.',
+          },
+        ].map((item) => (
+          <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">{item.title}</h3>
+            <p class="text-gray-600">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Open Roles -->
+  <section class="py-16 lg:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          Types of Roles We Hire For
+        </h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Even if you do not see your exact role listed, we are always interested in talented, motivated people.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        {[
+          { title: 'Pool Service Technician', description: 'Maintain residential and commercial pools on assigned routes. No experience needed; we train you.' },
+          { title: 'Senior Pool Technician', description: 'Experienced techs who can handle complex repairs, equipment diagnostics, and mentoring new hires.' },
+          { title: 'Route Manager', description: 'Oversee a team of technicians, manage scheduling, quality assurance, and customer relationships.' },
+          { title: 'Operations & Admin', description: 'Support the team from the office with scheduling, customer service, and business operations.' },
+        ].map((role) => (
+          <div class="bg-white border border-gray-200 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">{role.title}</h3>
+            <p class="text-gray-600 text-sm">{role.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 lg:py-24 bg-[#00568c]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+        Ready to Apply?
+      </h2>
+      <p class="text-xl text-blue-100 mb-8">
+        Send us your info and tell us a bit about yourself. We will get back to you within a few business days.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button href={`mailto:${company.email}?subject=Career Inquiry`} size="lg" variant="secondary">
+          Email Your Application
+        </Button>
+        <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
+          <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+          </svg>
+          Call {company.phone}
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

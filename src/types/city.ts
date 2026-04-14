@@ -1,3 +1,5 @@
+export type MetroSlug = 'san-diego' | 'los-angeles' | 'orange-county' | 'sacramento';
+
 export interface Neighborhood {
   name: string;
   description: string;
@@ -9,44 +11,45 @@ export interface Coordinates {
 }
 
 export interface City {
-  // Basic info
   name: string;
   slug: string;
-  county: 'San Diego';
+  metro: MetroSlug;
   state: string;
   zipCodes: string[];
-
-  // Geographic
   coordinates: Coordinates;
-  distanceFromHQ: string;
 
-  // Local details
+  /** Full URL path for this city, e.g. /california/san-diego-pool-service/la-jolla-pool-service/ */
+  urlPath: string;
+
   neighborhoods: Neighborhood[];
   landmarks: string[];
-
-  // Climate/conditions for unique content
   climateNotes: string;
   waterNotes: string;
 
-  // SEO content
   metaTitle: string;
   metaDescription: string;
 
-  // Page content sections
-  definitionParagraph: string;
   heroDescription: string;
   introContent: string;
-  localExpertiseContent: string;
-  climateContent: string;
 
-  // FAQs - unique per city
   faqs: { question: string; answer: string }[];
 
-  // Related cities for internal linking
   nearbyCities: string[];
-
-  // Service priority
   isPrimary: boolean;
 }
 
-export type CitySlug = string;
+export interface Metro {
+  name: string;
+  slug: MetroSlug;
+  state: string;
+  phone: { display: string; raw: string };
+  coordinates: Coordinates;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+    full: string;
+  };
+  cities: City[];
+}

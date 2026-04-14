@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  site: 'https://poollogicsd.com',
+  site: 'https://cabanapools.com',
   trailingSlash: 'always',
   output: 'static',
   adapter: vercel(),
@@ -20,42 +20,37 @@ export default defineConfig({
           item.changefreq = 'weekly';
         }
         // Service pages
-        else if (path.match(/^\/(pool-|hot-tub-).+-san-diego\/$/)) {
+        else if (path.match(/^\/(weekly-pool-cleaning|pool-filter-cleaning|pool-draining-restart|pool-algae-removal|hot-tub-cleaning|pool-acid-washing|pool-heater-repair|pool-pump-repair|pool-filter-repair|pool-automation-repair|pool-light-repair|salt-water-pool-repair|pool-heater-installation|pool-pump-installation|pool-filter-installation|pool-automation-installation|pool-light-replacement)-service\/$/)) {
           item.priority = 0.9;
           item.changefreq = 'monthly';
         }
-        // Services overview
-        else if (path === '/services/') {
+        // Metro hub city pages
+        else if (path.match(/^\/california\/(san-diego|los-angeles|orange-county|sacramento)-pool-service\/$/)) {
           item.priority = 0.9;
           item.changefreq = 'monthly';
         }
-        // City pages
-        else if (path.match(/^\/pool-service-[a-z-]+\/$/)) {
+        // Sub-city pages
+        else if (path.match(/^\/california\/.*-pool-service\//)) {
           item.priority = 0.8;
           item.changefreq = 'monthly';
         }
-        // About, reviews, commercial
-        else if (['/about/', '/reviews/', '/commercial-pool-service-san-diego/'].includes(path)) {
+        // Reviews, commercial, pricing guide
+        else if (['/reviews/', '/commercial-pool-service/', '/pool-service-pricing-guide/', '/pool-service-near-me/'].includes(path)) {
           item.priority = 0.7;
           item.changefreq = 'monthly';
         }
-        // Blog index, Kyle Bowman bio
-        else if (['/resources/', '/about/kyle-bowman/'].includes(path)) {
+        // Blog index
+        else if (path === '/resources/') {
           item.priority = 0.6;
           item.changefreq = 'weekly';
         }
-        // Blog posts, categories, topics
+        // Blog posts
         else if (path.startsWith('/resources/')) {
           item.priority = 0.6;
           item.changefreq = 'monthly';
         }
-        // City-service combo pages
-        else if (path.match(/^\/.+-pool-.+-[a-z-]+\/$/)) {
-          item.priority = 0.5;
-          item.changefreq = 'monthly';
-        }
         // Legal, utility pages
-        else if (['/privacy-policy/', '/terms-of-use/', '/html-sitemap/'].includes(path)) {
+        else if (['/privacy-policy/', '/terms-of-use/', '/html-sitemap/', '/qb-eula/', '/qb-privacypolicy/'].includes(path)) {
           item.priority = 0.3;
           item.changefreq = 'yearly';
         }
@@ -85,51 +80,8 @@ export default defineConfig({
     },
   },
   redirects: {
-    // Static page redirects
-    '/commercial-pool-service': '/commercial-pool-service-san-diego/',
+    // Preserve old WP paths if any exist
     '/terms-of-service': '/terms-of-use/',
     '/sitemap': '/html-sitemap/',
-
-    // City page redirects: /{city}-pool-service -> /pool-service-{city}/
-    '/alpine-pool-service': '/pool-service-alpine/',
-    '/bonita-pool-service': '/pool-service-bonita/',
-    '/carlsbad-pool-service': '/pool-service-carlsbad/',
-    '/chula-vista-pool-service': '/pool-service-chula-vista/',
-    '/del-mar-pool-service': '/pool-service-del-mar/',
-    '/el-cajon-pool-service': '/pool-service-el-cajon/',
-    '/encinitas-pool-service': '/pool-service-encinitas/',
-    '/escondido-pool-service': '/pool-service-escondido/',
-    '/fallbrook-pool-service': '/pool-service-fallbrook/',
-    '/jamul-pool-service': '/pool-service-jamul/',
-    '/la-jolla-pool-service': '/pool-service-la-jolla/',
-    '/la-mesa-pool-service': '/pool-service-la-mesa/',
-    '/lakeside-pool-service': '/pool-service-lakeside/',
-    '/national-city-pool-service': '/pool-service-national-city/',
-    '/oceanside-pool-service': '/pool-service-oceanside/',
-    '/poway-pool-service': '/pool-service-poway/',
-    '/ramona-pool-service': '/pool-service-ramona/',
-    '/san-diego-pool-service': '/pool-service-san-diego/',
-    '/san-marcos-pool-service': '/pool-service-san-marcos/',
-    '/santee-pool-service': '/pool-service-santee/',
-    '/spring-valley-pool-service': '/pool-service-spring-valley/',
-    '/vista-pool-service': '/pool-service-vista/',
-
-    // Service page redirects: /services/{slug} -> /{urlSlug}/
-    '/services/weekly-pool-cleaning': '/pool-cleaning-service-san-diego/',
-    '/services/pool-filter-cleaning': '/pool-filter-cleaning-service-san-diego/',
-    '/services/pool-drain-restart': '/pool-draining-restart-service-san-diego/',
-    '/services/pool-algae-removal': '/pool-algae-removal-service-san-diego/',
-    '/services/hot-tub-cleaning': '/hot-tub-cleaning-service-san-diego/',
-    '/services/pool-acid-washing': '/pool-acid-washing-san-diego/',
-    '/services/pool-heater-repair': '/pool-heater-repair-san-diego/',
-    '/services/pool-pump-repair': '/pool-pump-repair-san-diego/',
-    '/services/pool-filter-repair': '/pool-filter-repair-san-diego/',
-    '/services/pool-light-repair': '/pool-light-repair-san-diego/',
-    '/services/pool-automation-repair': '/pool-automation-repair-san-diego/',
-    '/services/salt-water-pool-repair': '/salt-water-pool-repair-san-diego/',
-    '/services/pool-heater-installation': '/pool-heater-installation-san-diego/',
-    '/services/pool-pump-installation': '/pool-pump-installation-san-diego/',
-    '/services/pool-filter-installation': '/pool-filter-installation-san-diego/',
-    '/services/pool-automation-installation': '/pool-automation-installation-san-diego/',
   },
 });
