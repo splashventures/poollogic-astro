@@ -54,7 +54,7 @@ export function generateArticleSchema(post: BlogPost) {
       url: company.url,
       logo: {
         '@type': 'ImageObject',
-        url: `${company.url}/images/logos/poollogic-logo.png`,
+        url: `${company.url}/images/logos/cabana-logo-blue.svg`,
         width: 200,
         height: 96,
       },
