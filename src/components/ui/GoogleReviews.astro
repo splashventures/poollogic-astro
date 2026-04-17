@@ -260,8 +260,16 @@ const marqueeSpeed = 45;
     const track = container.querySelector('.reviews-marquee-track') as HTMLElement;
     if (!track) return;
 
-    // Loop distance: half of the full duplicated track width, minus the 20px gap (flex gap-5).
-    const loopDistance = () => (track.scrollWidth / 2) - 10;
+    // Cards are duplicated 2x for seamless loop. Loop distance = one full set of originals + one inter-set gap.
+    // scrollWidth = 2N*cardWidth + (2N-1)*gap, so loopDistance = scrollWidth/2 + gap/2.
+    const GAP = 20; // matches flex gap-5 (1.25rem)
+    const loopDistance = () => (track.scrollWidth / 2) + GAP / 2;
+
+    // Shift one card-width-plus-gap per card. Card widths are 300-340px responsive.
+    const cardStep = () => {
+      const card = track.children[0] as HTMLElement | undefined;
+      return card ? card.offsetWidth + GAP : 360;
+    };
 
     const speed = Number(container.getAttribute('data-speed') || 45); // px per second
     let offset = 0;
@@ -274,13 +282,19 @@ const marqueeSpeed = 45;
       track.style.transform = `translateX(${offset}px)`;
     }
 
+    function normalize() {
+      const d = loopDistance();
+      if (d <= 0) return;
+      while (offset > 0) offset -= d;
+      while (offset <= -d) offset += d;
+    }
+
     function step(now: number) {
       const dt = now - lastFrame;
       lastFrame = now;
       if (!paused && !transitioning) {
         offset -= (speed * dt) / 1000;
-        const d = loopDistance();
-        if (d > 0 && offset <= -d) offset += d;
+        normalize();
         apply();
       }
       requestAnimationFrame(step);
@@ -293,25 +307,20 @@ const marqueeSpeed = 45;
       resumeTimer = window.setTimeout(() => {
         paused = false;
         lastFrame = performance.now();
-      }, 5000);
+      }, 6000);
     }
 
     function shift(direction: number) {
       schedulePause();
       transitioning = true;
-      const d = loopDistance();
-      offset += direction * 360;
-      // Keep offset within [-d, 0] so the loop maths stays stable.
-      if (d > 0) {
-        while (offset > 0) offset -= d;
-        while (offset <= -d) offset += d;
-      }
-      track.style.transition = 'transform 0.4s ease';
+      offset += direction * cardStep() * 3; // three cards per click
+      normalize();
+      track.style.transition = 'transform 0.5s ease';
       apply();
       window.setTimeout(() => {
         track.style.transition = '';
         transitioning = false;
-      }, 420);
+      }, 520);
     }
 
     container.addEventListener('mouseenter', () => { paused = true; });
