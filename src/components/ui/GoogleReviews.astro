@@ -101,7 +101,7 @@ function getSource(review: Review): { name: string; type: 'google' | 'trustindex
   return { name: 'Trustindex', type: 'trustindex', url: trustindexUrl };
 }
 
-const marqueeDuration = Math.max(40, allReviews.length * 6);
+const marqueeSpeed = 45;
 ---
 
 <section class="py-14 lg:py-20 bg-gradient-to-b from-white to-gray-50">
@@ -152,7 +152,7 @@ const marqueeDuration = Math.max(40, allReviews.length * 6);
 
       <div
         class="reviews-marquee group relative overflow-hidden"
-        style={`--marquee-duration: ${marqueeDuration}s`}
+        data-speed={marqueeSpeed}
       >
         <div class="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-32 lg:w-48 bg-gradient-to-r from-gray-50 to-transparent z-10"></div>
         <div class="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-32 lg:w-48 bg-gradient-to-l from-gray-50 to-transparent z-10"></div>
@@ -243,27 +243,11 @@ const marqueeDuration = Math.max(40, allReviews.length * 6);
 
 <style>
   .reviews-marquee-track {
-    animation: reviews-marquee var(--marquee-duration, 60s) linear infinite;
     will-change: transform;
-  }
-
-  .reviews-marquee:hover .reviews-marquee-track {
-    animation-play-state: paused;
-  }
-
-  @keyframes reviews-marquee {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(calc(-50% - 10px));
-    }
+    transform: translateX(0);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reviews-marquee-track {
-      animation: none;
-    }
     .reviews-marquee {
       overflow-x: auto;
       scrollbar-width: thin;
@@ -276,41 +260,69 @@ const marqueeDuration = Math.max(40, allReviews.length * 6);
     const track = container.querySelector('.reviews-marquee-track') as HTMLElement;
     if (!track) return;
 
-    let isPaused = false;
-    let currentOffset = 0;
+    // Loop distance: half of the full duplicated track width, minus the 20px gap (flex gap-5).
+    const loopDistance = () => (track.scrollWidth / 2) - 10;
 
-    function pauseAndShift(direction: number) {
-      // Get current visual position
-      const computedStyle = window.getComputedStyle(track);
-      const matrix = new DOMMatrix(computedStyle.transform);
-      currentOffset = matrix.m41;
+    const speed = Number(container.getAttribute('data-speed') || 45); // px per second
+    let offset = 0;
+    let lastFrame = performance.now();
+    let paused = false;
+    let resumeTimer: number | null = null;
+    let transitioning = false;
 
-      // Stop the animation, hold position
-      track.style.animation = 'none';
-      track.style.transform = `translateX(${currentOffset}px)`;
+    function apply() {
+      track.style.transform = `translateX(${offset}px)`;
+    }
 
-      // Force reflow
-      void track.offsetHeight;
+    function step(now: number) {
+      const dt = now - lastFrame;
+      lastFrame = now;
+      if (!paused && !transitioning) {
+        offset -= (speed * dt) / 1000;
+        const d = loopDistance();
+        if (d > 0 && offset <= -d) offset += d;
+        apply();
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame((t) => { lastFrame = t; requestAnimationFrame(step); });
 
-      // Shift
-      currentOffset += direction * 360;
-      track.style.transition = 'transform 0.4s ease';
-      track.style.transform = `translateX(${currentOffset}px)`;
-
-      isPaused = true;
-
-      // Resume auto-scroll after 5 seconds
-      clearTimeout((container as any)._resumeTimer);
-      (container as any)._resumeTimer = setTimeout(() => {
-        track.style.transition = '';
-        track.style.animation = '';
-        track.style.transform = '';
-        isPaused = false;
+    function schedulePause() {
+      paused = true;
+      if (resumeTimer) window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(() => {
+        paused = false;
+        lastFrame = performance.now();
       }, 5000);
     }
 
+    function shift(direction: number) {
+      schedulePause();
+      transitioning = true;
+      const d = loopDistance();
+      offset += direction * 360;
+      // Keep offset within [-d, 0] so the loop maths stays stable.
+      if (d > 0) {
+        while (offset > 0) offset -= d;
+        while (offset <= -d) offset += d;
+      }
+      track.style.transition = 'transform 0.4s ease';
+      apply();
+      window.setTimeout(() => {
+        track.style.transition = '';
+        transitioning = false;
+      }, 420);
+    }
+
+    container.addEventListener('mouseenter', () => { paused = true; });
+    container.addEventListener('mouseleave', () => {
+      if (resumeTimer) window.clearTimeout(resumeTimer);
+      paused = false;
+      lastFrame = performance.now();
+    });
+
     const wrapper = container.parentElement;
-    wrapper?.querySelector('.reviews-nav-prev')?.addEventListener('click', () => pauseAndShift(1));
-    wrapper?.querySelector('.reviews-nav-next')?.addEventListener('click', () => pauseAndShift(-1));
+    wrapper?.querySelector('.reviews-nav-prev')?.addEventListener('click', () => shift(1));
+    wrapper?.querySelector('.reviews-nav-next')?.addEventListener('click', () => shift(-1));
   });
 </script>
