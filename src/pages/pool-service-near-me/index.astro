@@ -6,6 +6,7 @@ import { company } from '@/data/company';
 import { cities } from '@/data/cities';
 import { services } from '@/data/services';
 import { reviews } from '@/data/reviews';
+import GoogleReviews from '@/components/ui/GoogleReviews.astro';
 
 const title = `Best Pool Service Near Me in San Diego | ${company.name}`;
 const description = `Looking for pool service near me in San Diego? ${company.name} offers professional pool cleaning, maintenance, and repairs across ${cities.length}+ San Diego communities. ${company.rating.value}-star rated.`;
@@ -50,7 +51,10 @@ const featuredReviews = reviews.slice(0, 3);
           <p class="text-xl text-blue-100 mb-8">
             Our experienced technicians provide comprehensive pool service to keep your pool looking great and running efficiently.
           </p>
-          <DualCTA quoteText="Get A Free Quote" />
+          <DualCTA quoteText="Get Your Free Quote" />
+          <p class="text-sm text-white/75 mt-4">
+            Get a free, five minute quote &middot; CPO-certified technicians &middot; Cancel anytime
+          </p>
         </div>
         <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
           <div class="grid grid-cols-2 gap-6 text-center">
@@ -75,6 +79,11 @@ const featuredReviews = reviews.slice(0, 3);
       </div>
     </div>
   </section>
+
+  <GoogleReviews
+    placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+    googleProfileUrl="https://g.co/kgs/NKwnBPz"
+  />
 
   <!-- Services Grid -->
   <section class="py-16 lg:py-24">

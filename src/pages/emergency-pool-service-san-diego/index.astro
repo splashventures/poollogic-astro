@@ -4,6 +4,7 @@ import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
 import Button from '@/components/ui/Button.astro';
 import { company } from '@/data/company';
 import { generateSimpleFAQSchema } from '@/lib/schema/faq';
+import GoogleReviews from '@/components/ui/GoogleReviews.astro';
 
 const PAGE_URL = `${company.url}/emergency-pool-service-san-diego/`;
 const title = 'Emergency Pool Service San Diego | Same-Day Response | PoolLogic';
@@ -154,9 +155,17 @@ const schemas = faqSchema ? [faqSchema] : [];
             Request Emergency Service
           </Button>
         </div>
+        <p class="text-sm text-white/75 mt-4">
+          Get a free, five minute quote &middot; CPO-certified technicians &middot; Cancel anytime
+        </p>
       </div>
     </div>
   </section>
+
+  <GoogleReviews
+    placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+    googleProfileUrl="https://g.co/kgs/NKwnBPz"
+  />
 
   <!-- What We Handle -->
   <section class="py-16 lg:py-20">

@@ -258,6 +258,19 @@ if (type === 'city' && city) {
 const nearbyCities = city ? getNearbyCities(city.slug) : [];
 const cityFaqs = (type === 'city' && city) ? city.faqs : [];
 
+// Returns the distance-from-HQ text to display, or null if it should be hidden
+// (San Diego itself is HQ, and cities > 10 miles away shouldn't emphasize distance).
+function getDistanceText(c: City | undefined): string | null {
+  if (!c) return null;
+  if (c.distanceFromHQ === 'Headquarters') return null;
+  const match = c.distanceFromHQ.match(/(\d+)/);
+  if (!match) return null;
+  const miles = parseInt(match[1], 10);
+  if (miles > 10) return null;
+  return c.distanceFromHQ;
+}
+const distanceText = getDistanceText(city);
+
 // === Service page data ===
 const serviceFaqs = (type === 'service' && service) ? getServiceFAQs(service) : [];
 const primaryCities = getPrimaryCities().slice(0, 12);
@@ -267,7 +280,7 @@ const relatedServices = (type === 'service' && service)
 
 const categoryConfig: Record<string, { bg: string; light: string; text: string; border: string; label: string }> = {
   maintenance: { bg: 'bg-[#00568c]', light: 'bg-[#88d2c7]/20', text: 'text-[#00568c]', border: 'border-[#88d2c7]/30', label: 'Maintenance Service' },
-  repair: { bg: 'bg-emerald-600', light: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-200', label: 'Repair Service' },
+  repair: { bg: 'bg-emerald-700', light: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', label: 'Repair Service' },
   installation: { bg: 'bg-violet-600', light: 'bg-violet-50', text: 'text-violet-600', border: 'border-violet-200', label: 'Installation Service' },
 };
 
@@ -395,32 +408,31 @@ const cityWhatsIncludedCard = [
       </div>
     </div>
 
-    <!-- Hero Section - Full background image -->
-    <section class="relative min-h-[520px] sm:min-h-[600px] lg:min-h-[700px] overflow-hidden">
+    <!-- Hero Section - Full background image, darkened via CSS -->
+    <section class="relative overflow-hidden bg-black">
       <!-- Background Image -->
-      <Image
-        src={heroServicesImg}
-        alt={`Pool service in ${city.name}, ${city.state} by PoolLogic`}
-        class="absolute inset-0 w-full h-full object-cover object-center"
-        widths={[640, 1280, 1920]}
-        sizes="100vw"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-      />
-      <!-- Gradient overlays for text readability -->
-      <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/85 via-[#00568c]/55 to-transparent"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"></div>
+      <div class="absolute inset-0">
+        <Image
+          src={heroServicesImg}
+          alt={`Pool service in ${city.name}, ${city.state} by PoolLogic`}
+          class="w-full !h-full object-cover object-center brightness-[0.45]"
+          widths={[640, 1280, 1920]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
 
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 flex items-center min-h-[520px] sm:min-h-[600px] lg:min-h-[700px]">
-        <div class="max-w-3xl">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div class="max-w-3xl [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
           <!-- Local badge -->
           <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 rounded-full px-4 py-2 mb-6">
             <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
             </svg>
             <span class="text-white font-medium text-sm">
-              Local Pool Service in {city.name}, {city.state} &middot; {city.distanceFromHQ} from HQ
+              Local Pool Service in {city.name}, {city.state}{city.distanceFromHQ === 'Headquarters' ? ' · Headquarters' : distanceText ? ` · ${distanceText} from HQ` : ''}
             </span>
           </div>
 
@@ -457,7 +469,7 @@ const cityWhatsIncludedCard = [
           <!-- CTA -->
           <div class="flex flex-col sm:flex-row gap-4 mb-6">
             <Button href={company.quoteUrl} external size="lg" variant="secondary">
-              Get Free {city.name} Quote
+              Get Your Free Quote
             </Button>
             <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
               <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -475,11 +487,16 @@ const cityWhatsIncludedCard = [
     </section>
 
     <!-- Stats -->
-    <section class="pb-16">
+    <section class="py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <TrustStats />
       </div>
     </section>
+
+    <GoogleReviews
+      placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+      googleProfileUrl="https://g.co/kgs/NKwnBPz"
+    />
 
     <!-- Introduction -->
     <section class="py-20 lg:py-28">
@@ -490,7 +507,7 @@ const cityWhatsIncludedCard = [
           </h2>
           <p class="definition-paragraph text-lg text-gray-700 text-center mb-6 font-medium">{city.definitionParagraph}</p>
           <p class="text-base text-gray-600 text-center mb-8 border-l-4 border-[#88d2c7] pl-4 text-left max-w-2xl mx-auto">
-            {city.name} pool owners trust PoolLogic for weekly cleaning, chemical balancing, and equipment care. We serve {city.neighborhoods.length} neighborhoods across the {city.zipCodes.join(', ')} ZIP {city.zipCodes.length > 1 ? 'codes' : 'code'}, just {city.distanceFromHQ} from our San Diego headquarters.
+            {city.name} pool owners trust PoolLogic for weekly cleaning, chemical balancing, and equipment care. We serve {city.neighborhoods.length} neighborhoods across the {city.zipCodes.join(', ')} ZIP {city.zipCodes.length > 1 ? 'codes' : 'code'}{city.distanceFromHQ === 'Headquarters' ? ' from our San Diego headquarters' : distanceText ? `, just ${distanceText} from our San Diego headquarters` : ''}.
           </p>
           <div class="prose prose-lg text-gray-600 text-center">
             {city.introContent.split('\n\n').map((paragraph) => (
@@ -562,7 +579,11 @@ const cityWhatsIncludedCard = [
 
             <div class="space-y-4">
               {[
-                `Just ${city.distanceFromHQ} from our San Diego headquarters`,
+                city.distanceFromHQ === 'Headquarters'
+                  ? 'Our San Diego headquarters is right here'
+                  : distanceText
+                    ? `Just ${distanceText} from our San Diego headquarters`
+                    : `${city.name} is part of our San Diego County service area`,
                 `Fast response for ${city.name} pool emergencies`,
                 `Technicians who know ${city.name} neighborhoods`,
                 `Service tailored to ${city.county} County water`,
@@ -649,7 +670,7 @@ const cityWhatsIncludedCard = [
             </ul>
 
             <Button href={company.quoteUrl} external size="lg" class="w-full justify-center mb-4">
-              Get Free {city.name} Pool Quote
+              Get Your Free Quote
             </Button>
 
             <p class="text-center text-gray-500 text-sm">
@@ -799,7 +820,7 @@ const cityWhatsIncludedCard = [
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
           <Button href={company.quoteUrl} external size="lg" variant="secondary">
-            Get Free {city.name} Quote
+            Get Your Free Quote
           </Button>
           <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
             <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -833,25 +854,24 @@ const cityWhatsIncludedCard = [
       </div>
     </div>
 
-    <!-- Hero Section - Full background image -->
-    <section class="relative min-h-[520px] sm:min-h-[600px] lg:min-h-[700px] overflow-hidden">
+    <!-- Hero Section - Full background image, darkened via CSS -->
+    <section class="relative overflow-hidden bg-black">
       <!-- Background Image -->
-      <Image
-        src={heroServicesImg}
-        alt={`${service.name} from PoolLogic in San Diego County`}
-        class="absolute inset-0 w-full h-full object-cover object-center"
-        widths={[640, 1280, 1920]}
-        sizes="100vw"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-      />
-      <!-- Gradient overlays for text readability -->
-      <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/85 via-[#00568c]/55 to-transparent"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"></div>
+      <div class="absolute inset-0">
+        <Image
+          src={heroServicesImg}
+          alt={`${service.name} from PoolLogic in San Diego County`}
+          class="w-full !h-full object-cover object-center brightness-[0.45]"
+          widths={[640, 1280, 1920]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
 
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 flex items-center min-h-[520px] sm:min-h-[600px] lg:min-h-[700px]">
-        <div class="max-w-3xl">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div class="max-w-3xl [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
           <!-- Category badge -->
           <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 rounded-full px-4 py-2 mb-6">
             <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
@@ -924,11 +944,16 @@ const cityWhatsIncludedCard = [
     </section>
 
     <!-- Stats -->
-    <section class="pb-16">
+    <section class="py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <TrustStats />
       </div>
     </section>
+
+    <GoogleReviews
+      placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+      googleProfileUrl="https://g.co/kgs/NKwnBPz"
+    />
 
     <!-- Problem/Solution -->
     <section class="py-20 lg:py-28">
@@ -1158,12 +1183,6 @@ const cityWhatsIncludedCard = [
       </div>
     </section>
 
-    <!-- Guarantee -->
-    <GoogleReviews
-      placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
-      googleProfileUrl="https://g.co/kgs/NKwnBPz"
-    />
-
     <GuaranteeSection />
 
     <!-- FAQ Section -->
@@ -1369,25 +1388,24 @@ const cityWhatsIncludedCard = [
       </div>
     </div>
 
-    <!-- Hero - Full background image -->
-    <section class="relative min-h-[520px] sm:min-h-[600px] lg:min-h-[700px] overflow-hidden">
+    <!-- Hero - Full background image, darkened via CSS -->
+    <section class="relative overflow-hidden bg-black">
       <!-- Background Image -->
-      <Image
-        src={heroServicesImg}
-        alt={`${service.name} in ${city.name}, ${city.state} by PoolLogic`}
-        class="absolute inset-0 w-full h-full object-cover object-center"
-        widths={[640, 1280, 1920]}
-        sizes="100vw"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-      />
-      <!-- Gradient overlays -->
-      <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/85 via-[#00568c]/55 to-transparent"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"></div>
+      <div class="absolute inset-0">
+        <Image
+          src={heroServicesImg}
+          alt={`${service.name} in ${city.name}, ${city.state} by PoolLogic`}
+          class="w-full !h-full object-cover object-center brightness-[0.45]"
+          widths={[640, 1280, 1920]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
 
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 flex items-center min-h-[520px] sm:min-h-[600px] lg:min-h-[700px]">
-        <div class="max-w-3xl">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div class="max-w-3xl [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
           <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 rounded-full px-4 py-2 mb-6">
             <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
@@ -1422,7 +1440,7 @@ const cityWhatsIncludedCard = [
 
           <div class="flex flex-col sm:flex-row gap-4 mb-6">
             <Button href={company.quoteUrl} external size="lg" variant="secondary">
-              Get Free {city.name} Quote
+              Get Your Free Quote
             </Button>
             <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
               <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -1434,6 +1452,11 @@ const cityWhatsIncludedCard = [
         </div>
       </div>
     </section>
+
+    <GoogleReviews
+      placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+      googleProfileUrl="https://g.co/kgs/NKwnBPz"
+    />
 
     <!-- Intro Content -->
     <section class="py-16 lg:py-20">
@@ -1606,7 +1629,7 @@ const cityWhatsIncludedCard = [
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <Button href={company.quoteUrl} external size="lg" variant="secondary">
-            Get Free {city.name} Quote
+            Get Your Free Quote
           </Button>
           <Button href={`tel:${company.phoneRaw}`} variant="outline" size="lg" class="border-white text-white hover:bg-white hover:text-[#00568c]">
             Call {company.phone}

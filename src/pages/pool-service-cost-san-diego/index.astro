@@ -6,6 +6,7 @@ import TrustStats from '@/components/ui/TrustStats.astro';
 import { company } from '@/data/company';
 import { services } from '@/data/services';
 import { generateSimpleFAQSchema } from '@/lib/schema/faq';
+import GoogleReviews from '@/components/ui/GoogleReviews.astro';
 
 const PAGE_URL = `${company.url}/pool-service-cost-san-diego/`;
 const title = 'Pool Service Cost in San Diego (2026 Pricing Guide) | PoolLogic';
@@ -121,6 +122,9 @@ const schemas = faqSchema ? [faqSchema] : [];
             Call {company.phone}
           </Button>
         </div>
+        <p class="text-sm text-white/75 mt-4">
+          Get a free, five minute quote &middot; CPO-certified technicians &middot; Cancel anytime
+        </p>
       </div>
     </div>
   </section>
@@ -131,6 +135,11 @@ const schemas = faqSchema ? [faqSchema] : [];
       <TrustStats />
     </div>
   </section>
+
+  <GoogleReviews
+    placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+    googleProfileUrl="https://g.co/kgs/NKwnBPz"
+  />
 
   <!-- Weekly Service Pricing -->
   <section class="py-16 lg:py-20">

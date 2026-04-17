@@ -63,25 +63,24 @@ const painPoints = [
   geoPlacename="San Diego"
   geoPosition={`${company.coordinates.lat};${company.coordinates.lng}`}
 >
-  <!-- Hero Section - Full background image -->
-  <section class="relative min-h-[520px] sm:min-h-[620px] lg:min-h-[680px] overflow-hidden">
+  <!-- Hero Section - Full background image, darkened via CSS -->
+  <section class="relative overflow-hidden bg-black">
     <!-- Background Image -->
-    <Image
-      src={heroPoolImg}
-      alt="Crystal clear swimming pool maintained by PoolLogic in San Diego"
-      class="absolute inset-0 w-full h-full object-cover object-[30%_center] 2xl:object-center"
-      widths={[640, 1280, 1920]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    />
-    <!-- Gradient overlay for text readability -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/80 via-[#00568c]/50 to-transparent"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+    <div class="absolute inset-0">
+      <Image
+        src={heroPoolImg}
+        alt="Crystal clear swimming pool maintained by PoolLogic in San Diego"
+        class="w-full !h-full object-cover object-[30%_center] 2xl:object-center brightness-[0.55]"
+        widths={[640, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
 
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 flex items-center min-h-[520px] sm:min-h-[620px] lg:min-h-[680px]">
-      <div class="max-w-[940px]">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+      <div class="max-w-[940px] [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
         <!-- Trust badge -->
         <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-4 sm:mb-6">
           <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
@@ -148,7 +147,7 @@ const painPoints = [
         </div>
 
         <!-- CTA -->
-        <div class="flex flex-col sm:flex-row gap-4">
+        <div class="flex flex-col sm:flex-row gap-4 mb-6">
           <Button href={company.quoteUrl} external size="lg" variant="secondary">
             Get Your Free Quote
           </Button>
@@ -159,12 +158,16 @@ const painPoints = [
             {company.phone}
           </Button>
         </div>
+
+        <p class="text-sm text-white/75">
+          Get a free, five minute quote &middot; CPO-certified technicians &middot; Cancel anytime
+        </p>
       </div>
     </div>
   </section>
 
   <!-- Trust Stats -->
-  <section class="pb-16">
+  <section class="py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <TrustStats />
     </div>

@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button.astro';
 import { company } from '@/data/company';
 import { cities } from '@/data/cities';
 import { values, milestones, teamMembers, whyChooseUs } from '@/data/brand';
+import GoogleReviews from '@/components/ui/GoogleReviews.astro';
 
 // Load team images from src/assets for Astro Image optimization
 const teamImageModules = import.meta.glob<{ default: ImageMetadata }>(
@@ -301,6 +302,11 @@ const description = `Learn about PoolLogic Pool Service - ${company.yearsInBusin
       </div>
     </div>
   </section>
+
+  <GoogleReviews
+    placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+    googleProfileUrl="https://g.co/kgs/NKwnBPz"
+  />
 
   <!-- Service Area -->
   <section class="py-16 lg:py-24">

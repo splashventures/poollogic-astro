@@ -4,6 +4,7 @@ import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
 import DualCTA from '@/components/ui/DualCTA.astro';
 import { company } from '@/data/company';
 import { reviews } from '@/data/reviews';
+import GoogleReviews from '@/components/ui/GoogleReviews.astro';
 
 const title = `Customer Reviews | ${company.name}`;
 const description = `Read ${reviews.length} five-star reviews from real ${company.name} customers in San Diego. See why families trust us for weekly pool cleaning, repairs, and maintenance.`;
@@ -85,6 +86,11 @@ const schema = {
       </div>
     </div>
   </section>
+
+  <GoogleReviews
+    placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+    googleProfileUrl="https://g.co/kgs/NKwnBPz"
+  />
 
   <!-- Reviews Grid -->
   <section class="py-16 lg:py-24">

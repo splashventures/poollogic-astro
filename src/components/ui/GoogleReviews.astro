@@ -3,6 +3,7 @@ interface Props {
   placeIds: string[];
   maxReviews?: number;
   googleProfileUrl: string;
+  trustindexUrl?: string;
 }
 
 interface Review {
@@ -26,7 +27,12 @@ interface ReviewsResponse {
   };
 }
 
-const { placeIds, maxReviews = 20, googleProfileUrl } = Astro.props;
+const {
+  placeIds,
+  maxReviews = 20,
+  googleProfileUrl,
+  trustindexUrl = 'https://www.trustindex.io/reviews/poollogicsd.com',
+} = Astro.props;
 
 const FUNCTION_URL = 'https://us-central1-cabana-cac.cloudfunctions.net/google-reviews';
 
@@ -69,21 +75,15 @@ const maxExternal = Math.min(externalReviews.length, 10);
 let extIdx = 0;
 for (let i = 0; i < reviews.length; i++) {
   allReviews.push(reviews[i]);
-  // Insert an external review every 2 Google reviews
   if ((i + 1) % 2 === 0 && extIdx < maxExternal) {
     allReviews.push(externalReviews[extIdx++]);
   }
 }
-// Append remaining external reviews
 while (extIdx < maxExternal) {
   allReviews.push(externalReviews[extIdx++]);
 }
 
-// Total review count across all sources
 const totalAllReviews = totalReviews + externalReviews.length;
-
-// For an infinite-loop marquee we need the content duplicated so the
-// translateX animation wraps seamlessly from 0 to -50%.
 const marqueeReviews = allReviews.length > 0 ? [...allReviews, ...allReviews] : [];
 
 function getInitials(name: string): string {
@@ -95,16 +95,19 @@ function truncateText(text: string, max: number): string {
   return text.slice(0, max).replace(/\s+\S*$/, '') + '...';
 }
 
-// Pace the marquee: longer duration for more reviews so the scroll stays slow.
+function getSource(review: Review): { name: string; type: 'google' | 'trustindex' | 'thumbtack'; url: string } {
+  if (review.placeId) return { name: 'Google', type: 'google', url: googleProfileUrl };
+  if (review.relativeTimeDescription === 'Thumbtack') return { name: 'Thumbtack', type: 'thumbtack', url: 'https://www.thumbtack.com/ca/san-diego/swimming-pool-maintenance/poollogic-pool-spa-service/service/517805754418053139' };
+  return { name: 'Trustindex', type: 'trustindex', url: trustindexUrl };
+}
+
 const marqueeDuration = Math.max(40, allReviews.length * 6);
 ---
 
 <section class="py-14 lg:py-20 bg-gradient-to-b from-white to-gray-50">
-  <!-- Header (contained) -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
       <div class="flex items-center justify-center gap-3 mb-4">
-        <!-- Stars -->
         <div class="flex items-center gap-1">
           {[...Array(5)].map(() => (
             <svg class="h-5 w-5 sm:h-6 sm:w-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -129,9 +132,7 @@ const marqueeDuration = Math.max(40, allReviews.length * 6);
   </div>
 
   {marqueeReviews.length > 0 ? (
-    <!-- Full-width marquee with nav arrows -->
     <div class="relative">
-      <!-- Nav arrows -->
       <button
         class="reviews-nav-prev absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:text-[#00568c] hover:bg-white transition-all"
         aria-label="Previous reviews"
@@ -153,104 +154,91 @@ const marqueeDuration = Math.max(40, allReviews.length * 6);
         class="reviews-marquee group relative overflow-hidden"
         style={`--marquee-duration: ${marqueeDuration}s`}
       >
-        <!-- Wider fade edges -->
         <div class="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-32 lg:w-48 bg-gradient-to-r from-gray-50 to-transparent z-10"></div>
         <div class="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-32 lg:w-48 bg-gradient-to-l from-gray-50 to-transparent z-10"></div>
 
         <div class="reviews-marquee-track flex gap-5 w-max py-4 px-4">
-          {marqueeReviews.map((review, idx) => (
-            <div
-              class="w-[300px] sm:w-[340px] flex-shrink-0 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col"
-              aria-hidden={idx >= allReviews.length ? 'true' : 'false'}
-            >
-              <!-- Reviewer info -->
-              <div class="flex items-center gap-3 mb-4">
-                {review.reviewerPhotoUrl ? (
-                  <img
-                    src={review.reviewerPhotoUrl}
-                    alt={review.reviewerName}
-                    class="w-10 h-10 rounded-full object-cover"
-                    loading="lazy"
-                    referrerpolicy="no-referrer"
-                    onerror={`this.style.display='none';this.nextElementSibling.style.display='flex'`}
-                  />
-                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00568c] to-[#88d2c7] items-center justify-center text-white font-semibold text-sm hidden">
-                    {getInitials(review.reviewerName)}
+          {marqueeReviews.map((review, idx) => {
+            const source = getSource(review);
+            return (
+              <div
+                class="w-[300px] sm:w-[340px] flex-shrink-0 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col"
+                aria-hidden={idx >= allReviews.length ? 'true' : 'false'}
+              >
+                <div class="flex items-center gap-3 mb-4">
+                  {review.reviewerPhotoUrl ? (
+                    <img
+                      src={review.reviewerPhotoUrl}
+                      alt={review.reviewerName}
+                      class="w-10 h-10 rounded-full object-cover"
+                      loading="lazy"
+                      referrerpolicy="no-referrer"
+                      onerror={`this.style.display='none';this.nextElementSibling.style.display='flex'`}
+                    />
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00568c] to-[#88d2c7] items-center justify-center text-white font-semibold text-sm hidden">
+                      {getInitials(review.reviewerName)}
+                    </div>
+                  ) : (
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00568c] to-[#88d2c7] flex items-center justify-center text-white font-semibold text-sm">
+                      {getInitials(review.reviewerName)}
+                    </div>
+                  )}
+                  <div class="min-w-0 flex-1">
+                    <p class="font-semibold text-gray-900 text-sm truncate">{review.reviewerName}</p>
+                    <p class="text-gray-500 text-xs">{source.name} review</p>
                   </div>
-                ) : (
-                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00568c] to-[#88d2c7] flex items-center justify-center text-white font-semibold text-sm">
-                    {getInitials(review.reviewerName)}
-                  </div>
-                )}
-                <div class="min-w-0 flex-1">
-                  <p class="font-semibold text-gray-900 text-sm truncate">{review.reviewerName}</p>
-                  <p class="text-gray-500 text-xs">{review.relativeTimeDescription}</p>
+                  {/* Source icon */}
+                  {source.type === 'google' ? (
+                    <svg class="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                  ) : source.type === 'thumbtack' ? (
+                    <svg class="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0z" fill="#009FD9"/>
+                      <path d="M16.8 8.4l-1.2-1.2-2.4 2.4-1.2-1.2 2.4-2.4-1.2-1.2-2.4 2.4L9 5.4 6.6 7.8l1.8 1.8-3 4.8L7.2 16.2l4.8-3 1.8 1.8 2.4-2.4-1.8-1.8 2.4-2.4z" fill="white"/>
+                    </svg>
+                  ) : (
+                    <svg class="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="#4CAF50"/>
+                      <path d="M10 17l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" fill="white"/>
+                    </svg>
+                  )}
                 </div>
-                <!-- Source icon -->
-                {review.placeId ? (
-                  <svg class="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                  </svg>
-                ) : (
-                  <svg class="h-4 w-4 flex-shrink-0 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                )}
-              </div>
-              <!-- Stars -->
-              <div class="flex gap-0.5 mb-3">
-                {[...Array(5)].map(() => (
-                  <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <!-- Review text -->
-              <p class="text-gray-700 text-sm leading-relaxed flex-1">
-                {truncateText(review.text, 200)}
-              </p>
-              {review.text.length > 200 && review.googleReviewUrl && (
+                <div class="flex gap-0.5 mb-3">
+                  {[...Array(5)].map(() => (
+                    <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <p class="text-gray-700 text-sm leading-relaxed flex-1">
+                  {truncateText(review.text, 200)}
+                </p>
                 <a
-                  href={review.googleReviewUrl}
+                  href={review.googleReviewUrl || source.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   class="text-[#00568c] text-sm font-medium mt-3 inline-block hover:underline"
                 >
-                  Read more on Google &rarr;
+                  Read more on {source.name} &rarr;
                 </a>
-              )}
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
   ) : (
-    <!-- Fallback when no reviews available -->
     <div class="text-center py-8">
       <p class="text-gray-600 mb-4">Check out what our customers are saying</p>
     </div>
   )}
 
-  <!-- Footer CTA -->
-  <div class="text-center mt-10">
-    <a
-      href={googleProfileUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="inline-flex items-center gap-2 text-[#00568c] font-semibold hover:underline"
-    >
-      <svg class="h-5 w-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-      </svg>
-      {hasFetched ? `See all ${totalReviews} reviews on Google` : 'See our reviews on Google'}
-    </a>
-  </div>
+  <!-- Trustindex link temporarily hidden -->
+
 </section>
 
 <style>
@@ -259,7 +247,6 @@ const marqueeDuration = Math.max(40, allReviews.length * 6);
     will-change: transform;
   }
 
-  /* Pause on hover so users can read a card that catches their eye */
   .reviews-marquee:hover .reviews-marquee-track {
     animation-play-state: paused;
   }
@@ -273,7 +260,6 @@ const marqueeDuration = Math.max(40, allReviews.length * 6);
     }
   }
 
-  /* Respect reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .reviews-marquee-track {
       animation: none;
@@ -286,35 +272,45 @@ const marqueeDuration = Math.max(40, allReviews.length * 6);
 </style>
 
 <script>
-  // Manual navigation for review carousel
-  document.querySelectorAll('.reviews-nav-prev, .reviews-nav-next').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const container = btn.closest('.relative')?.querySelector('.reviews-marquee') as HTMLElement;
-      const track = container?.querySelector('.reviews-marquee-track') as HTMLElement;
-      if (!container || !track) return;
+  document.querySelectorAll('.reviews-marquee').forEach((container) => {
+    const track = container.querySelector('.reviews-marquee-track') as HTMLElement;
+    if (!track) return;
 
-      // Pause auto-scroll
-      track.style.animationPlayState = 'paused';
+    let isPaused = false;
+    let currentOffset = 0;
 
-      // Get current transform position
+    function pauseAndShift(direction: number) {
+      // Get current visual position
       const computedStyle = window.getComputedStyle(track);
       const matrix = new DOMMatrix(computedStyle.transform);
-      const currentX = matrix.m41;
+      currentOffset = matrix.m41;
 
-      // Card width + gap (340px + 20px gap)
-      const scrollAmount = btn.classList.contains('reviews-nav-prev') ? 360 : -360;
-
-      // Apply new position
+      // Stop the animation, hold position
       track.style.animation = 'none';
-      track.style.transform = `translateX(${currentX + scrollAmount}px)`;
+      track.style.transform = `translateX(${currentOffset}px)`;
 
-      // Resume auto-scroll after 5 seconds of inactivity
+      // Force reflow
+      void track.offsetHeight;
+
+      // Shift
+      currentOffset += direction * 360;
+      track.style.transition = 'transform 0.4s ease';
+      track.style.transform = `translateX(${currentOffset}px)`;
+
+      isPaused = true;
+
+      // Resume auto-scroll after 5 seconds
       clearTimeout((container as any)._resumeTimer);
       (container as any)._resumeTimer = setTimeout(() => {
+        track.style.transition = '';
         track.style.animation = '';
         track.style.transform = '';
-        track.style.animationPlayState = '';
+        isPaused = false;
       }, 5000);
-    });
+    }
+
+    const wrapper = container.parentElement;
+    wrapper?.querySelector('.reviews-nav-prev')?.addEventListener('click', () => pauseAndShift(1));
+    wrapper?.querySelector('.reviews-nav-next')?.addEventListener('click', () => pauseAndShift(-1));
   });
 </script>

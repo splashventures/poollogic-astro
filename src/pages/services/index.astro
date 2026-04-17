@@ -41,25 +41,32 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
     </div>
   </div>
 
-  <!-- Hero Section - Full background image -->
-  <section class="relative min-h-[500px] sm:min-h-[560px] lg:min-h-[660px] overflow-hidden">
+  <!-- Hero Section - Full background image, darkened via CSS -->
+  <section class="relative overflow-hidden bg-black">
     <!-- Background Image -->
-    <Image
-      src={heroServicesImg}
-      alt="Residential pool serviced by PoolLogic in San Diego County"
-      class="absolute inset-0 w-full h-full object-cover object-[center_65%]"
-      widths={[640, 1280, 1920]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    />
-    <!-- Gradient overlays for text readability -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#00568c]/85 via-[#00568c]/55 to-transparent"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"></div>
+    <div class="absolute inset-0">
+      <Image
+        src={heroServicesImg}
+        alt="Residential pool serviced by PoolLogic in San Diego County"
+        class="w-full !h-full object-cover object-[center_65%] brightness-[0.45]"
+        widths={[640, 1280, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
 
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 flex items-center min-h-[500px] sm:min-h-[560px] lg:min-h-[660px]">
-      <div class="max-w-3xl">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+      <div class="max-w-3xl [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 rounded-full px-4 py-2 mb-6">
+          <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+          </svg>
+          <span class="text-white font-medium text-sm">Full-Service Pool Care for San Diego County</span>
+        </div>
+
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
           Pool Services
           <span class="block text-[#88d2c7]">Done Right</span>
@@ -82,9 +89,15 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
             <span class="font-medium">{company.rating.value}/5</span>
             <span class="text-white/70">({company.rating.count}+ reviews)</span>
           </div>
+          <div class="flex items-center gap-2">
+            <svg class="h-5 w-5 text-[#88d2c7]" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span class="text-white/90">Licensed &amp; Insured</span>
+          </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-4">
+        <div class="flex flex-col sm:flex-row gap-4 mb-6">
           <Button href={company.quoteUrl} external size="lg" variant="secondary">
             Get Your Free Quote
           </Button>
@@ -95,16 +108,26 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
             {company.phone}
           </Button>
         </div>
+
+        <p class="text-sm text-white/75">
+          Get a free, five minute quote &middot; CPO-certified technicians &middot; Cancel anytime
+        </p>
       </div>
     </div>
   </section>
 
   <!-- Stats Section -->
-  <section class="pb-16">
+  <section class="py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <TrustStats />
     </div>
   </section>
+
+  <!-- Google Reviews -->
+  <GoogleReviews
+    placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
+    googleProfileUrl="https://g.co/kgs/NKwnBPz"
+  />
 
   <!-- Service Categories Quick Jump -->
   <section class="py-12 bg-gray-50">
@@ -188,7 +211,7 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center gap-4 mb-4">
         <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center">
-          <svg class="h-7 w-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="h-7 w-7 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
@@ -210,10 +233,10 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
             </h3>
             <p class="text-gray-600 mb-4 line-clamp-2">{service.shortDescription}</p>
             <div class="flex items-center justify-between">
-              <span class="text-lg font-bold text-emerald-600">
+              <span class="text-lg font-bold text-emerald-700">
                 Free Quote
               </span>
-              <span class="text-emerald-600 group-hover:translate-x-1 transition-transform">
+              <span class="text-emerald-700 group-hover:translate-x-1 transition-transform">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
@@ -265,12 +288,6 @@ const description = `Complete pool services in San Diego: weekly cleaning, maint
       </div>
     </div>
   </section>
-
-  <!-- Guarantee Section -->
-  <GoogleReviews
-    placeIds={['ChIJI4PkKHBX2YARE1lV4m5FXG0']}
-    googleProfileUrl="https://g.co/kgs/NKwnBPz"
-  />
 
   <GuaranteeSection />
 
