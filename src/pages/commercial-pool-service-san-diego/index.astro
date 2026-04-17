@@ -231,7 +231,7 @@ const schemas = faqSchema ? [faqSchema] : [];
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <p class="text-sm font-semibold text-[#00568c] uppercase tracking-wider mb-3">Our Clients</p>
       <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-10">Trusted by 200+ Commercial Properties</h2>
-      <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-6 sm:gap-x-12 max-w-5xl mx-auto">
+      <div class="flex flex-wrap lg:flex-nowrap justify-center items-center gap-x-6 gap-y-6 sm:gap-x-8 lg:gap-x-6 xl:gap-x-8">
         {[
           { name: 'H.G. Fenton Company', src: '/images/clients/hgfenton.png', height: 32 },
           { name: 'Hilton', src: '/images/clients/hilton.svg', height: 28 },
@@ -243,11 +243,11 @@ const schemas = faqSchema ? [faqSchema] : [];
           { name: 'U.S. Dept. of Veterans Affairs', src: '/images/clients/va.png', height: 36 },
           { name: 'Best Western', src: '/images/clients/bestwestern.svg', height: 36 },
         ].map((client) => (
-          <div class="flex items-center justify-center" style={`height:${client.height}px;max-width:150px;`}>
+          <div class="flex items-center justify-center shrink-0" style={`height:${client.height}px;max-width:130px;`}>
             <img
               src={client.src}
               alt={client.name}
-              style={`max-height:${client.height}px;max-width:150px;width:auto;height:auto;`}
+              style={`max-height:${client.height}px;max-width:130px;width:auto;height:auto;`}
               class="object-contain opacity-50 hover:opacity-100 transition-all duration-300"
               loading="lazy"
             />
